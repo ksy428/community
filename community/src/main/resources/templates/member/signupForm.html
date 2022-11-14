@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link th:href="@{/css/bootstrap.min.css}"
+	href="../css/bootstrap.min.css" rel="stylesheet">
+<style>
+.container {
+	max-width: 560px;
+}
+
+.field-error {
+	border-color: #dc3545;
+	color: #dc3545;
+}
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="py-5 text-center">
+			<h2>회원 가입</h2>
+		</div>
+		<h4 class="mb-3">회원 정보 입력</h4>
+		<form class="validation-form" novalidate id="signup-form"
+			  action="" th:action th:object="${memberSignUpDto}" method="post">			  		
+			  
+			<label for="loginId">로그인 ID</label>
+			<div class="row">
+				<div class= "col">
+					<input type="text"
+						th:field="*{loginId}" class="form-control">
+					<div class="invalid-feedback"><font id="invalid-fb-loginId" size="2"></font></div>
+					<div class="valid-feedback"><font id="valid-fb-loginId" size="2"></font></div>
+				</div>
+				<div class="col">
+					<button type="button" id="idExistCheck-btn"
+					 		class="btn btn-primary">중복 검사</button>
+				</div>			
+			</div>
+			
+			<div class="col-sm-6">
+				<label for="password">비밀번호</label>
+					<input type="password"
+				  		   th:field="*{password}" class="form-control">
+					<div class="invalid-feedback"><font id="invalid-fb-password" size="2"></font></div>
+					<div class="valid-feedback"><font id="valid-fb-password" size="2"></font></div>
+			</div>		
+			
+			<label for="nickname">닉네임</label>
+			<div class="row">
+				<div class= "col">
+					<input type="text"
+						th:field="*{nickname}" class="form-control">
+					<div class="invalid-feedback"><font id="invalid-fb-nickname" size="2"></font></div>
+					<div class="valid-feedback"><font id="valid-fb-nickname" size="2"></font></div>
+				</div>
+				<div class="col">
+					<button type="button" id="nicknameExistCheck-btn"
+					 		class="btn btn-primary">중복 검사</button>
+				</div>			
+			</div>
+			
+			<label for="email">이메일</label>
+			<div class="row">
+				<div class= "col">
+					<input type="text"
+						th:field="*{email}" class="form-control">
+					<div class="invalid-feedback"><font id="invalid-fb-email" size="2"></font></div>
+					<div class="valid-feedback"><font id="valid-fb-email" size="2"></font></div>
+				</div>
+				<div class="col">
+					<button type="button" id="emailExistCheck-btn"
+					 		class="btn btn-primary">중복 검사</button>
+				</div>			
+			</div>	
+			
+			<hr class="my-4">
+			<div class="row">
+				<div class="col">
+					<button type="submit" id="signup-btn"
+					class="w-100 btn btn-primary btn-lg">회원 가입</button>
+				</div>
+				<div class="col">
+					<button type="button"
+						class="w-100 btn btn-secondary btn-lg" >취소</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- /container -->
+</body>
+
+<script>
+$(document).ready(function(e) {
+	
+	$("#signup-btn").on("click", function(e){
+		e.preventDefault();
+		
+		if($('#loginId').hasClass('is-valid') && $('#password').hasClass('is-valid')
+				&& $('#nickname').hasClass('is-valid') && $('#email').hasClass('is-valid')){
+			
+			$("#signup-form").submit();
+		}	
+		
+	}
+	);
+	
+	$("#idExistCheck-btn").on("click", function(e){			
+
+		if(!loginIdCheck()){
+			return false;
+		}		
+		
+		let loginId = $('#loginId').val();
+		$.ajax({
+			url:'/member/id/'+ loginId +'/exists',
+			type: 'get',
+			success: function(exist){
+				if(exist){
+					$("#loginId").addClass("is-invalid");
+					$('#invalid-fb-loginId').text('이미 사용 중인 아이디 입니다.');
+				}
+				else {					
+					$('#loginId').addClass('is-valid');
+					$('#valid-fb-loginId').text('사용 가능한 아이디 입니다.');
+				}
+			}		
+		});
+	} );
+	
+	$('#loginId').on('keyup', function(){	
+		
+		$('#loginId').removeClass('is-valid');
+		$('#loginId').removeClass('is-invalid');
+		if($('#loginId').val().trim() == ""){
+			return;
+		}
+		loginIdCheck();
+	});
+	
+	function loginIdCheck(){
+
+		let loginId = $('#loginId').val()
+		
+		if(loginId.length < 4 || loginId.length > 12 ){
+			$('#loginId').addClass('is-invalid');
+			$('#loginId').removeClass('is-valid');
+			$('#invalid-fb-loginId').text('올바른 아이디를 입력해주세요');
+			return false;
+		}
+		else{
+			$('#loginId').removeClass('is-invalid');
+			return true;
+		}			
+	}
+		
+	$("#nicknameExistCheck-btn").on("click", function(e){	
+		
+		if(!nicknameCheck()){
+			return false;
+		}		
+		
+		let nickname = $('#nickname').val();
+		$.ajax({
+			url:'/member/nickname/'+ nickname +'/exists',
+			type: 'get',
+			success: function(exist){
+				if(exist){
+					$("#nickname").addClass("is-invalid");
+					$('#invalid-fb-nickname').text('이미 사용 중인 닉네임 입니다.');
+				}
+				else {					
+					$('#nickname').addClass('is-valid');
+					$('#valid-fb-nickname').text('사용 가능한 닉네임 입니다.');
+				}
+			}		
+		});
+	} );
+	
+	$('#nickname').on('keyup', function(){	
+		
+		$('#nickname').removeClass('is-valid');
+		$('#nickname').removeClass('is-invalid');
+		if($('#nickname').val().trim() == ""){
+			return;
+		}
+		nicknameCheck();
+	});
+	
+	function nicknameCheck(){		
+		
+		let nickname = $('#nickname').val()
+		
+		if(nickname.length < 2 || nickname.length > 10 ){
+			$('#nickname').addClass('is-invalid');
+			$('#nickname').removeClass('is-valid');
+			$('#invalid-fb-nickname').text('올바른 닉네임을 입력해주세요');
+			return false;
+		}
+		else{
+			$('#nickname').removeClass('is-invalid');
+			return true;
+		}			
+	}
+	
+	$("#emailExistCheck-btn").on("click", function(e){	
+		
+		if(!emailCheck()){
+			return false;
+		}		
+		
+		let email = $('#email').val();
+		$.ajax({
+			url:'/member/email/'+ email +'/exists',
+			type: 'get',
+			success: function(exist){
+				if(exist){
+					$("#email").addClass("is-invalid");
+					$('#invalid-fb-email').text('이미 사용 중인 이메일 입니다.');
+				}
+				else {					
+					$('#email').addClass('is-valid');
+					$('#valid-fb-email').text('사용 가능한 이메일 입니다.');
+				}
+			}		
+		});
+	} );
+	
+	$('#email').on('keyup', function(){	
+		
+		$('#email').removeClass('is-valid');
+		$('#email').removeClass('is-invalid');
+		if($('#email').val().trim() == ""){
+			return;
+		}
+		
+		emailCheck();
+	});
+	
+	function emailCheck(){
+		
+		let email = $('#email').val()
+		
+		let re = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;			
+		if(!re.test(email)){
+			$('#email').addClass('is-invalid');
+			$('#email').removeClass('is-valid');
+			$('#invalid-fb-email').text('올바른 이메일을 입력해주세요');
+			return false;
+		}
+		else{
+			$('#email').removeClass('is-invalid');
+			return true;
+		}			
+	}
+	
+$('#password').on('keyup', function(){	
+		
+		$('#password').removeClass('is-valid');
+		$('#password').removeClass('is-invalid');
+		if($('#password').val().trim() == ""){
+			return;
+		}
+		
+		let password = $('#password').val()
+		
+		let re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+		
+		if(!re.test(password)){
+			$('#password').addClass('is-invalid');
+			$('#password').removeClass('is-valid');
+			$('#invalid-fb-password').text('올바른 비밀번호를 입력해주세요');
+			return false;
+		}
+		else{ 
+			$('#password').removeClass('is-invalid');
+			$('#password').addClass('is-valid');
+			return true;
+		}			
+	});
+});
+</script>
+</html>

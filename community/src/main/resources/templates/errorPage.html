@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<script type="text/javascript">
+	let message = '[[${message}]]';
+	let uri = '[[${uri}]]';
+	let preUrl = document.referrer;
+	alert(message);
+	document.location.href = preUrl;
+</script>
+</body>
+</html>
