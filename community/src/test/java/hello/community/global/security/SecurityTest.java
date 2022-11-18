@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityManager;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hello.community.domain.member.Member;
 import hello.community.repository.member.MemberRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
@@ -45,20 +44,12 @@ class SecurityTest {
 				.nickname("testZZ")
 				.email("test@naver.com")
 				.build());
-		clear();
 	}
 	
-    private void clear(){
-        em.flush();
-        em.clear();
-    }
-    
 	@Test
 	void 로그인테스트() throws Exception{
 		
 		mockMvc.perform(formLogin().userParameter("loginId").user(username).password(password))
 			.andExpect(authenticated());
 	}
-
-
 }

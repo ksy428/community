@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,7 +19,7 @@ import hello.community.dto.member.MemberInfoDto;
 import hello.community.dto.member.MemberSignUpDto;
 import hello.community.dto.member.PasswordEditDto;
 import hello.community.dto.member.MemberEditDto;
-import hello.community.service.member.MemberServiceImpl;
+import hello.community.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberController {
 
-	private final MemberServiceImpl memberService;
+	private final MemberService memberService;
 
 	@GetMapping("/signup")
 	public String signUpForm(@ModelAttribute MemberSignUpDto signUpDto) {
@@ -68,7 +67,7 @@ public class MemberController {
 
 		model.addAttribute("memberInfoDto", memberInfoDto);
 
-		return "/member/infoForm";
+		return "/member/info";
 	}
 
 	@GetMapping("/edit/info")

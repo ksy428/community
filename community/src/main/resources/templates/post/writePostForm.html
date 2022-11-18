@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link th:href="@{/css/bootstrap.min.css}"
+	href="../css/bootstrap.min.css" rel="stylesheet">
+<style>
+.container {
+	max-width: 840px;
+}
+</style>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+	integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+	crossorigin="anonymous">
+	
+</script>
+<script src="/js/summernote/summernote-lite.js"></script>
+<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+</head>
+<body>
+	<div class="container">
+		<div class="py-5 text-left">
+			<h2>게시글</h2>
+		</div>
+		<form id="write-form" name="write-form" th:action
+			th:object="${postWriteDto}" method="post">
+			<div>
+				<input type="text" class="form-control" th:field="*{title}"
+					placeholder="제목을 입력해 주세요">
+			</div>
+			<div>
+				<textarea id="summernote" th:field="*{content}"></textarea>
+			</div>
+
+			<div class="col-sm-3">
+				<button type="submit" id="write-btn"
+					class="w-100 btn btn-primary btn-lg">작성</button>
+			</div>
+		</form>
+	</div>
+</body>
+<script th:inline="javascript">
+
+let originName = [];
+let storeName = [];
+
+	$("#write-btn").on("click", function(e) {
+		e.preventDefault();
+
+		//let formData = new FormData($("#write-form"));
+
+		let formData = new FormData(document.getElementById('write-form'));
+		
+		for(let i=0; i < originName.length; i++){
+			formData.append('originName[]', originName[i]);
+		}
+		for(let i=0; i < storeName.length; i++){
+			formData.append('storeName[]', storeName[i]);
+		} 
+		$.ajax({
+			data : formData,
+			type : 'POST',
+			url : '/board/write',
+			//async: false,
+			contentType : false,
+			enctype : 'multipart/form-data',
+			processData : false,
+			success : function(postId) {
+				if (postId === "error") {
+					//document.location.href = '/board/write'
+				} else {
+					let url = '/board/view/' + postId;
+					location.replace(url);
+				}
+			}
+		});
+	});
+
+	$(document).ready(
+			function() {
+
+				var toolbar = [
+						// 글꼴 설정
+						[ 'fontname', [ 'fontname' ] ],
+						// 글자 크기 설정
+						[ 'fontsize', [ 'fontsize' ] ],
+						// 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+						[
+								'style',
+								[ 'bold', 'italic', 'underline',
+										'strikethrough', 'clear' ] ],
+						// 글자색
+						[ 'color', [ 'forecolor', 'color' ] ],
+						// 표만들기
+						[ 'table', [ 'table' ] ],
+						// 글머리 기호, 번호매기기, 문단정렬
+						[ 'para', [ 'ul', 'ol', 'paragraph' ] ],
+						// 줄간격
+						[ 'height', [ 'height' ] ],
+						// 그림첨부, 링크만들기, 동영상첨부
+						[ 'insert', [ 'picture', 'link', 'video' ] ],
+						// 코드보기, 확대해서보기, 도움말
+						[ 'view', [ 'codeview', 'fullscreen', 'help' ] ] ];
+
+				var setting = {
+					height : 520,
+					minHeight : null,
+					maxHeight : null,
+					focus : true,
+					lang : 'ko-KR',
+					toolbar : toolbar,
+					callbacks : { //여기 부분이 이미지를 첨부하는 부분
+						onImageUpload : function(files, editor, welEditable) {
+							for (let i = files.length - 1; i >= 0; i--) {
+								uploadSummernoteImageFile(files[i], this);
+							} 
+						}
+					}
+				};
+				$('#summernote').summernote(setting);
+			});
+
+	function uploadSummernoteImageFile(file, el) {
+		data = new FormData();
+		data.append('file', file);
+		$.ajax({
+			data : data,
+			type : 'POST',
+			url : '/media',
+			contentType : false,
+			enctype : 'multipart/form-data',
+			processData : false,
+			success : function(media) {
+				$(el).summernote('editor.insertImage','/tmp/' + media.storeMediaName);
+				originName.push(media.originMediaName);
+				storeName.push(media.storeMediaName);
+			}
+		});
+	}
+</script>
+</html>

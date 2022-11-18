@@ -24,13 +24,7 @@ public class MemberEditDto {
 	@NotBlank(message = "이메일을 입력하세요")
 	@Email(message = "이메일 형식이 아닙니다")
 	private String email;
-	
-	@Builder
-	public MemberEditDto(String loginId, String nickname, String email) {
-		this.loginId = loginId;
-		this.nickname = nickname;
-		this.email = email;
-	}
+
 	
 	public MemberEditDto(Member member) {
 		this.loginId = member.getLoginId();

@@ -1,8 +1,9 @@
 package hello.community.dto.post;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import hello.community.domain.image.Image;
+import hello.community.domain.media.Media;
 import hello.community.domain.post.Post;
 import hello.community.dto.member.MemberInfoDto;
 import lombok.Data;
@@ -16,8 +17,10 @@ public class PostInfoDto {
 	private String title;
 	private String content;
 	private Long hit;
-	private List<Image> updoaldImages;
+	private Long recommend;
+	private List<Media> uploadMedia;
 	private MemberInfoDto memberInfoDto;
+	private LocalDateTime createdDate;
 
 	
 	public PostInfoDto(Post post) {
@@ -25,7 +28,9 @@ public class PostInfoDto {
 		this.title = post.getTitle();
 		this.content = post.getContent();
 		this.hit = post.getHit();
-		this.updoaldImages = post.getImageList();
+		this.recommend = post.getRecommend();
+		this.uploadMedia = post.getMediaList();
 		this.memberInfoDto = new MemberInfoDto(post.getWriter());
+		this.createdDate = post.getCreatedDate();
 	}
 }

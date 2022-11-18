@@ -1,5 +1,6 @@
 package hello.community.service.post;
 
+import hello.community.dto.post.PostEditDto;
 import hello.community.dto.post.PostInfoDto;
 import hello.community.dto.post.PostWriteDto;
 import hello.community.exception.file.FileException;
@@ -8,11 +9,13 @@ import hello.community.exception.post.PostException;
 
 public interface PostService {
 
-	void write(PostWriteDto writeDto) throws FileException, MemberException;
+	Long write(PostWriteDto writeDto) throws FileException, MemberException;
 	
-	void edit(Long id, PostWriteDto writeDto) throws FileException, PostException;
+	void edit(Long id, PostEditDto editDto) throws FileException, PostException;
 	
 	void delete(Long id) throws FileException, PostException;
 	
 	PostInfoDto view (Long id) throws PostException;
+	
+	PostEditDto getEditInfo(Long id) throws PostException;
 }

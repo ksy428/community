@@ -1,4 +1,4 @@
-package hello.community.domain.image;
+package hello.community.domain.media;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,29 +19,29 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Image {
+public class Media {
 
 	@Id
-	@Column(name = "image_id")
+	@Column(name = "media_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String originImageName;
-	private String storeImageName;
+	private String originMediaName;
+	private String storeMediaName;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
 	private Post post;
 
 	@Builder
-	public Image(String originImageName, String storeImageName) {
-		this.originImageName = originImageName;
-		this.storeImageName = storeImageName;
+	public Media(String originMediaName, String storeMediaName) {
+		this.originMediaName = originMediaName;
+		this.storeMediaName = storeMediaName;
 	}
 
 	// 연관관계메서드
 	public void setPost(Post post) {
 		this.post = post;
-		post.getImageList().add(this);
+		post.getMediaList().add(this);
 	}
 }

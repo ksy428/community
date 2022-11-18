@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 
 import hello.community.domain.BaseTimeEntity;
 import hello.community.domain.comment.Comment;
-import hello.community.domain.image.Image;
+import hello.community.domain.media.Media;
 import hello.community.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,12 +44,14 @@ public class Post extends BaseTimeEntity{
 	private Member writer;
 	
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private List<Image> imageList = new ArrayList<>();
+	private List<Media> mediaList = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private List<Comment> commentList = new ArrayList<>();
 	
 	private Long hit;
+	
+	private Long recommend;
 	
 	@Builder
 	public Post(String title, String content, Member writer) {
@@ -57,6 +59,7 @@ public class Post extends BaseTimeEntity{
 		this.content = content;
 		this.writer = writer;
 		this.hit = 0L;
+		this.recommend = 0L;
 	}
 	
 	public void editTitle(String title) {
@@ -67,12 +70,16 @@ public class Post extends BaseTimeEntity{
 		this.content = content;
 	}
 	
-	public void initImageList() {
-		this.imageList.clear();
+	public void initMediaList() {
+		this.mediaList.clear();
 	}
 	
 	public void addHit() {
 		this.hit += 1;
+	}
+	
+	public void addRecommend() {
+		this.recommend += 1;
 	}
 	
 	//연관관계메서드

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import hello.community.domain.image.Image;
+import hello.community.domain.media.Media;
 import hello.community.exception.file.FileException;
 import hello.community.exception.file.FileExceptionType;
 import hello.community.exception.member.MemberException;
@@ -23,14 +23,21 @@ public class FileServiceImpl implements FileService {
 
 	@Value("${file.dir}")
 	private String fileDir;
+	
+	@Value("${file.tmpdir}")
+	private String tmpFileDir;
 
 	public String getFullPath(String filename) {
 		return fileDir + filename;
 	}
+	
+	public String getTmpFullPath(String filename) {
+		return tmpFileDir + filename;
+	}
 
 	@Override
-	public List<Image> storeFiles(List<MultipartFile> multipartFiles) throws FileException {
-		List<Image> storeFileResult = new ArrayList<>();
+	public List<Media> storeFiles(List<MultipartFile> multipartFiles) throws FileException {
+		List<Media> storeFileResult = new ArrayList<>();
 		for (MultipartFile multipartFile : multipartFiles) {
 			if (!multipartFile.isEmpty()) {
 				storeFileResult.add(storeFile(multipartFile));
@@ -40,7 +47,7 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public Image storeFile(MultipartFile multipartFile) throws FileException {
+	public Media storeFile(MultipartFile multipartFile) throws FileException {
 		if (multipartFile.isEmpty()) {
 			return null;
 		}
@@ -48,22 +55,26 @@ public class FileServiceImpl implements FileService {
 		String storeFileName = createStoreFileName(originalFilename);
 
 		try {
-			multipartFile.transferTo(new File(getFullPath(storeFileName)));
+			multipartFile.transferTo(new File(getTmpFullPath(storeFileName)));
 		} catch (IOException e) {
 			throw new FileException(FileExceptionType.FAIL_SAVE_FILE);
 		}
 		
-		return Image.builder().originImageName(originalFilename).storeImageName(storeFileName).build();
+		return Media.builder().originMediaName(originalFilename).storeMediaName(storeFileName).build();
 	}
 
-	@Override
+	/*// tmp -> db에 저장 + 파일옮기기
+	public Media storeFileCopy(List<String> tmpStoreFileName) {
+		
+		return Media.builder().originMediaName(originalFilename).storeMediaName(storeFileName).build();
+	}
+	*/
 	public String createStoreFileName(String originalFilename) {
 		String ext = extractExt(originalFilename);
 		String uuid = UUID.randomUUID().toString();
 		return uuid + "." + ext;
 	}
 
-	@Override
 	public String extractExt(String originalFilename) {
 		int pos = originalFilename.lastIndexOf(".");
 		return originalFilename.substring(pos + 1);

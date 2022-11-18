@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<link th:href="@{/css/bootstrap.min.css}"
+	href="../css/bootstrap.min.css" rel="stylesheet">
+<style>
+.container {
+	max-width: 840px;
+}
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="py-5 text-left">
+			<h2>게시글 조회</h2>
+		</div>
+		<h4 class="mb-3">게시글</h4>
+			<div> 
+				<div class="form-control">
+					<span th:text="${postInfoDto.title}"></span>
+				</div>
+				<div class="row">
+					<div class="col">
+						<span th:text="${postInfoDto.memberInfoDto.nickname}"></span>
+					</div>
+					<div class="col" align="right">
+						<span>추천 <b th:text="${postInfoDto.recommend}"></b></span>
+						<span>조회수 <b th:text="${postInfoDto.hit}"></b></span>
+						<span>작성일 <b th:text="${#temporals.format(postInfoDto.createdDate, 'yyyy-MM-dd HH:mm')}"></b></span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-control" th:utext="${postInfoDto.content}">
+			</div>
+	</div>
+</body>
+</html>
