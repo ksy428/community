@@ -49,74 +49,75 @@ public class PostServiceImpl implements PostService {
 		post.setWriter(memberRepository.findByLoginId(SecurityUtil.getLoginMemberId())
 				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER)));
 
-		// 서버에 이미지 저장
-		if (!CollectionUtils.isEmpty(writeDto.getUploadFile())) {
-			List<Media> mediaList = fileService.storeFiles(writeDto.getUploadFile());
+		List<Media> mediaList = writeDto.getMediaList();
+
+		if (!CollectionUtils.isEmpty(mediaList)) {
+			fileService.copyFiles(mediaList);
 			for (Media media : mediaList) {
 				media.setPost(post);
 			}
 		}
 		postRepository.save(post);
-		
+
 		return post.getId();
 	}
 
 	@Override
-	public void edit(Long id, PostEditDto editDto) throws FileException, PostException {
+	@Transactional
+	public void edit(Long postId, PostEditDto editDto) throws FileException, PostException {
 
-		Post post = postRepository.findById(id).orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
-
-		// 기존이미지 삭제
-		List<Media> deleteMediaList = mediaRepository.findAllByPostId(id);
-
+		Post post = findOne(postId);
+		List<Media> newMediaList = editDto.getNewMediaList();
+		List<Media> deleteMediaList = editDto.getDeleteMediaList();
+		
+		//서버에서 파일삭제
 		if (!CollectionUtils.isEmpty(deleteMediaList)) {
 			for (Media media : deleteMediaList) {
-				fileService.deleteFiles(media.getStoreMediaName());
-				mediaRepository.delete(media);
+				fileService.deleteFile(media.getStoreName());
+				post.getMediaList().remove(media);
 			}
 		}
-		post.initMediaList();
-		post.editTitle(editDto.getTitle());
-		post.editContent(editDto.getContent());
-
-		// 새로운 이미지 서버에 저장
-		if (!CollectionUtils.isEmpty(editDto.getNewUpdoaldFile())) {
-			List<Media> saveMediaList = fileService.storeFiles(editDto.getNewUpdoaldFile());
-			for (Media media : saveMediaList) {
+		//서버에 파일저장
+		if (!CollectionUtils.isEmpty(newMediaList)) {
+			fileService.copyFiles(newMediaList);
+			for (Media media : newMediaList) {
 				media.setPost(post);
 			}
 		}
+		post.editTitle(editDto.getTitle());
+		post.editContent(editDto.getContent());
 	}
 
 	@Override
-	public void delete(Long id) throws FileException, PostException{
+	@Transactional
+	public void delete(Long postId) throws FileException, PostException {
 
-		Post post = postRepository.findById(id).orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
+		Post post = findOne(postId);
 
 		// 게시글 속 이미지 삭제
-		List<Media> deleteMediaList = mediaRepository.findAllByPostId(id);
+		List<Media> deleteMediaList = mediaRepository.findAllByPostId(postId);
 
 		if (!CollectionUtils.isEmpty(deleteMediaList)) {
 			for (Media media : deleteMediaList) {
-				fileService.deleteFiles(media.getStoreMediaName());
-				mediaRepository.delete(media);
+				fileService.deleteFile(media.getStoreName());
 			}
-		}	
+		}
 		postRepository.delete(post);
 		post.getWriter().getPostList().remove(post);
 	}
 
 	@Override
-	public PostInfoDto view(Long id) throws PostException{
-		return new PostInfoDto(postRepository.findById(id)
-				.orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST)));
+	public PostInfoDto view(Long postId) throws PostException {
+		return new PostInfoDto(findOne(postId));
 	}
 
 	@Override
-	public PostEditDto getEditInfo(Long id) throws PostException {
-		return new PostEditDto(postRepository.findById(id)
-				.orElseThrow(()-> new PostException(PostExceptionType.NOT_FOUND_POST)));
+	public PostEditDto getEditInfo(Long postId) throws PostException {
+		return new PostEditDto(findOne(postId));
 	}
-	
-	
+
+	@Override
+	public Post findOne(Long postId) throws PostException {
+		return postRepository.findById(postId).orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
+	}
 }

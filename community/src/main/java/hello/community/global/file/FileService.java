@@ -13,11 +13,11 @@ public interface FileService {
 	List<Media> storeFiles(List<MultipartFile> multipartFiles) throws FileException;
 	
 	Media storeFile(MultipartFile multipartFile) throws FileException;
+		
+	void copyFiles(List<Media> mediaList) throws FileException;
 	
-	/*String createStoreFileName(String originalFilename);
+	void deleteFile(String storeName) throws FileException;
 	
-	String extractExt(String originalFilename);*/
-	
-	void deleteFiles(String fileName) throws FileException;
+	void deleteTmpFile(String fileName) throws FileException;
 	
 }

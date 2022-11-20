@@ -18,7 +18,7 @@ public class PostInfoDto {
 	private String content;
 	private Long hit;
 	private Long recommend;
-	private List<Media> uploadMedia;
+	//private List<Media> uploadMedia;
 	private MemberInfoDto memberInfoDto;
 	private LocalDateTime createdDate;
 
@@ -29,7 +29,7 @@ public class PostInfoDto {
 		this.content = post.getContent();
 		this.hit = post.getHit();
 		this.recommend = post.getRecommend();
-		this.uploadMedia = post.getMediaList();
+		//this.uploadMedia = post.getMediaList();
 		this.memberInfoDto = new MemberInfoDto(post.getWriter());
 		this.createdDate = post.getCreatedDate();
 	}

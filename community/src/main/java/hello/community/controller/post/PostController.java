@@ -1,6 +1,7 @@
 package hello.community.controller.post;
 
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,29 +47,25 @@ public class PostController {
 	}
 	
 	@GetMapping("/board/write")
-	public String writeForm(@ModelAttribute PostWriteDto writeDto) {
-		
+	public String writeForm(@ModelAttribute PostWriteDto writeDto) {	
 		return "post/writePostForm";
 	}
 	
 	@PostMapping("/board/write")
 	@ResponseBody
 	public String write(@Valid @ModelAttribute PostWriteDto writeDto, BindingResult result,
-			@RequestParam("originName[]") List<String> originName,
-			@RequestParam("storeName[]") List<String> storeName){
-
-		
-		log.info("원래: {}", originName);
-		log.info("저장: {}", storeName);
+			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
+			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList){
 
 		if(result.hasErrors()){
-			//return "post/writePostForm";
 			return "error";
 		}
+		
+		writeDto.initDto(originNameList, storeNameList);
+
 		Long postId = postService.write(writeDto);
 		
 		return postId.toString();
-		//return "redirect:/board/view/"+ postId;
 	}
 	
 	@GetMapping("/board/view/{postId}")
@@ -92,14 +89,23 @@ public class PostController {
 	}
 	
 	@PutMapping("/board/view/{postId}/edit")
-	public String edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result) {
+	@ResponseBody
+	public String edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result,
+			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
+			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList) {
 			
 		if(result.hasErrors()) {
 			return "post/editPostForm";
 		}
+		
+		editDto.setMediaList(postService.findOne(postId).getMediaList());
+		
+		editDto.inItDto(originNameList, storeNameList);
+		
 		postService.edit(postId, editDto);
 		
-		return "redirect:/board/view/"+ postId;
+		//return "redirect:/board/view/"+ postId;
+		return postId.toString();
 	}
 	
 	@DeleteMapping("/board/view/{postId}")

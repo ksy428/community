@@ -43,10 +43,10 @@ public class Post extends BaseTimeEntity{
 	@JoinColumn(name = "member_id")
 	private Member writer;
 	
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Media> mediaList = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> commentList = new ArrayList<>();
 	
 	private Long hit;

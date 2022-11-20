@@ -26,17 +26,17 @@ public class Media {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String originMediaName;
-	private String storeMediaName;
+	private String originName;
+	private String storeName;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
 	private Post post;
 
 	@Builder
-	public Media(String originMediaName, String storeMediaName) {
-		this.originMediaName = originMediaName;
-		this.storeMediaName = storeMediaName;
+	public Media(String originName, String storeName) {
+		this.originName = originName;
+		this.storeName = storeName;
 	}
 
 	// 연관관계메서드

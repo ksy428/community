@@ -42,31 +42,31 @@
 </body>
 <script th:inline="javascript">
 
-let originName = [];
-let storeName = [];
+$(document).ready(function(e){
+	
+	let originNameList = [];
+	let storeNameList = [];
 
 	$("#write-btn").on("click", function(e) {
 		e.preventDefault();
 
-		//let formData = new FormData($("#write-form"));
-
 		let formData = new FormData(document.getElementById('write-form'));
 		
-		for(let i=0; i < originName.length; i++){
-			formData.append('originName[]', originName[i]);
+		for(let i=0; i < originNameList.length; i++){
+			formData.append('originNameList[]', originNameList[i]);
 		}
-		for(let i=0; i < storeName.length; i++){
-			formData.append('storeName[]', storeName[i]);
+		for(let i=0; i < storeNameList.length; i++){
+			formData.append('storeNameList[]', storeNameList[i]);
 		} 
 		$.ajax({
 			data : formData,
 			type : 'POST',
 			url : '/board/write',
-			//async: false,
 			contentType : false,
 			enctype : 'multipart/form-data',
 			processData : false,
 			success : function(postId) {
+				
 				if (postId === "error") {
 					//document.location.href = '/board/write'
 				} else {
@@ -132,11 +132,12 @@ let storeName = [];
 			enctype : 'multipart/form-data',
 			processData : false,
 			success : function(media) {
-				$(el).summernote('editor.insertImage','/tmp/' + media.storeMediaName);
-				originName.push(media.originMediaName);
-				storeName.push(media.storeMediaName);
+				$(el).summernote('editor.insertImage','/tmp/' + media.storeName);
+				originNameList.push(media.originName);
+				storeNameList.push(media.storeName);
 			}
 		});
 	}
+});
 </script>
 </html>

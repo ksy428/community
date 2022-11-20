@@ -38,6 +38,31 @@
 			
 			<div class="form-control" th:utext="${postInfoDto.content}">
 			</div>
+			<div class="row">
+				<div class="col-sm-3">
+					<button class="w-100 btn btn-primary btn-lg" id="edit-btn" type="button"> 수정</button>
+				</div>
+				<div class="col-sm-3">
+					<form id="delete-form" name="delete-form" th:action th:method="delete"> 
+						 <button class="w-100 btn btn-primary btn-lg" id="delete-btn" type="submit"> 삭제</button>
+					</form>
+				</div>
+			</div>
 	</div>
 </body>
+
+<script type="text/javascript">
+
+$(document).ready(function(e){
+	
+	$("#edit-btn").on("click", function(e){
+		e.preventDefault();
+		
+		document.location.href = window.location.href+'/edit';
+	}
+	);
+	
+});
+
+</script>
 </html>

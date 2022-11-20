@@ -2,6 +2,8 @@ package hello.community.global.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,17 +38,19 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public List<Media> storeFiles(List<MultipartFile> multipartFiles) throws FileException {
+	public List<Media> storeFiles(List<MultipartFile> multipartFileList) throws FileException {
 		List<Media> storeFileResult = new ArrayList<>();
-		for (MultipartFile multipartFile : multipartFiles) {
+		for (MultipartFile multipartFile : multipartFileList) {
 			if (!multipartFile.isEmpty()) {
 				storeFileResult.add(storeFile(multipartFile));
 			}
 		}
 		return storeFileResult;
 	}
-
 	@Override
+	/***
+	 *  임시폴더에 파일 저장
+	 */
 	public Media storeFile(MultipartFile multipartFile) throws FileException {
 		if (multipartFile.isEmpty()) {
 			return null;
@@ -59,37 +63,62 @@ public class FileServiceImpl implements FileService {
 		} catch (IOException e) {
 			throw new FileException(FileExceptionType.FAIL_SAVE_FILE);
 		}
+		return Media.builder().originName(originalFilename).storeName(storeFileName).build();
+	}
+	/***
+	 * 임시폴더에 있던 파일 복사 후 삭제
+	 */
+	@Override
+	public void copyFiles(List<Media> mediaList) throws FileException{
+		for (Media media : mediaList) {		
+			File tmpFile = new File(getTmpFullPath(media.getStoreName()));			
+	
+			if(tmpFile.exists()) {
+				File copyFile = new File(getFullPath(media.getStoreName()));
+				try {
+					Files.copy(tmpFile.toPath(), copyFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
+					deleteTmpFile(media.getStoreName());
+				} catch (IOException e) {
+					throw new FileException(FileExceptionType.FAIL_SAVE_FILE);
+				}
+			}
+		}
+	}
+	/***
+	 * 파일삭제
+	 */
+	@Override
+	public void deleteFile(String storeName) throws FileException {
 		
-		return Media.builder().originMediaName(originalFilename).storeMediaName(storeFileName).build();
+		File deleteFile = new File(getFullPath(storeName));
+		if(deleteFile.exists()) {
+			if(!deleteFile.delete()) {
+				throw new FileException(FileExceptionType.FAIL_DELETE_FILE);
+			}
+		}
+	}
+	
+	/***
+	 * 임시파일삭제
+	 */
+	@Override
+	public void deleteTmpFile(String storeName) throws FileException {
+		
+		File deleteFile = new File(getTmpFullPath(storeName));
+		if(deleteFile.exists()) {
+			if(!deleteFile.delete()) {
+				throw new FileException(FileExceptionType.FAIL_DELETE_FILE);
+			}
+		}
 	}
 
-	/*// tmp -> db에 저장 + 파일옮기기
-	public Media storeFileCopy(List<String> tmpStoreFileName) {
-		
-		return Media.builder().originMediaName(originalFilename).storeMediaName(storeFileName).build();
-	}
-	*/
 	public String createStoreFileName(String originalFilename) {
 		String ext = extractExt(originalFilename);
 		String uuid = UUID.randomUUID().toString();
 		return uuid + "." + ext;
 	}
-
 	public String extractExt(String originalFilename) {
 		int pos = originalFilename.lastIndexOf(".");
 		return originalFilename.substring(pos + 1);
-	}
-
-	@Override
-	public void deleteFiles(String filePath) throws FileException {
-		
-		File deleteFile = new File(getFullPath(filePath));
-		
-		if(deleteFile.exists()) {
-			
-			if(!deleteFile.delete()) {
-				throw new FileException(FileExceptionType.FAIL_DELETE_FILE);
-			}
-		}
 	}
 }
