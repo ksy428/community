@@ -3,18 +3,20 @@ package hello.community.service.post;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 
-import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import hello.community.domain.media.Media;
-import hello.community.domain.member.Member;
 import hello.community.domain.post.Post;
 import hello.community.dto.post.PostEditDto;
 import hello.community.dto.post.PostInfoDto;
+import hello.community.dto.post.PostPagingDto;
 import hello.community.dto.post.PostWriteDto;
 import hello.community.exception.file.FileException;
 import hello.community.exception.member.MemberException;
@@ -26,6 +28,7 @@ import hello.community.global.security.SecurityUtil;
 import hello.community.repository.media.MediaRepository;
 import hello.community.repository.member.MemberRepository;
 import hello.community.repository.post.PostRepository;
+import hello.community.repository.post.PostSearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -119,5 +122,11 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public Post findOne(Long postId) throws PostException {
 		return postRepository.findById(postId).orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
+	}
+
+	@Override
+	public PostPagingDto searchPostList(Pageable pageable, PostSearch postSearch, int page) {
+		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  10);
+		return new PostPagingDto(postRepository.search(pageable, postSearch));
 	}
 }

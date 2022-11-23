@@ -94,8 +94,8 @@ class PostServiceImplTest {
 	/***
 	 * summernote 쓰면서 안씀
 	 */
-	/*
-	// 이미지 있는 Post 데이터 입력
+	
+	/*// 이미지 있는 Post 데이터 입력
 		Long setMediaPost(String title, String content) throws Exception {
 	
 			MultipartFile mock1 = getMockMultiaprtFile(fileName1, filePath1);
@@ -160,8 +160,8 @@ class PostServiceImplTest {
 		
 		assertThat(editPost.getTitle().equals("제목수정완료"));
 		assertThat(mediaRepository.findAll().size()).isEqualTo(1);
-	}*/
-
+	}
+	
 	@Test
 	@WithMockUser(username = "test", roles = "MEMBER")
 	void 게시글수정이미지x() throws Exception {
@@ -172,35 +172,35 @@ class PostServiceImplTest {
 		PostEditDto editDto = new PostEditDto(post);
 		editDto.setTitle("제목수정완료");
 		editDto.setContent("내용수정완료");
-
+	
 		// when
 		postService.edit(postId, editDto);
-
+	
 		// then
-
+	
 		Post editPost = postRepository.findById(postId)
 			.orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
 		
 		assertThat(editPost.getTitle().equals("제목수정완료"));
 	}
-
+	
 	@Test
 	@WithMockUser(username = "test", roles = "MEMBER")
 	void 게시글수정_찾기실패() throws Exception {
 		// given
 		Long postId = setPost("제목1", "내용1");
-
+	
 		Post post = postRepository.findById(postId)
 				.orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
 		PostEditDto editDto = new PostEditDto(post);
 		editDto.setTitle("제목수정완료");
 		editDto.setContent("내용수정완료");
-
+	
 		// when
 		// then
 		assertThrows(PostException.class, () -> postService.edit(100L, editDto));
 	}
-
+	
 	@Test
 	@WithMockUser(username = "test", roles = "MEMBER")
 	// @Rollback(false)
@@ -209,7 +209,7 @@ class PostServiceImplTest {
 		Long postId = setPost("11", "11");
 		setPost("22", "22");
 		setPost("33", "33");
-
+	
 		// when		
 		postService.delete(postId);
 		
@@ -219,17 +219,17 @@ class PostServiceImplTest {
 		
 		assertThat(member.getPostList().size()).isEqualTo(2);
 	}
-
+	
 	@Test
 	@WithMockUser(username = "test", roles = "MEMBER")
 	void 게시글조회() throws Exception {
-
+	
 		Long postId = setPost("제목1", "내용1");
-
+	
 		PostInfoDto infoDto = postService.view(postId);
-
+	
 		assertThat(infoDto.getContent().equals("11"));
 		assertThat(infoDto.getMemberInfoDto().getLoginId().equals("test"));
 		assertThat(infoDto.getMemberInfoDto().getEmail().equals("test.naver.com"));
-	}
+	}*/
 }

@@ -39,6 +39,11 @@
 					th:onclick="|location.href='@{/board/write}'|" type="button">
 					글쓰기</button>
 		</div>
+		<div sec:authorize ="isAuthenticated()" class="col">
+				<button class="w-100 btn btn-primary btn-lg"
+					th:onclick="|location.href='@{/board}'|" type="button">
+					게시판보기</button>
+		</div>
 		<hr class="my-4">
 	</div>
 	

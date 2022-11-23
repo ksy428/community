@@ -38,12 +38,12 @@ class SecurityTest {
 	@BeforeEach
 	public void init() {
 	
-		memberRepository.save(Member.builder()			
+		/*memberRepository.save(Member.builder()			
 				.loginId("test")
 				.password(passwordEncoder.encode("1234"))
 				.nickname("testZZ")
 				.email("test@naver.com")
-				.build());
+				.build());*/
 	}
 	
 	@Test

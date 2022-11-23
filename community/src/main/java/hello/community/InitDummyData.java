@@ -36,17 +36,19 @@ public class InitDummyData {
 		@Transactional
 	    public void save() {
 			 //initMember("tpdud0428", "1234", "세영짱짱", "tpdud0428@naver.com");
-			 initMember("test", "1234", "test짱짱", "test@naver.com");
-			 initMember("dummy1", "1234", "dummy짱짱1", "dummy1@naver.com");
-			 initMember("dummy2", "1234", "dummy짱짱2", "dummy2@naver.com");
-			 initMember("dummy3", "1234", "dummy짱짱3", "dummy3@naver.com");
+			 initMember("test", "1234", "짱짱", "test@naver.com");
+			 initMember("dummy1", "1234", "1번유저", "dummy1@naver.com");
+			 initMember("dummy2", "1234", "2번유저", "dummy2@naver.com");
+			 initMember("dummy3", "1234", "3번유저", "dummy3@naver.com");
 		
-			 initPost("1번글", "내용무", 1L);
-			 initPost("2번글", "내용무", 1L);
-			 initPost("3번글", "내용무", 1L);
-			 initPost("4번글", "내용무", 2L);
-			 initPost("5번글", "내용무", 3L);
-			 initPost("6번글", "내용무", 4L);		
+				/*
+				 * initPost("1번글", "내용무", 1L); initPost("2번글", "내용무", 1L); initPost("3번글",
+				 * "내용무", 1L); initPost("4번글", "내용무", 2L); initPost("5번글", "내용무", 3L);
+				 * initPost("6번글", "내용무", 4L);
+				 */
+			 for(int i=0; i<150;i++) {
+				 initPost(i+"번글", i+"번내용", (long) ((i % 4) + 1));
+			 }
 	    }
 
 		@Transactional

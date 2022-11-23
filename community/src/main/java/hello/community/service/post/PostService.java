@@ -1,12 +1,16 @@
 package hello.community.service.post;
 
+import org.springframework.data.domain.Pageable;
+
 import hello.community.domain.post.Post;
 import hello.community.dto.post.PostEditDto;
 import hello.community.dto.post.PostInfoDto;
+import hello.community.dto.post.PostPagingDto;
 import hello.community.dto.post.PostWriteDto;
 import hello.community.exception.file.FileException;
 import hello.community.exception.member.MemberException;
 import hello.community.exception.post.PostException;
+import hello.community.repository.post.PostSearch;
 
 public interface PostService {
 
@@ -23,4 +27,6 @@ public interface PostService {
 	PostEditDto getEditInfo(Long postId) throws PostException;
 	
 	Post findOne(Long postId) throws PostException;
+	
+	PostPagingDto searchPostList(Pageable pageable, PostSearch postSearch, int page);
 }

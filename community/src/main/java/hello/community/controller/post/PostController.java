@@ -1,19 +1,14 @@
 package hello.community.controller.post;
 
-import java.awt.Image;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.hibernate.transform.ToListResultTransformer;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +18,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import hello.community.domain.media.Media;
 import hello.community.dto.post.PostEditDto;
 import hello.community.dto.post.PostInfoDto;
+import hello.community.dto.post.PostPagingDto;
 import hello.community.dto.post.PostWriteDto;
+import hello.community.repository.post.PostSearch;
 import hello.community.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +36,16 @@ public class PostController {
 	private final PostService postService;
 	
 	@GetMapping("/board")
-	public String postList() {
+	public String postList(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
+			 @RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+		
+		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);
+		
+		log.info("검색조건: {}",postSearch.getTarget());
+		log.info("키워드: {}",postSearch.getKeyword());
+		log.info("페이징: {}",postPagingDto.toString());
+		
+		model.addAttribute("postPagingDto",postPagingDto);
 		
 		return "post/listPost";
 	}
