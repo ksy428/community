@@ -41,10 +41,6 @@ public class PostController {
 		
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);
 		
-		log.info("검색조건: {}",postSearch.getTarget());
-		log.info("키워드: {}",postSearch.getKeyword());
-		log.info("페이징: {}",postPagingDto.toString());
-		
 		model.addAttribute("postPagingDto",postPagingDto);
 		
 		return "post/listPost";

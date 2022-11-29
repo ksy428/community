@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BriefPostInfo {
+public class PostBriefInfo {
 
 	private Long postId;
 	private String title;
@@ -18,7 +18,7 @@ public class BriefPostInfo {
 	private Long recommend;
 	private LocalDateTime createdDate;
 	
-	public BriefPostInfo(Post post) {
+	public PostBriefInfo(Post post) {
 		this.postId = post.getId();
 		this.title = post.getTitle();
 		this.content = post.getContent();

@@ -30,16 +30,15 @@ public class PostPagingDto {
 	// 페이지 버튼 개수
 	private int pageNum;
 	
-	
 
-	private List<BriefPostInfo> postList = new ArrayList<>();
+	private List<PostBriefInfo> postList = new ArrayList<>();
 
 	public PostPagingDto(Page<Post> searchResults) {
 
 		totalPageCount = searchResults.getTotalPages();
 		currentPageNum = searchResults.getNumber() + 1;
 		totalElementCount = searchResults.getTotalElements();
-		postList = searchResults.getContent().stream().map(BriefPostInfo::new).toList();
+		postList = searchResults.getContent().stream().map(PostBriefInfo::new).toList();
 
 		pageNum = 10;
 		// 현재페이지가 페이지버튼 개수 중간값 보다 작을 경우

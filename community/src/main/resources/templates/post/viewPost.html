@@ -8,6 +8,31 @@
 .container {
 	max-width: 840px;
 }
+.member-info {
+	display: inline-block;
+}
+.post-info {
+	display: inline-block;
+	float: right;
+}
+.post-head{
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.title-row{
+	padding: 0.5rem 0.75rem 0.5rem 0.75rem; 
+	border-bottom: 1px solid;
+	border-color: #bbb;
+	font-size: 1.3rem;
+	background-color: #eee;
+}
+.info-row {
+	padding: 0.35rem 0.75rem 0.3rem 0.75rem;
+	font-size: 0.9rem;
+    overflow: hidden;
+}
+
 </style>
 <script
   src="https://code.jquery.com/jquery-3.6.1.min.js"
@@ -20,15 +45,15 @@
 			<h2>게시글 조회</h2>
 		</div>
 		<h4 class="mb-3">게시글</h4>
-			<div> 
-				<div class="form-control">
+			<div class="post-head"> 
+				<div class="title-row">
 					<span th:text="${postInfoDto.title}"></span>
 				</div>
-				<div class="row">
-					<div class="col">
+				<div class="info-row">
+					<div class="member-info">
 						<span th:text="${postInfoDto.memberInfoDto.nickname}"></span>
 					</div>
-					<div class="col" align="right">
+					<div class="post-info">
 						<span>추천 <b th:text="${postInfoDto.recommend}"></b></span>
 						<span>조회수 <b th:text="${postInfoDto.hit}"></b></span>
 						<span>작성일 <b th:text="${#temporals.format(postInfoDto.createdDate, 'yyyy-MM-dd HH:mm')}"></b></span>

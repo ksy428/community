@@ -8,8 +8,6 @@ import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import hello.community.domain.media.Media;
@@ -45,6 +43,7 @@ public class PostServiceImpl implements PostService {
 	private final FileService fileService;
 
 	@Override
+	@Transactional
 	public Long write(PostWriteDto writeDto) throws FileException, MemberException {
 
 		Post post = writeDto.toEntity();
@@ -70,6 +69,11 @@ public class PostServiceImpl implements PostService {
 	public void edit(Long postId, PostEditDto editDto) throws FileException, PostException {
 
 		Post post = findOne(postId);
+		
+		if(!post.getWriter().getLoginId().equals(SecurityUtil.getLoginMemberId())) {
+			throw new PostException(PostExceptionType.NOT_AUTHORIZATION_POST);
+		}
+		
 		List<Media> newMediaList = editDto.getNewMediaList();
 		List<Media> deleteMediaList = editDto.getDeleteMediaList();
 		
@@ -96,6 +100,10 @@ public class PostServiceImpl implements PostService {
 	public void delete(Long postId) throws FileException, PostException {
 
 		Post post = findOne(postId);
+		
+		if(!post.getWriter().getLoginId().equals(SecurityUtil.getLoginMemberId())) {
+			throw new PostException(PostExceptionType.NOT_AUTHORIZATION_POST);
+		}
 
 		// 게시글 속 이미지 삭제
 		List<Media> deleteMediaList = mediaRepository.findAllByPostId(postId);
@@ -110,8 +118,11 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public PostInfoDto view(Long postId) throws PostException {
-		return new PostInfoDto(findOne(postId));
+		Post post = findOne(postId);
+		post.addHit();
+		return new PostInfoDto(post);
 	}
 
 	@Override

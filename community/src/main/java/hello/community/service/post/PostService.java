@@ -13,8 +13,6 @@ import hello.community.exception.post.PostException;
 import hello.community.repository.post.PostSearch;
 
 public interface PostService {
-
-	//Long write(PostWriteDto writeDto) throws FileException, MemberException;
 	
 	Long write(PostWriteDto writeDto) throws FileException, MemberException;
 	

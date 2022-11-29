@@ -6,10 +6,17 @@ import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import hello.community.domain.comment.Comment;
 import hello.community.domain.member.Member;
 import hello.community.domain.post.Post;
+import hello.community.exception.comment.CommentException;
+import hello.community.exception.comment.CommentExceptionType;
 import hello.community.exception.member.MemberException;
 import hello.community.exception.member.MemberExceptionType;
+import hello.community.exception.post.PostException;
+import hello.community.exception.post.PostExceptionType;
+import hello.community.global.security.SecurityUtil;
+import hello.community.repository.comment.CommentRepository;
 import hello.community.repository.member.MemberRepository;
 import hello.community.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +39,7 @@ public class InitDummyData {
 		private final MemberRepository memberRepository;
 		private final PostRepository postRepository;
 		private final PasswordEncoder passwordEncoder;
+		private final CommentRepository commentRepository;
 		
 		@Transactional
 	    public void save() {
@@ -41,14 +49,26 @@ public class InitDummyData {
 			 initMember("dummy2", "1234", "2번유저", "dummy2@naver.com");
 			 initMember("dummy3", "1234", "3번유저", "dummy3@naver.com");
 		
-				/*
-				 * initPost("1번글", "내용무", 1L); initPost("2번글", "내용무", 1L); initPost("3번글",
-				 * "내용무", 1L); initPost("4번글", "내용무", 2L); initPost("5번글", "내용무", 3L);
-				 * initPost("6번글", "내용무", 4L);
-				 */
-			 for(int i=0; i<150;i++) {
-				 initPost(i+"번글", i+"번내용", (long) ((i % 4) + 1));
+	
+			 for(int i=0; i<3;i++) {			 
+				 initPost((i+1) +"번 글", (i+1)+"번 내용", 1L);
 			 }
+			 
+			 for(int i=0; i<3; i++) {
+				 long groupId = (long) i+1;				 
+				 initComment("1번 글_"+ groupId+"번댓글", 1L, 1L, groupId);
+			 }
+			 
+			 for(int i=0; i<10; i++) {
+				 long commentNum2 = (long)((i % 3 ) + 1);	 
+				 initReComment(commentNum2+"번 댓글_대댓글", 1L, 1L, commentNum2);
+			 }
+			 
+				/*
+				 * Long commentId = initComment("댓글", 1L, 150L, 101L); initReComment("대댓글", 1L,
+				 * 150L, commentId); initReComment("대댓글", 1L, 150L, commentId);
+				 * initReComment("대댓글", 1L, 150L, commentId);
+				 */
 	    }
 
 		@Transactional
@@ -62,13 +82,42 @@ public class InitDummyData {
 		}
 		
 		@Transactional
-		public void initPost(String title, String content,Long memberId) {
+		public void initPost(String title, String content, Long memberId) {
 			Post post = Post.builder().title(title).content(content).build();
 			post.setWriter(memberRepository.findById(memberId).
 					orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER)));
 			
 			postRepository.save(post);
 		}	
+		
+		@Transactional
+		public Long initComment(String content, Long memberId, Long postId, Long groupId) {
+			Comment comment = Comment.builder().content(content).build();
+			
+			comment.setMember(memberRepository.findById(memberId)
+					.orElseThrow(()-> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER)));
+			comment.setPost(postRepository.findById(postId)
+					.orElseThrow(()-> new PostException(PostExceptionType.NOT_FOUND_POST)));
+			comment.setGroupId(groupId);
+			commentRepository.save(comment);
+			
+			return comment.getId();
+		}
+		
+		@Transactional
+		public void initReComment(String content, Long memberId, Long postId, Long commentId) {
+			Comment comment = Comment.builder().content(content).build();
+			
+			comment.setMember(memberRepository.findById(memberId)
+					.orElseThrow(()-> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER)));
+			comment.setPost(postRepository.findById(postId)
+					.orElseThrow(()-> new PostException(PostExceptionType.NOT_FOUND_POST)));
+			comment.setParent(commentRepository.findById(commentId)
+					.orElseThrow(()-> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT)));
+			comment.setGroupId(commentId);
+			
+			commentRepository.save(comment);
+		}
 	}
 }
 

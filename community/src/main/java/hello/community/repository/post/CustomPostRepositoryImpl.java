@@ -44,6 +44,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 					.limit(pageable.getPageSize())
 					.orderBy(post.id.desc())
 					.fetch();
+			
 			JPAQuery<Post> countQuery = query
 					.selectFrom(post)
 					.where(
