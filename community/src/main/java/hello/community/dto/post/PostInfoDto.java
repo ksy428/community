@@ -20,7 +20,7 @@ public class PostInfoDto {
 	private Long recommend;
 	private MemberInfoDto memberInfoDto;
 	private LocalDateTime createdDate;
-
+	private int totalCommentCount;
 	
 	public PostInfoDto(Post post) {
 		this.postId = post.getId();
@@ -30,5 +30,6 @@ public class PostInfoDto {
 		this.recommend = post.getRecommend();
 		this.memberInfoDto = new MemberInfoDto(post.getWriter());
 		this.createdDate = post.getCreatedDate();
+		this.totalCommentCount = post.getCommentList().size();
 	}
 }

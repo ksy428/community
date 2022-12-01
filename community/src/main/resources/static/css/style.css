@@ -1352,6 +1352,21 @@ var(
 	margin-right: 0
 }
 
+.body .board-article .article-comment .list-area .parentcomment-wrapper{
+	margin-right: 0
+}
+
+.body .board-article .article-comment .list-area .recomment-wrapper{
+	margin-left: 2rem;
+	margin-right: 0
+}
+
+.body .board-article .article-comment .list-area .recomment-wrapper>.recomment-wrapper{
+	margin-left: 0;
+	margin-right: 0
+	
+}
+
 @media screen and (max-width:767px) {
 	.body .board-article .article-comment .list-area .comment-wrapper>.comment-wrapper
 		{

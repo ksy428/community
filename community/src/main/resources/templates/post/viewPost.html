@@ -45,7 +45,7 @@
 							</div>														
 							<div class="article-comment position-relative">
 								<div class="title">
-									<div class="comment-info"> <span>댓글 x개</span></div>
+									<div class="comment-info"> <span>댓글 <b th:text="${postInfoDto.totalCommentCount}"></b>개</span></div>
 									<div class="link">
 										<span>본문보기 </span>
 										<span class="sep"></span>
@@ -72,12 +72,11 @@
 									</div> -->
 								</div>
 								<div class="pagination-wrapper my-2">
-									<ui class="pagination justify-content-center" id="comment-paging">
-									</ui>
-								</div>
+									<ui class="pagination justify-content-center" id="comment-paging"></ui>
 								</div>
 							</div>
 						</div>
+					</div>
 						<div class="row">
 							<div class="col-sm-3">
 								<button class="w-100 btn btn-primary btn-lg" id="edit-btn" type="button"> 수정</button>
@@ -88,14 +87,12 @@
 								</form>
 							</div>
 						</div>
-					</div>
 				</article>
+			</div>
 				<aside class="sidebar right-sidebar">
 					<div>우측사이드바</div>
 				</aside>
-			</div>
 	</div>
-
 </body>
 
 <script type="text/javascript">
@@ -112,7 +109,7 @@ $(document).ready(function(e){
 	}
 	);
 });
-
+// 댓글리스트 가져오기
 function getCommentList(page){
 	
 	let postId = '[[${postInfoDto.postId}]]';
@@ -125,52 +122,57 @@ function getCommentList(page){
 		
 		$('.list-area').children().remove();
 		
+		//페이징으로 인해서 대댓글이 첫번째에 올 경우 grouping을 위한 변수
+		let groupId = 0;
+		let isFirst = true;
+		
 		$.each(result.commentList, function(index, comment) {
-			let commentList ="";	
+		
+			let isParent = (comment.parentId  == null) ? true : false;
+			let isDeleted = (comment.isDeleted) ? true : false;
+		
+			let commentList ="";
+			let hierarchy = isParent ? '"parentcomment-wrapper"':'"recomment-wrapper"';
+			let content = isDeleted ? '<span style="color: #999;"> 삭제된 댓글입니다.</span>' : comment.content;
+
+			commentList += '<div class='+hierarchy+'> \n'+ 
+								'<div class="comment-item" id=c_' + comment.commentId +'> \n'+
+									'<div class="content"> \n';
+			if(!isDeleted){	//삭제되지않은 댓글만 추가내용		
+				commentList += 			'<div class="info-row clearfix"> \n'+
+											'<span class="user-info">'+ comment.writerNickname + '</span> \n'+
+											'<div class="right"> \n'+ 
+												'<span>'+ comment.createdDate +'</span> \n';
+				if(isParent){ //부모댓글만 답글있음
+					commentList += 				'<span class="sep"></span> \n'+
+												'<a href="#" class="reply-link" data-best data-target='+ comment.commentId +'>답글</a> \n';
+				}
+				commentList +=				'</div> \n'+
+										'</div>\n';
+			}			
+				commentList += 			'<div class="message"> \n'+
+											'<div class="text">'+ content +'</div> \n'+
+										'</div>\n'+
+									'</div>\n'+
+								'</div>\n'+
+							'</div>\n';
 			
-			// 삭제된댓글
-			if(comment.isDeleted){
-				commentList += '<div class="comment-wrapper"> \n'+ 
-									'<div class="comment-item" id=c_' + comment.commentId +'> \n'+
-										'<div class="content"> \n'+					
-											 '<div class="message"> \n'+
-											 	'<div class="text"><span style="color: #999;"> 삭제된 댓글입니다.</span></div> \n'+
-											 '</div>\n'+
-										'</div>\n'+
-									'</div>\n'+
-								'</div>\n';
-			}
-			//정상댓글
-			else{
-				commentList += '<div class="comment-wrapper"> \n'+ 
-									'<div class="comment-item" id=c_' + comment.commentId +'> \n'+
-										'<div class="content"> \n'+
-											'<div class="info-row clearfix"> \n'+
-												'<span class="user-info">'+ comment.writerNickname + '</span> \n'+
-												'<div class="right"> \n'+ 
-													'<span>'+ comment.createdDate +'</span> \n';														
-				if(comment.parentId == null){
-					commentList += 					'<span class="sep"></span> \n'+
-													'<a href="#" class="reply-link" data-best data-target='+ comment.commentId +'>답글</a> \n';
-				}						
-				commentList += 					'</div>\n'+
-											 '</div>\n'+
-											'<div class="message"> \n'+
-											 	'<div class="text">'+ comment.content +'</div> \n'+
-											'</div>\n'+
-										'</div>\n'+
-									'</div>\n'+
-								'</div>\n';
-			}
-			if(comment.parentId == null){
+			//첫번째 오는것이 댓글인지 대댓글인지 판단
+			if(isParent){
+				isFirst = true;
+			}	
+			// group의 루트로 설정
+			// isFirst 초기화가 true이기 때문에 대댓글이 처음으로 오는 경우 , 댓글인 경우
+			if(isFirst){
 				$('.list-area').append(commentList);
+				groupId = comment.commentId;
+				isFirst = false;
 			}
 			else{
-				$('#c_'+comment.parentId).parent().append(commentList);
+				$('#c_'+groupId).parent().append(commentList);
 			}
 		});		
-		
-		//---페이징---	
+		//---댓글페이징---	
 		let pageList = "";
 		let previousPage = result.startPageNum - 1;
 		let nextPage = result.endPageNum + 1;
@@ -206,8 +208,7 @@ function getCommentList(page){
 								'<span aria-hidden="true">&raquo;</span> \n'+
 							'</a> \n'+
 						'</li>';
-		}
-		
+		}		
 		$('#comment-paging').html(pageList);			
 		}	
 	});
