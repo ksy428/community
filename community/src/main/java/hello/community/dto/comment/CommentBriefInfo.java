@@ -1,9 +1,9 @@
 package hello.community.dto.comment;
 
-import java.time.LocalDateTime;
+
+import java.time.format.DateTimeFormatter;
 
 import hello.community.domain.comment.Comment;
-import hello.community.domain.post.Post;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -16,12 +16,16 @@ public class CommentBriefInfo {
 	private Long commentId;
 	private String content;
 	private String writerNickname;
-	private LocalDateTime createdDate;
+	private String createdDate;
+	private Long parentId;
+	private Boolean isDeleted;
 	
 	public CommentBriefInfo(Comment comment) {
 		this.commentId = comment.getId();
 		this.content = comment.getContent();
 		this.writerNickname = comment.getWriter().getNickname();
-		this.createdDate = comment.getCreatedDate();
+		this.createdDate = comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		this.parentId = comment.getParent() == null ? null :comment.getParent().getId();
+		this.isDeleted = comment.isDeleted();
 	}
 }

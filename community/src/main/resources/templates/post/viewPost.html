@@ -1,93 +1,217 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" class="width-1300 navbar-scroll">
 <head>
 <meta charset="utf-8">
 <link th:href="@{/css/bootstrap.min.css}"
 	href="../css/bootstrap.min.css" rel="stylesheet">
-<style>
-.container {
-	max-width: 840px;
-}
-.member-info {
-	display: inline-block;
-}
-.post-info {
-	display: inline-block;
-	float: right;
-}
-.post-head{
-    border-top: 1px solid;
-    border-bottom: 1px solid;
-}
 
-.title-row{
-	padding: 0.5rem 0.75rem 0.5rem 0.75rem; 
-	border-bottom: 1px solid;
-	border-color: #bbb;
-	font-size: 1.3rem;
-	background-color: #eee;
-}
-.info-row {
-	padding: 0.35rem 0.75rem 0.3rem 0.75rem;
-	font-size: 0.9rem;
-    overflow: hidden;
-}
+<link th:href="@{/css/style.css?after}" type="text/css"
+	href="../css/style.css?after" rel="stylesheet">
 
-</style>
 <script
   src="https://code.jquery.com/jquery-3.6.1.min.js"
   integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-  crossorigin="anonymous"></script>
+  crossorigin="anonymous">
+</script>
+
 </head>
-<body>
-	<div class="container">
-		<div class="py-5 text-left">
-			<h2>게시글 조회</h2>
+<body class="body">
+	<div class="root-container">
+		<div class="navbar-wrapper">
+			<nav class="navbar navbar-dark navbar-expand">게시판들</nav>
 		</div>
-		<h4 class="mb-3">게시글</h4>
-			<div class="post-head"> 
-				<div class="title-row">
-					<span th:text="${postInfoDto.title}"></span>
-				</div>
-				<div class="info-row">
-					<div class="member-info">
-						<span th:text="${postInfoDto.memberInfoDto.nickname}"></span>
+		 	<div class="content-wrapper clearfix">
+		 		<div class="sidebar left-ad-area"></div>
+				<article class="containe-fluid board-article">
+					<div class="article-view">
+						<div class="board-title">현재게시판 영역</div>
+						<div class="article-wrapper">
+							<div class="article-head"> 
+								<div class="title-row"> <span th:text="${postInfoDto.title}"></span></div>
+								<div class="info-row">
+									<div class="member-info"> <span th:text="${postInfoDto.memberInfoDto.nickname}"></span> </div>
+									<div class="article-info">
+										<span>추천 <b th:text="${postInfoDto.recommend}"></b></span>
+										<span>조회수 <b th:text="${postInfoDto.hit}"></b></span>
+										<span>작성일 <b th:text="${#temporals.format(postInfoDto.createdDate, 'yyyy-MM-dd HH:mm')}"></b></span>
+									</div>
+								</div>
+							</div>
+							<div class="article-body">
+								<div class="fr-view article-content" th:utext="${postInfoDto.content}"></div>
+								<div class="vote-area" id="vote">
+									<button class="item">추천</button>
+								</div>
+							</div>														
+							<div class="article-comment position-relative">
+								<div class="title">
+									<div class="comment-info"> <span>댓글 x개</span></div>
+									<div class="link">
+										<span>본문보기 </span>
+										<span class="sep"></span>
+										<span>목록으로 </span>
+									</div>
+								</div>
+								<div class="list-area">
+									<!-- <div class="comment-wrapper">
+										<div class="comment-item" id="comment_1">
+											<div class="content">
+												<div class="info-row clearfix">
+													<span class="user-info"> 유저이름 </span>
+													<div class="right">
+														<span>2020-01-01</span>
+														<span class="sep"></span>
+														<a href="#" class="reply-link" data-best data-target="comment_1">답글</a>
+													</div>
+												</div>
+												<div class="message">
+													<div class="text"> 댓글내용</div>
+												</div>
+											</div>
+										</div>
+									</div> -->
+								</div>
+								<div class="pagination-wrapper my-2">
+									<ui class="pagination justify-content-center" id="comment-paging">
+									</ui>
+								</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+								<button class="w-100 btn btn-primary btn-lg" id="edit-btn" type="button"> 수정</button>
+							</div>
+							<div class="col-sm-3">
+								<form id="delete-form" name="delete-form" th:action th:method="delete"> 
+									 <button class="w-100 btn btn-primary btn-lg" id="delete-btn" type="submit"> 삭제</button>
+								</form>
+							</div>
+						</div>
 					</div>
-					<div class="post-info">
-						<span>추천 <b th:text="${postInfoDto.recommend}"></b></span>
-						<span>조회수 <b th:text="${postInfoDto.hit}"></b></span>
-						<span>작성일 <b th:text="${#temporals.format(postInfoDto.createdDate, 'yyyy-MM-dd HH:mm')}"></b></span>
-					</div>
-				</div>
-			</div>
-			
-			<div class="form-control" th:utext="${postInfoDto.content}"></div>
-			
-			<div class="row">
-				<div class="col-sm-3">
-					<button class="w-100 btn btn-primary btn-lg" id="edit-btn" type="button"> 수정</button>
-				</div>
-				<div class="col-sm-3">
-					<form id="delete-form" name="delete-form" th:action th:method="delete"> 
-						 <button class="w-100 btn btn-primary btn-lg" id="delete-btn" type="submit"> 삭제</button>
-					</form>
-				</div>
+				</article>
+				<aside class="sidebar right-sidebar">
+					<div>우측사이드바</div>
+				</aside>
 			</div>
 	</div>
+
 </body>
 
 <script type="text/javascript">
 
 $(document).ready(function(e){
+		
+	getCommentList(1);
 	
+
 	$("#edit-btn").on("click", function(e){
 		e.preventDefault();
 		
 		document.location.href = window.location.href+'/edit';
 	}
 	);
-	
 });
+
+function getCommentList(page){
+	
+	let postId = '[[${postInfoDto.postId}]]';
+	let url = "/comment/"+ postId + "/" + page;
+
+	$.ajax({
+		url:'/comment/'+ postId + '/' + page,
+		type: 'get',
+		success: function(result){ //commentPagingDto 가져옴
+		
+		$('.list-area').children().remove();
+		
+		$.each(result.commentList, function(index, comment) {
+			let commentList ="";	
+			
+			// 삭제된댓글
+			if(comment.isDeleted){
+				commentList += '<div class="comment-wrapper"> \n'+ 
+									'<div class="comment-item" id=c_' + comment.commentId +'> \n'+
+										'<div class="content"> \n'+					
+											 '<div class="message"> \n'+
+											 	'<div class="text"><span style="color: #999;"> 삭제된 댓글입니다.</span></div> \n'+
+											 '</div>\n'+
+										'</div>\n'+
+									'</div>\n'+
+								'</div>\n';
+			}
+			//정상댓글
+			else{
+				commentList += '<div class="comment-wrapper"> \n'+ 
+									'<div class="comment-item" id=c_' + comment.commentId +'> \n'+
+										'<div class="content"> \n'+
+											'<div class="info-row clearfix"> \n'+
+												'<span class="user-info">'+ comment.writerNickname + '</span> \n'+
+												'<div class="right"> \n'+ 
+													'<span>'+ comment.createdDate +'</span> \n';														
+				if(comment.parentId == null){
+					commentList += 					'<span class="sep"></span> \n'+
+													'<a href="#" class="reply-link" data-best data-target='+ comment.commentId +'>답글</a> \n';
+				}						
+				commentList += 					'</div>\n'+
+											 '</div>\n'+
+											'<div class="message"> \n'+
+											 	'<div class="text">'+ comment.content +'</div> \n'+
+											'</div>\n'+
+										'</div>\n'+
+									'</div>\n'+
+								'</div>\n';
+			}
+			if(comment.parentId == null){
+				$('.list-area').append(commentList);
+			}
+			else{
+				$('#c_'+comment.parentId).parent().append(commentList);
+			}
+		});		
+		
+		//---페이징---	
+		let pageList = "";
+		let previousPage = result.startPageNum - 1;
+		let nextPage = result.endPageNum + 1;
+		
+		if(result.hasPrev){
+			pageList += '<li class="page-item"> \n'+
+							'<a class="page-link" href="#" onclick="getCommentList(1)" aria-label="First"> \n'+
+								'<span aria-hidden="true">&laquo;</span> \n'+
+							'</a> \n'+
+						'</li> \n'+
+						'<li class="page-item"> \n'+
+							'<a class="page-link" href="#" onclick="getCommentList('+ previousPage +')" aria-label="Previous"> \n'+
+								'<span aria-hidden="true">&lt;</span> \n'+
+							'</a> \n'+
+						'</li>';
+		}
+		//페이지번호
+		let index = result.startPageNum;	
+		for(index; index <= result.endPageNum; index++){
+			let active = result.currentPageNum == index ? 'class="page-item active"' : '';
+			pageList += '<li '+ active + '>'+
+							'<a class="page-link" href="#" onclick="getCommentList('+ index +')">'+ index +' </a>'+
+						'</li>';
+		}			
+		if(result.hasNext){
+			pageList += '<li class="page-item"> \n'+
+							'<a class="page-link" href="#" onclick="getCommentList('+ nextPage +')" aria-label="Next"> \n'+
+								'<span aria-hidden="true">&gt;</span> \n'+
+							'</a> \n'+
+						'</li> \n'+
+						'<li class="page-item"> \n'+
+							'<a class="page-link" href="#" onclick="getCommentList('+ result.totalPageCount +')" aria-label="Last"> \n'+
+								'<span aria-hidden="true">&raquo;</span> \n'+
+							'</a> \n'+
+						'</li>';
+		}
+		
+		$('#comment-paging').html(pageList);			
+		}	
+	});
+}
 
 </script>
 </html>

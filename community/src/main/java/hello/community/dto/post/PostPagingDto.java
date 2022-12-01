@@ -22,7 +22,7 @@ public class PostPagingDto {
 	// 총 게시글의 개수
 	private long totalElementCount;
 	// 다음,이전 페이지 여부
-	boolean hasPrev, hasNext;
+	private boolean hasPrev, hasNext;
 	// 시작 페이지 번호
 	private int startPageNum;
 	// 종료 페이지 번호

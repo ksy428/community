@@ -24,7 +24,7 @@ public class CommentPagingDto {
 	// 총 게시글의 개수
 	private long totalElementCount;
 	// 다음,이전 페이지 여부
-	boolean hasPrev, hasNext;
+	private boolean hasPrev, hasNext;
 	// 시작 페이지 번호
 	private int startPageNum;
 	// 종료 페이지 번호
@@ -43,8 +43,34 @@ public class CommentPagingDto {
 		totalElementCount = searchResults.getTotalElements();
 		commentList = searchResults.getContent().stream().map(CommentBriefInfo::new).toList();
 		
+		pageNum = 10;
+		// 현재페이지가 페이지버튼 개수 중간값 보다 작을 경우
+		if(currentPageNum <= pageNum / 2) {
+			// 현재페이지와 총 페이지 개수를 이용해 페이지버튼 start,end 인덱스 부여
+			startPageNum = 1;
+			endPageNum = totalPageCount < pageNum ? totalPageCount : pageNum;
+			
+			if(endPageNum == 0) {
+				endPageNum++;
+			}
+			
+			hasPrev = false;
+			hasNext = totalPageCount > pageNum;			 
+		}
+		// 현재페이지가 페이지버튼 개수 중간값보다 클 경우
+		else { 
+			startPageNum = (currentPageNum - (pageNum / 2)) + 1;
+			endPageNum = (currentPageNum + (pageNum / 2)) < totalPageCount ? (currentPageNum + (pageNum / 2)) : totalPageCount;
+			hasPrev =  currentPageNum - (pageNum / 2) >= 1;
+			hasNext = currentPageNum + (pageNum / 2) < totalPageCount;
+		}	
+		
 		log.info("결과사이즈: {}", commentList.size());
 		log.info("totalElementCount: {}", totalElementCount);
-		log.info("댓글 리스트: {}", commentList.toString());
+		log.info("current: {}", currentPageNum);
+		log.info("start: {}", startPageNum);
+		log.info("end: {}", endPageNum);
+		log.info("hasPrev: {}", hasPrev);
+		log.info("hasNext: {}", hasNext);
 	}
 }

@@ -5,6 +5,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hello.community.dto.comment.CommentEditDto;
+import hello.community.dto.comment.CommentPagingDto;
 import hello.community.dto.comment.CommentWriteDto;
 import hello.community.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -31,20 +34,22 @@ public class CommentController {
 	
 	
 	@GetMapping("/comment/{postId}/{page}")
-	public String commentList(Model model, Pageable pageable, @PathVariable Long postId, @PathVariable int page) {
+	public ResponseEntity<CommentPagingDto> commentList(Pageable pageable, @PathVariable Long postId, @PathVariable int page) {
 		
-		commentService.searchCommentList(pageable, postId, page);
-		
-		return "";
+		CommentPagingDto commentPagingDto = commentService.searchCommentList(pageable, postId, page);
+			
+		return new ResponseEntity<>(commentPagingDto, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = {"/comment/{postId}","/comment/{postId}/{commentId}"})
 	public String write(@Valid @ModelAttribute CommentWriteDto writeDto, BindingResult result
 			,@PathVariable Long postId ,@PathVariable(required = false) Optional<Long> commentId) {
 		
-		/*
-		 * if(result.hasErrors()){ return null; }
-		 */
+		
+		if(result.hasErrors()){
+			return null;
+		}
+		 
 		 		
 		commentService.write(postId, commentId, writeDto);
 		

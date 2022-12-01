@@ -54,7 +54,7 @@ public class InitDummyData {
 				 initPost((i+1) +"번 글", (i+1)+"번 내용", 1L);
 			 }
 			 
-			 for(int i=0; i<3; i++) {
+			 for(int i=0; i<100; i++) {
 				 long groupId = (long) i+1;				 
 				 initComment("1번 글_"+ groupId+"번댓글", 1L, 1L, groupId);
 			 }
@@ -99,6 +99,7 @@ public class InitDummyData {
 			comment.setPost(postRepository.findById(postId)
 					.orElseThrow(()-> new PostException(PostExceptionType.NOT_FOUND_POST)));
 			comment.setGroupId(groupId);
+	
 			commentRepository.save(comment);
 			
 			return comment.getId();
@@ -115,6 +116,7 @@ public class InitDummyData {
 			comment.setParent(commentRepository.findById(commentId)
 					.orElseThrow(()-> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT)));
 			comment.setGroupId(commentId);
+			comment.editDeleteStatus();
 			
 			commentRepository.save(comment);
 		}
