@@ -42,18 +42,15 @@ public class CommentController {
 	}
 	
 	@PostMapping(value = {"/comment/{postId}","/comment/{postId}/{commentId}"})
-	public String write(@Valid @ModelAttribute CommentWriteDto writeDto, BindingResult result
+	public ResponseEntity<Long> write(@Valid @ModelAttribute CommentWriteDto writeDto, BindingResult result
 			,@PathVariable Long postId ,@PathVariable(required = false) Optional<Long> commentId) {
-		
-		
+			
 		if(result.hasErrors()){
 			return null;
-		}
-		 
-		 		
-		commentService.write(postId, commentId, writeDto);
-		
-		return "";
+		}		 		
+		//commentService.write(postId, commentId, writeDto);
+		log.info("writeDto : {}", writeDto.toString());
+		return new ResponseEntity<>(commentService.write(postId, commentId, writeDto), HttpStatus.OK);
 	}
 	
 	@PutMapping("/comment/{commentId}")

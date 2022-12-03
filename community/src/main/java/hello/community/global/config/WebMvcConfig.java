@@ -16,6 +16,9 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		
 		registry.addResourceHandler("/file/**")
 				.addResourceLocations("file:///E:/Development/eclipse-workspace/storage/file/");
+		
+		registry.addResourceHandler("/**")
+        		.addResourceLocations("classpath:/templates/", "classpath:/static/");
 	}
 
 	

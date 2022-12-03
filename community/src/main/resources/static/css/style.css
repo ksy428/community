@@ -3996,6 +3996,51 @@ opacity
 	display: flex
 }
 
+
+
+
+
+
+.reply-form>.reply-form__submit-button-wrapper
+	{
+	text-align: right;
+	justify-content: flex-end;
+	padding-bottom: .5em;
+
+}
+
+.reply-form>.reply-form__submit-button-wrapper>.reply-form__submit-button
+	{
+	padding: .25em 1.5em;
+	border: 1px solid;
+	border-color: #bbb;
+	border-color: var(--color-border-outer);
+	background-color: #fff;
+	background-color: var(--color-bg-main);
+	border-radius: 4px;
+	color: #000;
+	color: var(--color-text-color);
+	transition-duration: .3s
+}
+
+.reply-form>.reply-form__submit-button-wrapper>.reply-form__submit-button:focus
+	{
+	outline: 2px solid;
+	outline-color: #0275d8;
+	outline-color: var(--color-link-color)
+}
+
+.reply-form>.reply-form__submit-button-wrapper>.reply-form__submit-button:hover
+	{
+	background-color: #eee;
+	background-color: var(--color-bg-focus)
+}
+
+
+
+
+
+
 .reply-form>.recaptcha-privacy {
 	text-align: right;
 	font-size: .7em;
