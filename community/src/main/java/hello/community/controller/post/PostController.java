@@ -68,7 +68,7 @@ public class PostController {
 		return postId.toString();
 	}
 	
-	@GetMapping("/board/view/{postId}")
+	@GetMapping("/board/{postId}")
 	public String view(@PathVariable Long postId, Model model) {
 		
 		PostInfoDto infoDto = postService.view(postId);
@@ -78,7 +78,7 @@ public class PostController {
 		return "post/viewPost";
 	}
 	
-	@GetMapping("/board/view/{postId}/edit")
+	@GetMapping("/board/{postId}/edit")
 	public String editForm(@PathVariable Long postId, Model model) {
 		
 		PostEditDto editDto = postService.getEditInfo(postId);
@@ -88,7 +88,7 @@ public class PostController {
 		return "post/editPostForm";
 	}
 	
-	@PutMapping("/board/view/{postId}/edit")
+	@PutMapping("/board/{postId}/edit")
 	@ResponseBody
 	public String edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result,
 			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
@@ -108,7 +108,7 @@ public class PostController {
 		return postId.toString();
 	}
 	
-	@DeleteMapping("/board/view/{postId}")
+	@DeleteMapping("/board/{postId}")
 	public String delete(@PathVariable Long postId){
 	
 		postService.delete(postId);

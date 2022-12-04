@@ -2,7 +2,7 @@
 
 $(document).ready(function(e){
 	
-	getCommentList(1);
+	getCommentList();
 	
 	$(".reply-form.write").attr('action','/comment/'+ postId);
 	
@@ -29,9 +29,7 @@ $(document).ready(function(e){
 			$('.reply-form').remove();			
 		}
 
-		//답글 form 생성
-		let commentItem = $('#'+'c_'.concat(commentId));
-	
+		//답글 form 생성	
 		let form = '<form class="reply-form" id="'+'f_'.concat(commentId,'" ')+'action="/comment/'.concat(postId,'/',commentId,'" ') +'method="post">' +
 						'<div class="reply-form__container">'+
 							'<div class="reply-form-textarea-wrapper">'+
@@ -42,16 +40,9 @@ $(document).ready(function(e){
 							'<button class="reply-form__submit-button" id="write-btn" type="submit">작성</button>'+
 						'</div>'+
 					'</form>';
-					
-		commentItem.after(form);							
-	});
-	
-	//댓글 페이지 이동
-	$(".body").on("click",".page-link", function(){
-		
-		let pageIndex = $(this).attr("data-target");
-		
-		getCommentList(pageIndex);	
+		//let commentItem = $('#'+'c_'.concat(commentId));
+		//commentItem.after(form);
+		$('#'+'c_'.concat(commentId)).after(form);							
 	});
 	
 	//댓글 write
@@ -65,23 +56,32 @@ $(document).ready(function(e){
 			url: form.attr('action'),
 			data: form.serialize(),
 			type: 'post',
-			//contentType:'application/json; charset=utf-8',
 			success : function(result){		
 			//여기에 댓글추가 html에
 									
-			//location.replace(location.href);
+			let list_area = getCommentList();
+			
+			$('.list_area').append(list_area);
+			//$('.article-body').append(list_area);
 			}
 		});
 	});
 });
 // 댓글리스트 가져오기
-function getCommentList(page){
+function getCommentList(){
 
-	let url = "/comment/"+ postId + "/" + page;
+	let url = "/comment/"+ postId;
+	let urlParams = new URLSearchParams(location.search);
+	
+	let data = {
+		page: urlParams.get("page"),
+		cp: urlParams.get("cp")		
+	}
 
 	$.ajax({
-		url:'/comment/'+ postId + '/' + page,
+		url: url,
 		type: 'get',
+		data: data,
 		success: function(result){ //commentPagingDto 가져옴
 		
 		$('.list-area').children().remove();
@@ -138,17 +138,18 @@ function getCommentList(page){
 		});		
 		//---댓글페이징---	
 		let pageList = "";
-		let previousPage = result.startPageNum - 1;
-		let nextPage = result.endPageNum + 1;
-		
+		let queryString = "";
+	
 		if(result.hasPrev){
+			queryString = '?'.concat(createQueryString(1),'#comment');
 			pageList += '<li class="page-item"> \n'+
-							'<a class="page-link" href="#" data-target="1" aria-label="First"> \n'+
+							'<a class="page-link" href='+ queryString +' aria-label="First"> \n'+
 								'<span aria-hidden="true">&laquo;</span> \n'+
 							'</a> \n'+
-						'</li> \n'+
-						'<li class="page-item"> \n'+
-							'<a class="page-link" href="#" data-target='+ previousPage +' aria-label="Previous"> \n'+
+						'</li> \n';
+			queryString = '?'.concat(createQueryString(result.startPageNum - 1),'#comment');			
+			pageList +='<li class="page-item"> \n'+
+							'<a class="page-link" href='+ queryString +' aria-label="Previous"> \n'+
 								'<span aria-hidden="true">&lt;</span> \n'+
 							'</a> \n'+
 						'</li>';
@@ -156,19 +157,23 @@ function getCommentList(page){
 		//페이지번호
 		let index = result.startPageNum;	
 		for(index; index <= result.endPageNum; index++){
-			let active = result.currentPageNum == index ? 'class="page-item active"' : '';
+					let active = result.currentPageNum == index ? 'class="page-item active"' : '';
+
+			queryString = '?'.concat(createQueryString(index),'#comment');
 			pageList += '<li '+ active + '>'+
-							'<a class="page-link" href="#" data-target='+ index +'>'+ index +' </a>'+
+							'<a class="page-link" href='+ queryString +' >'+ index +' </a>'+
 						'</li>';
 		}			
 		if(result.hasNext){
+			queryString = '?'.concat(createQueryString(result.endPageNum + 1),'#comment');
 			pageList += '<li class="page-item"> \n'+
-							'<a class="page-link" href="#" data-target='+ nextPage +' aria-label="Next"> \n'+
+							'<a class="page-link" href='+ queryString +' aria-label="Next"> \n'+
 								'<span aria-hidden="true">&gt;</span> \n'+
 							'</a> \n'+
-						'</li> \n'+
-						'<li class="page-item"> \n'+
-							'<a class="page-link" href="#" data-target='+ result.totalPageCount +' aria-label="Last"> \n'+
+						'</li> \n';
+			queryString = '?'.concat(createQueryString(result.totalPageCount),'#comment');			
+			pageList += '<li class="page-item"> \n'+
+							'<a class="page-link" href='+ queryString +' aria-label="Last"> \n'+
 								'<span aria-hidden="true">&raquo;</span> \n'+
 							'</a> \n'+
 						'</li>';
@@ -176,8 +181,18 @@ function getCommentList(page){
 		$('#comment-paging').html(pageList);			
 		}	
 	});
+	return $('.list-area');
 }
 
 function writeComment(){
 
+}
+
+function createQueryString(cp){
+	
+	let queryString = {
+		//page: page,
+		cp: cp		
+	}
+	return new URLSearchParams(queryString).toString();	
 }

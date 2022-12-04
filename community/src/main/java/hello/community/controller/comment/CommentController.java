@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hello.community.dto.comment.CommentEditDto;
@@ -33,10 +34,21 @@ public class CommentController {
 	private final CommentService commentService;
 	
 	
-	@GetMapping("/comment/{postId}/{page}")
+	/*@GetMapping("/comment/{postId}/{page}")
 	public ResponseEntity<CommentPagingDto> commentList(Pageable pageable, @PathVariable Long postId, @PathVariable int page) {
 		
 		CommentPagingDto commentPagingDto = commentService.searchCommentList(pageable, postId, page);
+			
+		return new ResponseEntity<>(commentPagingDto, HttpStatus.OK);
+	}*/
+	@GetMapping("/comment/{postId}")
+	public ResponseEntity<CommentPagingDto> commentList(Pageable pageable, @PathVariable Long postId,
+			@RequestParam(required = false, defaultValue = "1", value = "page") int postPage,
+			@RequestParam(required = false, defaultValue = "1", value = "cp") int commentPage) {
+		
+	//	log.info("포스트페이지: {}",postPage);
+		log.info("댓글페이지: {}",commentPage);
+		CommentPagingDto commentPagingDto = commentService.searchCommentList(pageable, postId, commentPage);
 			
 		return new ResponseEntity<>(commentPagingDto, HttpStatus.OK);
 	}

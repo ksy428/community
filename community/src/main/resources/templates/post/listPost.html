@@ -47,7 +47,7 @@
 				<tbody>
 					<tr th:each="post : ${postPagingDto.postList}">
 						<td th:text="${post.postId}">번호</td>
-						<td><a th:href="@{|/board/view/${post.postId}|}" th:text="${post.title}">제목</a></td>
+						<td><a th:href="@{|/board/${post.postId}|}" th:text="${post.title}">제목</a></td>
 						<td th:text="${post.writerNickname}">작성자</td>
 						<td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</td>
 						<td th:text="${post.hit}">조회수</td>
