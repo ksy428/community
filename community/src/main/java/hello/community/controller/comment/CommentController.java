@@ -46,8 +46,6 @@ public class CommentController {
 			@RequestParam(required = false, defaultValue = "1", value = "page") int postPage,
 			@RequestParam(required = false, defaultValue = "1", value = "cp") int commentPage) {
 		
-	//	log.info("포스트페이지: {}",postPage);
-		log.info("댓글페이지: {}",commentPage);
 		CommentPagingDto commentPagingDto = commentService.searchCommentList(pageable, postId, commentPage);
 			
 		return new ResponseEntity<>(commentPagingDto, HttpStatus.OK);

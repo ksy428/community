@@ -2,9 +2,30 @@
 
 $(document).ready(function(e){
 	
-	getCommentList();
-	
 	$(".reply-form.write").attr('action','/comment/'+ postId);
+	
+	
+	let urlParams = new URLSearchParams(location.search);
+	let page = urlParams.get("page");
+	let	cp = urlParams.get("cp")
+	
+	getCommentList(page,cp).then(pagingDto => {
+		
+		let result = pagingDto;
+		
+		// 처음 게시글에 들어왔을때 마지막 댓글페이지  => 쿼리스트링없으면 마지막페이지로 댓글리스트를 다시가져온다
+		if(!urlParams.toString().length){
+			getCommentList(page, pagingDto.totalPageCount).then(pagingDto => {	
+				result = pagingDto;
+				viewCommentList(result);
+			});
+		}
+		else{
+			viewCommentList(result);
+		}	
+	});
+	
+	
 	
 	$("#edit-btn").on("click", function(e){
 		e.preventDefault();
@@ -14,7 +35,9 @@ $(document).ready(function(e){
 	
 	
 	//대댓글 form 생성
-	$(".body").on("click",".reply-link", function(){
+	$(".body").on("click",".reply-link", function(e){
+		
+		e.preventDefault();
 			
 		let commentId = $(this).attr("data-target");
 		
@@ -40,9 +63,11 @@ $(document).ready(function(e){
 							'<button class="reply-form__submit-button" id="write-btn" type="submit">작성</button>'+
 						'</div>'+
 					'</form>';
-		//let commentItem = $('#'+'c_'.concat(commentId));
-		//commentItem.after(form);
-		$('#'+'c_'.concat(commentId)).after(form);							
+
+		//$('#'+'c_'.concat(commentId)).after(form);
+		$('#c_'+ commentId).after(form);
+		
+		//$('#c_'+ commentId).scrollIntoView();						
 	});
 	
 	//댓글 write
@@ -51,40 +76,63 @@ $(document).ready(function(e){
 		e.preventDefault();
 		
 		let form = $(this).closest("form");
-	
 		$.ajax({
 			url: form.attr('action'),
 			data: form.serialize(),
 			type: 'post',
 			success : function(result){		
-			//여기에 댓글추가 html에
-									
-			let list_area = getCommentList();
+								
+			//alert("시작전");
+			let urlParams = new URLSearchParams(location.search);
+			let page = urlParams.get("page");
+			let	cp = urlParams.get("cp")			
+					
+			getCommentList(page,cp).then(pagingDto => {
+				viewCommentList(pagingDto);				
+			});
 			
-			$('.list_area').append(list_area);
-			//$('.article-body').append(list_area);
+			/*alert("c_"+result);
+			alert($('#c_'+ result).length);
+			if($('#c_'+ result).length){
+				alert("찾앗다");
+				$('#c_'+ result).scrollintoView();
+			}
+			else{
+				alert("못찾음");
+			}*/
+			//$('.list_area').append(list_area);
+			//alert($('#c_'+result).attr('class'));
 			}
 		});
+
 	});
 });
+
+
 // 댓글리스트 가져오기
-function getCommentList(){
+function getCommentList(page, cp){
+	return new Promise(function(resolve, reject){
 
 	let url = "/comment/"+ postId;
-	let urlParams = new URLSearchParams(location.search);
 	
 	let data = {
-		page: urlParams.get("page"),
-		cp: urlParams.get("cp")		
+		page: page,
+		cp: cp		
 	}
+		$.ajax({
+			url: url,
+			type: 'get',
+			data: data,
+			success: function(result){ //commentPagingDto 가져옴				
+				resolve(result);		
+			}
+		})	
+	});
+}
 
-	$.ajax({
-		url: url,
-		type: 'get',
-		data: data,
-		success: function(result){ //commentPagingDto 가져옴
-		
-		$('.list-area').children().remove();
+function viewCommentList(result){
+	
+	$('.list-area').children().remove();
 		
 		//페이징으로 인해서 대댓글이 첫번째에 올 경우 grouping을 위한 변수
 		let groupId = 0;
@@ -178,15 +226,11 @@ function getCommentList(){
 							'</a> \n'+
 						'</li>';
 		}		
-		$('#comment-paging').html(pageList);			
-		}	
-	});
-	return $('.list-area');
+		$('#comment-paging').html(pageList);	
+		
+	return $('.list-area');	
 }
 
-function writeComment(){
-
-}
 
 function createQueryString(cp){
 	
