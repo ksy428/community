@@ -9,13 +9,17 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import hello.community.domain.member.Member;
+import lombok.Getter;
 
+@Getter
 public class UserDetailsImpl implements UserDetails{
 
 	private Member member;
+	private String loginId;
 	
 	public UserDetailsImpl(Member member) {
 		this.member = member;
+		this.loginId = member.getLoginId();
 	}
 
 	@Override
@@ -55,4 +59,7 @@ public class UserDetailsImpl implements UserDetails{
 		return true;
 	}
 
+	public Member getMember() {
+		return this.member;
+	}
 }

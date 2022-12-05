@@ -8,8 +8,24 @@
 	min-width: 20rem
 }
 
+
 .body a, .body button {
-	outline: 0
+	outline: 0;
+}
+
+.body a.text-colored-link {
+	color: #0275d8;
+	color: var(--color-link-color)
+}
+
+.body a.text-colored-link:focus, .body a.text-colored-link:visited {
+	color: #0275d8;
+	color: var(--color-link-color)
+}
+a {
+    color: inherit;
+    text-decoration: none;
+    background-color: transparent;
 }
 
 .body .sep:before {
@@ -100,6 +116,18 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
 .body .board-article .article-wrapper {
 	overflow: auto;
 	margin-top: 1.0rem
+}
+
+.body .board-article .edit-menu {
+	padding: .35rem .75rem;
+	background-color: #fff;
+	background-color: var(--color-bg-main);
+	text-align: right;
+	font-size: .9em
+}
+
+.body .board-article .edit-menu .postForm{
+	display: inline-block
 }
 
 .body .board-article .article-head {

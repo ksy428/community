@@ -24,7 +24,7 @@
 			<h2>게시글 수정</h2>
 		</div>
 		<form id="edit-form" name="edit-form" th:action
-			th:object="${postEditDto}" method="post">
+			th:object="${postEditDto}" th:method="put">
 			<div>
 				<input type="text" class="form-control" th:field="*{title}"
 					placeholder="제목을 입력해 주세요">

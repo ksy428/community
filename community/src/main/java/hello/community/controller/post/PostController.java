@@ -88,8 +88,8 @@ public class PostController {
 		return "post/editPostForm";
 	}
 	
-	@PutMapping("/board/{postId}/edit")
 	@ResponseBody
+	@PutMapping("/board/{postId}/edit")
 	public String edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result,
 			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
 			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList) {
@@ -104,7 +104,7 @@ public class PostController {
 		
 		postService.edit(postId, editDto);
 		
-		//return "redirect:/board/view/"+ postId;
+		//return "redirect:/board/"+ postId;
 		return postId.toString();
 	}
 	
