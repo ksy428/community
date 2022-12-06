@@ -145,7 +145,7 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	public CommentPagingDto searchCommentList(Pageable pageable, Long postId, int page) {
-		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  40);		
+		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  50);		
 		return new CommentPagingDto(commentRepository.search(pageable, postId));
 	}
 }

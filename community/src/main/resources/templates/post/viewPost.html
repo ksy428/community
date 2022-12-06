@@ -61,7 +61,7 @@
 								<div class="title">
 									<div class="comment-info"> <span>댓글 <b id="comment_count" th:text="${postInfoDto.totalCommentCount}"></b>개</span></div>
 									<div class="link">
-										<span>본문보기 </span>
+										<a href="#" onClick="javascript:window.scrollTo(0,0)">본문으로 </a>
 										<span class="sep"></span>
 										<span>목록으로 </span>
 									</div>
@@ -93,7 +93,8 @@
 </body>
 <script type="text/javascript">
 	let postId = '[[${postInfoDto.postId}]]';
-	let writerId = ('[[${postInfoDto.memberInfoDto.loginId}]]');
+	let writerId = '[[${postInfoDto.memberInfoDto.loginId}]]';
 	let authId = '[[${#authentication.name}]]';
+	let authRole = '[[${#authentication.authorities}]]';	
 </script>
 </html>

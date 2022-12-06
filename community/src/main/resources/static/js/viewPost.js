@@ -79,29 +79,48 @@ $(document).ready(function(e){
 		//$('html, body').animate({scrollTop: $('#c_'+ commentId).offset.top}, 400);						
 	});
 	
-	
+				
 	//댓글 write
 	$(".body").on("click",".reply-form__submit-button",function(e){
 		
 		e.preventDefault();
 		
 		let form = $(this).closest("form");
-		let commentId;
+		let writeCommentId;
 		
-		writeComment(form).then(result => {
+		writeComment(form).then(commentId => {
 			
-			commentId = result;		
+			writeCommentId = commentId;		
 		
 			let urlParams = getQueryString();
 			
 			getCommentList(urlParams.page , urlParams.cp).then(pagingDto => {
-				
-				viewCommentList(pagingDto);							
+							
+				//현재페이지에서 방금 작성 한 댓글 있는지 찾기			
+				//못찾았으면 어느페이지에 있는지 찾기
+				if(existsComment(pagingDto.commentList, writeCommentId)){				
+					viewCommentList(pagingDto);
 
-				$('#comment_count').html(pagingDto.totalElementCount);	
-				
-				let url = "?".concat(createQueryString(pagingDto.currentPageNum),'#c_',commentId);
-				location.href= url;
+					$('#comment_count').html(pagingDto.totalElementCount);
+
+					let url = "?".concat(createQueryString(pagingDto.currentPageNum), '#c_', writeCommentId);
+					location.href = url;	
+				}
+				else{													
+					for(let index = pagingDto.totalPageCount ; index > 0 ; index--){
+						getCommentList(urlParams.page , index).then(pagingDto => {	
+							
+							if(existsComment(pagingDto.commentList, writeCommentId)){
+								viewCommentList(pagingDto);
+
+								$('#comment_count').html(pagingDto.totalElementCount);
+
+								let url = "?".concat(createQueryString(pagingDto.currentPageNum), '#c_', writeCommentId);
+								location.href = url;
+							}					
+						});			
+					}		
+				}											
 			});
 		});
 	});
@@ -212,7 +231,7 @@ function viewCommentList(result){
 												'<span class="sep"></span> \n'+
 												'<a href="#" class="delete-link" data-target='+ comment.commentId +'>삭제</a> \n';		
 				}								
-				if(isParent){ //부모댓글만 답글있음
+				if(isParent && authRole != '[ROLE_ANONYMOUS]'){ //부모댓글&&로그인해야만 답글있음
 					commentList += 				'<span class="sep"></span> \n'+
 												'<a href="#" class="reply-link" data-target='+ comment.commentId +'>답글</a> \n';
 				}
@@ -261,8 +280,7 @@ function viewCommentList(result){
 						'</li>';
 		}
 		//페이지번호
-		let index = result.startPageNum;	
-		for(index; index <= result.endPageNum; index++){
+		for(let index = result.startPageNum; index <= result.endPageNum; index++){
 					let active = result.currentPageNum == index ? 'class="page-item active"' : '';
 
 			queryString = '?'.concat(createQueryString(index),'#comment');
@@ -308,4 +326,20 @@ function getQueryString(){
 	}
 	
 	return queryString;
+}
+
+function existsComment(commentList, findId) {
+
+	let isFind = false;
+
+	//alert("찾는 : "+findId);
+	$.each(commentList, function(index, comment) {
+		
+		//alert("현재 : "+comment.commentId);
+		if (comment.commentId == findId) {			
+			isFind = true;
+			return false;
+		}
+	});
+	return isFind;
 }
