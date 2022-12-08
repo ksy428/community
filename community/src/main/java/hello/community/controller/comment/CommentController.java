@@ -34,16 +34,9 @@ public class CommentController {
 	private final CommentService commentService;
 	
 	
-	/*@GetMapping("/comment/{postId}/{page}")
-	public ResponseEntity<CommentPagingDto> commentList(Pageable pageable, @PathVariable Long postId, @PathVariable int page) {
-		
-		CommentPagingDto commentPagingDto = commentService.searchCommentList(pageable, postId, page);
-			
-		return new ResponseEntity<>(commentPagingDto, HttpStatus.OK);
-	}*/
+	
 	@GetMapping("/comment/{postId}")
 	public ResponseEntity<CommentPagingDto> commentList(Pageable pageable, @PathVariable Long postId,
-			@RequestParam(required = false, defaultValue = "1", value = "page") int postPage,
 			@RequestParam(required = false, defaultValue = "1", value = "cp") int commentPage) {
 		
 		CommentPagingDto commentPagingDto = commentService.searchCommentList(pageable, postId, commentPage);

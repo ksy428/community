@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hello.community.dto.comment.CommentPagingDto;
 import hello.community.dto.post.PostEditDto;
 import hello.community.dto.post.PostInfoDto;
 import hello.community.dto.post.PostPagingDto;
@@ -36,14 +40,27 @@ public class PostController {
 	private final PostService postService;
 	
 	@GetMapping("/board")
-	public String postList(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
-			 @RequestParam(required = false, defaultValue = "1", value = "page") int page) {
+	public String postListForm(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
+			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
 		
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);
 		
 		model.addAttribute("postPagingDto",postPagingDto);
 		
 		return "post/listPost";
+	}
+	
+	@ResponseBody
+	@GetMapping("/board/list")
+	public ResponseEntity<PostPagingDto> postList(@ModelAttribute PostSearch postSearch, Pageable pageable,
+			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
+		
+		log.info("posttSearch: {}" + postSearch.toString());
+		log.info("페이지: {}", page);
+		
+		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);				
+		
+		return new ResponseEntity<>(postPagingDto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/board/write")

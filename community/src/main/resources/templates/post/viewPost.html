@@ -74,7 +74,7 @@
 								<form class="reply-form write" id="commentForm" action th:action="@{/comment/{param}(param=${postInfoDto.postId})}" method="post">
 									<div class="reply-form__container">
 										<div class="reply-form-textarea-wrapper">
-											<textarea class="reply-form-textarea" name="content"></textarea>
+											<textarea class="reply-form-textarea" name="content" placeholder="내용을 입력하세요"></textarea>
 										</div>
 									</div>
 									<div class="reply-form__submit-button-wrapper">
@@ -83,6 +83,62 @@
 								</form>
 							</div>
 						</div>
+						<div class="included-article-list">
+							<div class="article-list">
+								<div class="list-table table">
+									<div class="vrow column head d-none d-md-flex">
+										<div class="vrow-inner">
+											<div class="vrow-top">
+												<span class="vcol col-id">아디</span>
+												<span class="vcol col-title">제목</span>
+											</div>
+											<div class="vrow-bottom">
+												<span class="vcol col-author">작성자</span>
+												<span class="vcol col-time">작성일</span>
+												<span class="vcol col-view">조회수</span>
+												<span class="vcol col-rate">추천</span>
+											</div>
+										</div>				
+									</div>
+									<a class="vrow column" href="#">
+										<div class="vrow-inner">
+											<div class="vrow-top">
+												<span class="vcol col-id">id</span>
+												<span class="vcol col-title">ㅋㅋ</span>
+											</div>
+											<div class="vrow-bottom">
+												<span class="vcol col-author">세영</span>
+												<span class="vcol col-time">어제</span>
+												<span class="vcol col-view">1</span>
+												<span class="vcol col-rate">10</span>
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
+							<form action="/board" method="get"
+								class="form-inline search-form justify-content-end">
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<select class="form-control form-control-sm" name="target" id="target">
+											<option value="all" selected="">전체</option>
+											<option value="title">제목</option>
+											<option value="content">내용</option>						
+											<option value="writer">작성자</option>
+											<option value="title_content">제목/내용</option>
+										</select>
+									</div>									
+									<input type="text" class="form-control form-control-sm" name="keyword" id="keyword">
+									<div class="input-group-append">
+										<button class="btn btn-arca btn-sm" type="submit">검색</button>
+									</div>
+								</div>
+							</form>
+							<nav class="pagination-wrapper">
+								<ul class="pagination justify-content-center" id="post-paging">
+								</ul>
+							</nav>
+					</div>
 					</div>														
 				</article>
 				<aside class="sidebar right-sidebar">

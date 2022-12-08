@@ -2,16 +2,16 @@
 
 $(document).ready(function(e){
 	
-	//alert("준비");
-	let urlParams = getQueryString();
-
-	getCommentList(urlParams.page,urlParams.cp).then(pagingDto => {
+	//let urlParams = getQueryString();
+	let urlParams = new URLSearchParams(location.search);
+	
+	getCommentList(urlParams.get('cp')).then(pagingDto => {
 		
 		let result = pagingDto;
 		
 		// 처음 게시글에 들어왔을때 마지막 댓글페이지  => 쿼리스트링에서 댓글페이지cp가 체크 후 null이면 마지막페이지로 댓글리스트를 다시가져온다
-		if(!urlParams.cp){
-			getCommentList(urlParams.page, pagingDto.totalPageCount).then(pagingDto => {	
+		if(!urlParams.get('cp')){
+			getCommentList(pagingDto.totalPageCount).then(pagingDto => {	
 				result = pagingDto;
 				viewCommentList(result);
 			});
@@ -21,13 +21,14 @@ $(document).ready(function(e){
 		}	
 	});
 	
+	getPostList();
+	
 	// 게시글 수정
 	$(".body").on("click",".post-edit", function(e){
 		
 		e.preventDefault();
 		
 		let form = $(this).closest("form");
-		alert(form.attr("action"));
 		form.submit();
 	});
 	
@@ -37,7 +38,6 @@ $(document).ready(function(e){
 		e.preventDefault();
 		let form = $(this).closest("form");
 		
-		alert(form.attr("action"));
 		if (confirm("게시글을 삭제하시겠습니까?")) {
 			form.submit();
 		}
@@ -92,10 +92,10 @@ $(document).ready(function(e){
 			
 			writeCommentId = commentId;		
 		
-			let urlParams = getQueryString();
-			
-			getCommentList(urlParams.page , urlParams.cp).then(pagingDto => {
-							
+			let urlParams = new URLSearchParams(location.search);
+		
+			getCommentList(urlParams.get('cp')).then(pagingDto => {
+										
 				//현재페이지에서 방금 작성 한 댓글 있는지 찾기			
 				//못찾았으면 어느페이지에 있는지 찾기
 				if(existsComment(pagingDto.commentList, writeCommentId)){				
@@ -103,26 +103,29 @@ $(document).ready(function(e){
 
 					$('#comment_count').html(pagingDto.totalElementCount);
 
-					let url = "?".concat(createQueryString(pagingDto.currentPageNum), '#c_', writeCommentId);
+					let url = "?".concat(createQueryString(urlParams.get('p'), pagingDto.currentPageNum, urlParams.get('target'), urlParams.get('keyword')), '#c_', writeCommentId);
 					location.href = url;	
 				}
 				else{													
 					for(let index = pagingDto.totalPageCount ; index > 0 ; index--){
-						getCommentList(urlParams.page , index).then(pagingDto => {	
+						getCommentList(index).then(pagingDto => {	
 							
 							if(existsComment(pagingDto.commentList, writeCommentId)){
 								viewCommentList(pagingDto);
 
 								$('#comment_count').html(pagingDto.totalElementCount);
 
-								let url = "?".concat(createQueryString(pagingDto.currentPageNum), '#c_', writeCommentId);
+								let url = "?".concat(createQueryString(urlParams.get('p'), pagingDto.currentPageNum, urlParams.get('target'), urlParams.get('keyword')), '#c_', writeCommentId);
 								location.href = url;
 							}					
 						});			
 					}		
 				}											
 			});
+			
+			$('.reply-form-textarea').val('');
 		});
+		
 	});
 	
 	//댓글 delete
@@ -137,7 +140,7 @@ $(document).ready(function(e){
 			
 			let urlParams = getQueryString();
 			
-			getCommentList(urlParams.page , urlParams.cp).then(pagingDto => {
+			getCommentList(urlParams.get('cp')).then(pagingDto => {
 				
 				viewCommentList(pagingDto);							
 
@@ -182,21 +185,64 @@ function deleteComment(commentId){
 	});
 }
 // 댓글리스트 가져오기 ajax
-function getCommentList(page, cp){
+function getCommentList(cp){
 	return new Promise(function(resolve, reject){
 	
-	let data = {
-		page: page,
-		cp: cp		
-	}
+	
 		$.ajax({
 			url: '/comment/'+ postId,
 			type: 'get',
-			data: data,
+			data: {
+				cp : cp
+				},
 			success: function(result){ //commentPagingDto 가져옴				
 				resolve(result);		
 			}
 		})	
+	});
+}
+
+// 게시글리스트 가져오기 ajax
+function getPostList(){
+	
+	
+	$('.list-table').children().remove();
+	let urlParams = new URLSearchParams(location.search);
+	
+	let postSearch = {
+		target: $('#target').val(),
+		keyword: $('#keyword').val(),
+		p: urlParams.get('p')
+	}
+
+	$.ajax({
+		url: '/board/list',
+		type: 'get',
+		data: postSearch,
+		success: function(result){
+			$.each(result.postList, function(index, post) {
+				
+				let postList="";
+				let queryString = '?'.concat(createQueryString(urlParams.get('p'), null, urlParams.get('target'), urlParams.get('keyword'),'#comment'));
+				let active = (postId == post.postId) ? 'active' : '';
+				postList += '<a class="vrow column ' + active + '" href= /board/'+ post.postId +'/'+ queryString + '> \n'+ 
+								'<div class="vrow-inner"> \n'+
+									'<div class ="vrow-top"> \n'+
+										'<span class="vcol col-id">'+ post.postId + '</span> \n'+
+										'<span class="vcol col-title">'+ post.title + '</span> \n'+
+									'</div> \n'+
+									'<div class ="vrow-bottom"> \n'+
+										'<span class="vcol col-author">'+ post.writerNickname + '</span> \n'+
+										'<span class="vcol col-time">'+ post.createdDate + '</span> \n'+
+										'<span class="vcol col-view">'+ post.hit + '</span> \n'+
+										'<span class="vcol col-rate">'+ post.recommend + '</span> \n'+
+									'</div> \n'+
+								'</div> \n'+
+							'</a> \n';
+				
+				$('.list-table').append(postList);	
+			});
+		}
 	});
 }
 //댓글리스트 뷰에 추가
@@ -263,16 +309,16 @@ function viewCommentList(result){
 		//---댓글페이징---	
 		let pageList = "";
 		let queryString = "";
-		
+		let urlParams = new URLSearchParams(location.search);
 	
 		if(result.hasPrev){
-			queryString = '?'.concat(createQueryString(1),'#comment');
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), 1, urlParams.get('target'), urlParams.get('keyword'),'#comment'));
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="First"> \n'+
 								'<span aria-hidden="true">&laquo;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
-			queryString = '?'.concat(createQueryString(result.startPageNum - 1),'#comment');			
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.startPageNum - 1, urlParams.get('target'), urlParams.get('keyword')),'#comment');			
 			pageList +='<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="Previous"> \n'+
 								'<span aria-hidden="true">&lt;</span> \n'+
@@ -283,19 +329,19 @@ function viewCommentList(result){
 		for(let index = result.startPageNum; index <= result.endPageNum; index++){
 					let active = result.currentPageNum == index ? 'class="page-item active"' : '';
 
-			queryString = '?'.concat(createQueryString(index),'#comment');
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), index, urlParams.get('target'), urlParams.get('keyword')),'#comment');
 			pageList += '<li '+ active + '>'+
 							'<a class="page-link" href='+ queryString +' >'+ index +' </a>'+
 						'</li>';
 		}			
 		if(result.hasNext){
-			queryString = '?'.concat(createQueryString(result.endPageNum + 1),'#comment');
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.endPageNum + 1, urlParams.get('target'), urlParams.get('keyword')),'#comment');
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="Next"> \n'+
 								'<span aria-hidden="true">&gt;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
-			queryString = '?'.concat(createQueryString(result.totalPageCount),'#comment');			
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.totalPageCount, urlParams.get('target'), urlParams.get('keyword')),'#comment');			
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="Last"> \n'+
 								'<span aria-hidden="true">&raquo;</span> \n'+
@@ -307,35 +353,31 @@ function viewCommentList(result){
 	return $('.list-area');	
 }
 
-
-function createQueryString(cp){
+function createQueryString(p, cp, target, keyword){
 	
-	let queryString = {
-		//page: page,
-		cp: cp		
+	let urlParams = new URLSearchParams();
+	
+	if(p){
+		urlParams.set('p',p);
 	}
-	return new URLSearchParams(queryString).toString();	
-}
-
-function getQueryString(){
-	
-	let urlParams = new URLSearchParams(location.search);
-	let queryString = {
-		page: urlParams.get("page"),
-		cp: urlParams.get("cp")		
+	if(cp){
+		urlParams.set('cp',cp);
+	}
+	if(target){
+		urlParams.set('target',target);
+	}
+	if(keyword){
+		urlParams.set('keyword',keyword);
 	}
 	
-	return queryString;
+	return urlParams;	
 }
 
 function existsComment(commentList, findId) {
 
 	let isFind = false;
 
-	//alert("찾는 : "+findId);
 	$.each(commentList, function(index, comment) {
-		
-		//alert("현재 : "+comment.commentId);
 		if (comment.commentId == findId) {			
 			isFind = true;
 			return false;

@@ -441,6 +441,189 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
 }
 
 
+.body .board-article .included-article-list {
+	border-top: 1px solid;
+	border-color: #bbb;
+	border-color: var(--color-border-outer);
+	padding-top: 1rem;
+	margin-top: 1rem
+}
+
+
+.body .board-article .article-list {
+	margin-top: .5rem;
+	margin-bottom: .5rem
+}
+
+.body .board-article .article-list .list-table {
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-color: #bbb;
+	border-color: var(--color-border-outer);
+	font-size: .95rem
+}
+
+.body .table {
+	color: #000;
+	color: var(--color-text-color)
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+
+.body .board-article .article-list .list-table .vrow.column.head {
+	border-bottom: 2px solid;
+	border-color: #ddd;
+	border-color: var(--color-border-inner);
+	font-weight: 700
+}
+
+.body .board-article .article-list .list-table .vrow.column.head .vcol {
+	font-size: .8rem !important
+}
+
+.body .board-article .article-list .list-table .vrow.column {
+	display: flex;
+	width: 100%;
+	padding: .4rem .6rem;
+	border-bottom: 1px solid;
+	border-color: #ddd;
+	border-color: var(--color-border-inner);
+	position: relative;
+	align-items: center;
+	height: 2.4rem
+}
+
+
+.body .board-article .article-list .list-table .vrow.column .vrow-inner
+	{
+	display: flex;
+	flex: 1;
+	align-items: center
+}
+
+
+.body .board-article .article-list .list-table .vrow.column .vrow-top {
+	display: flex;
+	flex: 1
+}
+
+.body .board-article .article-list .list-table .vrow.column .vrow-top .vcol{
+	margin-right: 1rem
+}
+
+.body .board-article .article-list .list-table .vrow.column .vrow-bottom{
+	display: flex
+}
+
+.body .board-article .article-list .list-table .vrow.column .vcol.col-author,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-category,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-id,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-rate,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-time,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-view
+	{
+	font-size: .83rem
+}
+
+.body .board-article .article-list .list-table .vrow.column .vcol.col-id
+	{
+	width: 6rem
+}
+
+
+.body .board-article .article-list .list-table .vrow.column .vcol.col-author,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-title
+	{
+	text-align: left;
+	overflow: hidden;
+	word-break: break-all;
+	white-space: nowrap;
+	text-overflow: ellipsis
+}
+
+
+.body .board-article .article-list .list-table .vrow.column .vcol.col-author,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-title
+	{
+	text-align: left;
+	overflow: hidden;
+	word-break: break-all;
+	white-space: nowrap;
+	text-overflow: ellipsis
+}
+
+
+.body .board-article .article-list .list-table .vrow.column .vcol.col-author
+	{
+	width: 7rem
+}
+
+.body .board-article .article-list .list-table .vrow.column .vcol.col-category,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-time
+	{
+	width: 6rem
+}
+
+.body .board-article .article-list .list-table .vrow.column .vcol.col-rate,
+	.body .board-article .article-list .list-table .vrow.column .vcol.col-view
+	{
+	width: 3rem
+}
+
+
+
+.body .board-article .search-form {
+	margin-top: .5rem
+}
+
+.justify-content-end {
+    justify-content: flex-end!important;
+}
+
+.form-inline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: auto;
+}
+
+.input-group-prepend, .input-group-append {
+    display: flex;
+}
+
+.body .board-article .article-list .list-table a.vrow.active {
+	background-color: #eee;
+	background-color: var(--color-bg-focus)
+}
+
+.body .board-article .article-list .list-table a.vrow:hover {
+	text-decoration: none;
+	background-color: #eee;
+	background-color: var(--color-bg-focus)
+}
+
+
+.body .btn-arca {
+    background-color: #fff;
+    background-color: var(--color-bg-main);
+    border-color: #bbb;
+    border-color: var(--color-border-outer);
+}
+
+
+
 
 
 
