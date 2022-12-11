@@ -49,7 +49,7 @@ public class RecommendServiceImpl implements RecommendService{
 			post.addRecommend();			
 			recommendRepository.save(recommend);
 			
-			return recommend.getId();
+			return post.getRecommend();
 		}
 		// 중복 추천했을 경우
 		else {

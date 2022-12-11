@@ -54,7 +54,9 @@
 							<div class="article-body">
 								<div class="fr-view article-content" th:utext="${postInfoDto.content}"></div>
 								<div class="vote-area" id="vote">
-									<button class="item" id="recommend-btn">추천</button>
+									<button class="item" id="recommend-btn">추천
+										<span id="recommend" th:text="${postInfoDto.recommend}"></span>
+									</button>
 								</div>
 							</div>														
 							<div class="article-comment position-relative" id="comment">
@@ -99,21 +101,7 @@
 												<span class="vcol col-rate">추천</span>
 											</div>
 										</div>				
-									</div>
-									<a class="vrow column" href="#">
-										<div class="vrow-inner">
-											<div class="vrow-top">
-												<span class="vcol col-id">id</span>
-												<span class="vcol col-title">ㅋㅋ</span>
-											</div>
-											<div class="vrow-bottom">
-												<span class="vcol col-author">세영</span>
-												<span class="vcol col-time">어제</span>
-												<span class="vcol col-view">1</span>
-												<span class="vcol col-rate">10</span>
-											</div>
-										</div>
-									</a>
+									</div>								
 								</div>
 							</div>
 							<form action="/board" method="get"

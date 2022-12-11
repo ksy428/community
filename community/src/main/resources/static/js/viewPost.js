@@ -20,7 +20,7 @@ $(document).ready(function(e){
 			viewCommentList(result);
 		}	
 	});
-	
+		
 	getPostList();
 	
 	// 게시글 수정
@@ -161,8 +161,8 @@ $(document).ready(function(e){
 			url: '/recommend/'+postId,
 			type: 'post',
 			dataType: 'json',
-			success : function(result){
-				alert("성공");	
+			success : function(result){				
+				$('#recommend').html(result);	
 			},
 			error : function(result){
 				alert(result.responseText);
@@ -181,8 +181,12 @@ function writeComment(form){
 			url: form.attr('action'),
 			data: form.serialize(),
 			type: 'post',
+			dataType: 'json',
 			success : function(result){				
 				resolve(result);
+			},
+			error : function(result){
+				alert(result.responseText);
 			}
 		});		
 	});
@@ -195,9 +199,13 @@ function deleteComment(commentId){
 		$.ajax({
 			url: '/comment/' + commentId,
 			type: 'delete',
+			dataType: 'json',
 			success : function(result){
 				resolve(result);
-			}
+			},
+			error : function(result){
+				alert(result.responseText);
+			} 
 		});
 	});
 }
@@ -205,16 +213,19 @@ function deleteComment(commentId){
 function getCommentList(cp){
 	return new Promise(function(resolve, reject){
 	
-	
 		$.ajax({
 			url: '/comment/'+ postId,
 			type: 'get',
 			data: {
 				cp : cp
 				},
+			dataType: 'json',
 			success: function(result){ //commentPagingDto 가져옴				
 				resolve(result);		
-			}
+			},
+			error : function(result){
+				alert(result.responseText);
+			} 
 		})	
 	});
 }
@@ -226,8 +237,10 @@ function getPostList(){
 	let urlParams = new URLSearchParams(location.search);
 	
 	let postSearch = {
-		target: $('#target').val(),
-		keyword: $('#keyword').val(),
+		//target: $('#target').val(),
+		//keyword: $('#keyword').val(),
+		target: urlParams.get('target'),
+		keyword: urlParams.get('keyword') ?? '',
 		p: urlParams.get('p')
 	}
 
@@ -235,6 +248,7 @@ function getPostList(){
 		url: '/board/list',
 		type: 'get',
 		data: postSearch,
+		dataType: 'json',
 		success: function(result){
 			$.each(result.postList, function(index, post) {
 				
@@ -258,7 +272,57 @@ function getPostList(){
 				
 				$('.list-table').append(postList);	
 			});
+			
+		/////////////////////////////////////////////////////////	
+			//---게시글페이징---	
+		let pageList = "";
+		let queryString = "";
+		//let urlParams = new URLSearchParams(location.search);
+	
+		if(result.hasPrev){
+			queryString = '?'.concat(createQueryString(1, null, urlParams.get('target'), urlParams.get('keyword')));
+			pageList += '<li class="page-item"> \n'+
+							'<a class="page-link" href="/board'+ queryString +'" aria-label="First"> \n'+
+								'<span aria-hidden="true">&laquo;</span> \n'+
+							'</a> \n'+
+						'</li> \n';
+			queryString = '?'.concat(createQueryString(result.startPageNum - 1, nul1, urlParams.get('target'), urlParams.get('keyword')));			
+			pageList +='<li class="page-item"> \n'+
+							'<a class="page-link" href="/board'+ queryString +'" aria-label="Previous"> \n'+
+								'<span aria-hidden="true">&lt;</span> \n'+
+							'</a> \n'+
+						'</li>';
 		}
+		//페이지번호
+		for(let index = result.startPageNum; index <= result.endPageNum; index++){
+					let active = result.currentPageNum == index ? 'class="page-item active"' : '';
+
+			queryString = '?'.concat(createQueryString(index, null, urlParams.get('target'), urlParams.get('keyword')));
+			pageList += '<li '+ active + '>'+
+							'<a class="page-link" href="/board'+ queryString +'">'+ index +' </a>'+
+						'</li>';
+		}			
+		if(result.hasNext){
+			queryString = '?'.concat(createQueryString(result.endPageNum + 1, null, urlParams.get('target'), urlParams.get('keyword')));
+			pageList += '<li class="page-item"> \n'+
+							'<a class="page-link" href="/board'+ queryString +'" aria-label="Next"> \n'+
+								'<span aria-hidden="true">&gt;</span> \n'+
+							'</a> \n'+
+						'</li> \n';
+			queryString = '?'.concat(createQueryString(result.totalPageCount, null, urlParams.get('target'), urlParams.get('keyword')));			
+			pageList += '<li class="page-item"> \n'+
+							'<a class="page-link" href="/board'+ queryString +'" aria-label="Last"> \n'+
+								'<span aria-hidden="true">&raquo;</span> \n'+
+							'</a> \n'+
+						'</li>';
+		}		
+		$('#post-paging').html(pageList);
+		
+		//////////////////////////////////////////////////////			
+		},
+		error : function(result){
+				alert(result.responseText);
+		} 
 	});
 }
 //댓글리스트 뷰에 추가
@@ -373,17 +437,21 @@ function createQueryString(p, cp, target, keyword){
 	
 	let urlParams = new URLSearchParams();
 	
-	if(p){
-		urlParams.set('p',p);
-	}
-	if(cp){
-		urlParams.set('cp',cp);
-	}
 	if(target){
 		urlParams.set('target',target);
 	}
 	if(keyword){
 		urlParams.set('keyword',keyword);
+	}
+	
+	if(p){
+		urlParams.set('p',p);
+	}
+	else{
+		urlParams.set('p',1);
+	}
+	if(cp){
+		urlParams.set('cp',cp);
 	}
 	
 	return urlParams;	

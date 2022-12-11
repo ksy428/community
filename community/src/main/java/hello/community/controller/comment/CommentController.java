@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hello.community.dto.comment.CommentEditDto;
@@ -47,7 +49,7 @@ public class CommentController {
 	@PostMapping(value = {"/comment/{postId}","/comment/{postId}/{commentId}"})
 	public ResponseEntity<Long> write(@Valid @ModelAttribute CommentWriteDto writeDto, BindingResult result
 			,@PathVariable Long postId ,@PathVariable(required = false) Optional<Long> commentId) {
-			
+		
 		if(result.hasErrors()){
 			return null;
 		}		 		

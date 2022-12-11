@@ -63,16 +63,15 @@ $(document).ready(function(e){
 			type : 'POST',
 			url : '/board/write',
 			contentType : false,
+			dataType: 'json',
 			enctype : 'multipart/form-data',
 			processData : false,
 			success : function(postId) {
-				
-				if (postId === "error") {
-					//document.location.href = '/board/write'
-				} else {
-					let url = '/board/' + postId;
-					location.replace(url);
-				}
+				let url = '/board/' + postId;
+				location.replace(url);
+			},
+			error : function(result){
+				alert(result.responseText);
 			}
 		});
 	});

@@ -43,6 +43,7 @@ public class PostController {
 	public String postListForm(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
 			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
 		
+		log.info("서치: {}", postSearch);
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);
 		
 		model.addAttribute("postPagingDto",postPagingDto);
@@ -58,19 +59,19 @@ public class PostController {
 	
 	@PostMapping("/board/write")
 	@ResponseBody
-	public String write(@Valid @ModelAttribute PostWriteDto writeDto, BindingResult result,
+	public ResponseEntity<Long> write(@Valid @ModelAttribute PostWriteDto writeDto, BindingResult result,
 			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
 			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList){
 
 		if(result.hasErrors()){
-			return "error";
+			//return "error";
 		}
 		
 		writeDto.initDto(originNameList, storeNameList);
 
 		Long postId = postService.write(writeDto);
 		
-		return postId.toString();
+		return new ResponseEntity<>(postId, HttpStatus.OK);
 	}
 	
 	@GetMapping("/board/{postId}")
@@ -95,12 +96,12 @@ public class PostController {
 	
 	@ResponseBody
 	@PutMapping("/board/{postId}/edit")
-	public String edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result,
+	public ResponseEntity<Long> edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result,
 			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
 			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList) {
 			
 		if(result.hasErrors()) {
-			return "post/editPostForm";
+			//return "post/editPostForm";
 		}
 		
 		editDto.setMediaList(postService.findOne(postId).getMediaList());
@@ -110,7 +111,7 @@ public class PostController {
 		postService.edit(postId, editDto);
 		
 		//return "redirect:/board/"+ postId;
-		return postId.toString();
+		return new ResponseEntity<>(postId, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/board/{postId}")
@@ -126,6 +127,7 @@ public class PostController {
 	public ResponseEntity<PostPagingDto> postList(@ModelAttribute PostSearch postSearch, Pageable pageable,
 			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
 		
+		//log.info("서치: {}", postSearch);
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);				
 		
 		return new ResponseEntity<>(postPagingDto, HttpStatus.OK);

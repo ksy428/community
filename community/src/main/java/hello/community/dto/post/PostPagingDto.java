@@ -9,10 +9,12 @@ import hello.community.domain.post.Post;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @ToString
 @NoArgsConstructor
+@Slf4j
 public class PostPagingDto {
 
 	// 총 페이지 개수
@@ -61,5 +63,13 @@ public class PostPagingDto {
 			hasPrev =  currentPageNum - (pageNum / 2) >= 1;
 			hasNext = currentPageNum + (pageNum / 2) < totalPageCount;
 		}	
+		
+		log.info("결과사이즈: {}", postList.size());
+		log.info("totalElementCount: {}", totalElementCount);
+		log.info("current: {}", currentPageNum);
+		log.info("start: {}", startPageNum);
+		log.info("end: {}", endPageNum);
+		log.info("hasPrev: {}", hasPrev);
+		log.info("hasNext: {}", hasNext);
 	}
 }

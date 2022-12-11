@@ -65,13 +65,13 @@ $(document).ready(function(e){
 			contentType : false,
 			enctype : 'multipart/form-data',
 			processData : false,
-			success : function(postId) {
-				
-				if (postId === "error") {
-				} else {
-					let url = '/board/' + postId;
-					location.replace(url);
-				}
+			dataType: 'json',
+			success : function(postId) {		
+				let url = '/board/' + postId;
+				location.replace(url);
+			},
+			error : function(result){
+				alert(result.responseText);
 			}
 		});
 	});

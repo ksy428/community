@@ -50,7 +50,7 @@ public class InitDummyData {
 			 initMember("dummy3", "1234", "3번유저", "dummy3@naver.com");
 		
 	
-			 for(int i=0; i<3;i++) {			 
+			 for(int i=0; i<100;i++) {			 
 				 initPost((i+1) +"번 글", (i+1)+"번 내용", 1L);
 			 }
 			 

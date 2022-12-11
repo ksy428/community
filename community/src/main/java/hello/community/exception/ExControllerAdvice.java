@@ -32,6 +32,7 @@ public class ExControllerAdvice {
 		log.info("url: {}", request.getRequestURI());
 		log.info("exeption message: {}", e.getExceptionType().getErrorMessage());
 		log.info("헤더: {}", request.getHeader("X-Requested-With")); // XMLHttpRequest
+		log.info("쿼리스트링: {}", request.getQueryString());
 		
 		//ajax요청에서 예외발생
 		if(request.getHeader("X-Requested-With") != null) {
@@ -41,7 +42,7 @@ public class ExControllerAdvice {
 		else {	
 			model.addAttribute("message", e.getExceptionType().getErrorMessage());
 			model.addAttribute("uri", request.getRequestURI());
-
+			
 			return "errorPage";
 		}
 		

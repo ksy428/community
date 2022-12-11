@@ -21,8 +21,8 @@ public class RecommendController {
 	public ResponseEntity<Long> postRecommand(@PathVariable Long postId){
 		
 		log.info("아디: {}", postId);
-		Long id = recommendService.write(postId);
-		log.info("결과아디: {}", id);
-		return new ResponseEntity<>(id, HttpStatus.OK);
+		Long recommendCount = recommendService.write(postId);
+		log.info("결과아디: {}", recommendCount);
+		return new ResponseEntity<>(recommendCount, HttpStatus.OK);
 	}
 }
