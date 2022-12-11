@@ -5,6 +5,7 @@ import java.net.http.HttpRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,12 +28,22 @@ public class ExControllerAdvice {
 	}*/
 	
 	@ExceptionHandler(BaseException.class)
-	public String memberExHandler(BaseException e, Model model, HttpServletRequest request) {
+	public Object memberExHandler(BaseException e, Model model, HttpServletRequest request) {
 		log.info("url: {}", request.getRequestURI());
 		log.info("exeption message: {}", e.getExceptionType().getErrorMessage());
-		model.addAttribute("message", e.getExceptionType().getErrorMessage());
-		model.addAttribute("uri", request.getRequestURI());
-		return "errorPage";
+		log.info("헤더: {}", request.getHeader("X-Requested-With")); // XMLHttpRequest
+		
+		//ajax요청에서 예외발생
+		if(request.getHeader("X-Requested-With") != null) {
+			
+			return new ResponseEntity<>(e.getExceptionType().getErrorMessage(), e.getExceptionType().getHttpStatus());
+		}
+		else {	
+			model.addAttribute("message", e.getExceptionType().getErrorMessage());
+			model.addAttribute("uri", request.getRequestURI());
+
+			return "errorPage";
+		}
+		
 	}
-	
 }

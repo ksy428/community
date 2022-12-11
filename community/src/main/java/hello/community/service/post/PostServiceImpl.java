@@ -140,4 +140,5 @@ public class PostServiceImpl implements PostService {
 		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  10);
 		return new PostPagingDto(postRepository.search(pageable, postSearch));
 	}
+
 }

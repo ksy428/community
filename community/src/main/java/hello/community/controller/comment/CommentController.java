@@ -51,8 +51,7 @@ public class CommentController {
 		if(result.hasErrors()){
 			return null;
 		}		 		
-		//commentService.write(postId, commentId, writeDto);
-		log.info("writeDto : {}", writeDto.toString());
+
 		return new ResponseEntity<>(commentService.write(postId, commentId, writeDto), HttpStatus.OK);
 	}
 	

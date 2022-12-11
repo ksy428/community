@@ -50,18 +50,6 @@ public class PostController {
 		return "post/listPost";
 	}
 	
-	@ResponseBody
-	@GetMapping("/board/list")
-	public ResponseEntity<PostPagingDto> postList(@ModelAttribute PostSearch postSearch, Pageable pageable,
-			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
-		
-		log.info("posttSearch: {}" + postSearch.toString());
-		log.info("페이지: {}", page);
-		
-		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);				
-		
-		return new ResponseEntity<>(postPagingDto, HttpStatus.OK);
-	}
 	
 	@GetMapping("/board/write")
 	public String writeForm(@ModelAttribute PostWriteDto writeDto) {	
@@ -132,4 +120,16 @@ public class PostController {
 		
 		return "redirect:/board";
 	}
+	
+	@ResponseBody
+	@GetMapping("/board/list")
+	public ResponseEntity<PostPagingDto> postList(@ModelAttribute PostSearch postSearch, Pageable pageable,
+			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
+		
+		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);				
+		
+		return new ResponseEntity<>(postPagingDto, HttpStatus.OK);
+	}
+	
+	
 }

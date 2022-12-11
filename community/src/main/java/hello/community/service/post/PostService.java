@@ -27,4 +27,5 @@ public interface PostService {
 	Post findOne(Long postId) throws PostException;
 	
 	PostPagingDto searchPostList(Pageable pageable, PostSearch postSearch, int page);
+	
 }

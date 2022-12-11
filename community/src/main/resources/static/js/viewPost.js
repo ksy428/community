@@ -152,6 +152,23 @@ $(document).ready(function(e){
 	});
 
 
+	//추천
+	$('#recommend-btn').on("click", function(e){
+		
+		e.preventDefault();
+		
+		$.ajax({
+			url: '/recommend/'+postId,
+			type: 'post',
+			dataType: 'json',
+			success : function(result){
+				alert("성공");	
+			},
+			error : function(result){
+				alert(result.responseText);
+			}
+		});
+	});
 	
 });
 
@@ -204,9 +221,8 @@ function getCommentList(cp){
 
 // 게시글리스트 가져오기 ajax
 function getPostList(){
-	
-	
-	$('.list-table').children().remove();
+
+	$('.list-table').children('a').remove();
 	let urlParams = new URLSearchParams(location.search);
 	
 	let postSearch = {

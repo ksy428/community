@@ -60,7 +60,8 @@ class CommentServiceImplTest {
 		// then
 		Comment comment = commentRepository.findById(writeCommentId)
 				.orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
-		assertThat(comment.getContent().equals("댓글11"));
+
+		assertThat(comment.getContent()).isEqualTo("댓글11");
 	}
 
 	@Test
@@ -76,8 +77,9 @@ class CommentServiceImplTest {
 		// then
 		Comment comment = commentRepository.findById(writeCommentId)
 				.orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
-		assertThat(comment.getContent().equals("2번게시글 2번댓글에 대댓글 ㅋㅋ"));
-		assertThat(comment.getParent().getId().equals(2L));
+
+		assertThat(comment.getContent()).isEqualTo("2번게시글 2번댓글에 대댓글");
+		assertThat(comment.getParent().getId()).isEqualTo(2L);
 	}
 
 	@Test
@@ -93,7 +95,8 @@ class CommentServiceImplTest {
 		// then
 		Comment comment = commentRepository.findById(editCommentId)
 				.orElseThrow(() -> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
-		assertThat(comment.getContent().equals("댓글수정완료"));
+
+		assertThat(comment.getContent()).isEqualTo("댓글수정완료");
 	}
 
 	@Test
