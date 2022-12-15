@@ -58,12 +58,14 @@ public class CommentController {
 	}
 	
 	@PutMapping("/comment/{commentId}")
-	public String edit(@Valid @ModelAttribute CommentEditDto editDto, BindingResult result
+	public ResponseEntity<Long> edit(@Valid @ModelAttribute CommentEditDto editDto, BindingResult result
 			,@PathVariable Long commentId) {
 		
-		commentService.edit(commentId, editDto);
+		if(result.hasErrors()){
+			return null;
+		}
 		
-		return "";
+		return new ResponseEntity<>(commentService.edit(commentId, editDto), HttpStatus.OK);
 
 	}
 	

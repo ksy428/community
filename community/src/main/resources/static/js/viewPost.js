@@ -43,7 +43,7 @@ $(document).ready(function(e){
 		}
 	});
 	
-	//대댓글 form 생성
+	//대댓글쓰기 form 생성
 	$(".body").on("click",".reply-link", function(e){
 		
 		e.preventDefault();
@@ -63,13 +63,18 @@ $(document).ready(function(e){
 		//답글 form 생성	
 		let form = '<form class="reply-form" id="'+'f_'.concat(commentId,'" ')+' data-reply action="/comment/'.concat(postId,'/',commentId,'" ') +'method="post">' +
 						'<div class="reply-form__container">'+
+							'<div class="reply-form__info">' +
+								'<div class="reply-form__user-info">'+
+									'<span class="replay-form-title">답글 쓰기</span>'+
+								'</div>'+
+								'<div class="reply-form__submit-button-wrapper">'+
+									'<button class="reply-form__submit-button" id="write-btn" type="submit">작성</button>'+
+								'</div>'+
+							'</div>'+															
 							'<div class="reply-form-textarea-wrapper">'+
 								'<textarea class="reply-form-textarea" name="content"></textarea>'+
 							'</div>'+
-						'</div>'+
-						'<div class="reply-form__submit-button-wrapper">'+
-							'<button class="reply-form__submit-button" id="write-btn" type="submit">작성</button>'+
-						'</div>'+
+						'</div>'+				
 					'</form>';
 
 		$('#c_'+ commentId).after(form);
@@ -79,9 +84,48 @@ $(document).ready(function(e){
 		//$('html, body').animate({scrollTop: $('#c_'+ commentId).offset.top}, 400);						
 	});
 	
+	//댓글 수정 form 생성	
+	$(".body").on("click",".edit-link", function(e){
+		
+		e.preventDefault();
+		
+		let commentId = $(this).attr("data-target");
+		
+
+		let content = $(this).closest('.comment-item').find('.text').text();
+		
+		//답글을 눌렀을때 이미 열린 답글form이 있다면 삭제
+		if($('.reply-form[data-reply]').length){
+
+			//답글을 누르고 열린 답글form이 이미 존재하고, 같은 답글을 또 누르면 삭제만 하고 return
+			if($('.reply-form[data-reply]').attr("id") == 'f_'+commentId){
+				return $('.reply-form[data-reply]').remove();
+			}
+			$('.reply-form[data-reply]').remove();		
+		}
+		
+		let form = '<form class="reply-form edit" id="'+'f_'.concat(commentId,'" ')+' data-reply action="/comment/'.concat(commentId,'" ') +'method="put">' +
+						'<div class="reply-form__container">'+
+							'<div class="reply-form__info">' +
+								'<div class="reply-form__user-info">'+
+									'<span class="replay-form-title">댓글 수정</span>'+
+								'</div>'+
+								'<div class="reply-form__submit-button-wrapper">'+
+									'<button class="reply-form__submit-button" id="edit-btn" type="submit">수정</button>'+
+								'</div>'+
+							'</div>'+															
+							'<div class="reply-form-textarea-wrapper">'+
+								'<textarea class="reply-form-textarea" name="content">'+ content+'</textarea>'+
+							'</div>'+
+						'</div>'+				
+					'</form>';
+					
+		$('#c_'+ commentId).after(form);
+	});
+	
 				
 	//댓글 write
-	$(".body").on("click",".reply-form__submit-button",function(e){
+	$(".body").on("click","#write-btn",function(e){		
 		
 		e.preventDefault();
 		
@@ -128,6 +172,24 @@ $(document).ready(function(e){
 		
 	});
 	
+	//댓글 edit
+	$(".body").on("click","#edit-btn",function(e){		
+		
+		e.preventDefault();
+	
+		let form = $(this).closest("form");
+	
+		editComment(form).then(() =>{
+			
+			let urlParams = new URLSearchParams(location.search);
+			
+			getCommentList(urlParams.get('cp')).then(pagingDto => {
+				
+				viewCommentList(pagingDto);													
+			});
+		});
+	});
+	
 	//댓글 delete
 	$(".body").on("click",".delete-link", function(e){
 		
@@ -138,7 +200,7 @@ $(document).ready(function(e){
 		if (confirm("댓글을 삭제하시겠습니까?")) {
 		deleteComment(commentId).then(() =>{
 			
-			let urlParams = getQueryString();
+			let urlParams = new URLSearchParams(location.search);
 			
 			getCommentList(urlParams.get('cp')).then(pagingDto => {
 				
@@ -151,10 +213,8 @@ $(document).ready(function(e){
 		}
 	});
 
-
 	//추천
 	$('#recommend-btn').on("click", function(e){
-		
 		e.preventDefault();
 		
 		$.ajax({
@@ -176,7 +236,6 @@ $(document).ready(function(e){
 //댓글쓰기 ajax
 function writeComment(form){
 	return new Promise(function(resolve, reject){
-		
 		$.ajax({
 			url: form.attr('action'),
 			data: form.serialize(),
@@ -192,10 +251,28 @@ function writeComment(form){
 	});
 }
 
+//댓글수정 ajax
+function editComment(form){
+	return new Promise(function(resolve, reject){
+		
+		$.ajax({
+			url: form.attr('action'),
+			data: form.serialize(),
+			type: 'put',
+			dataType: 'json',
+			success : function(result){				
+				resolve(result);
+			},
+			error : function(result){
+				alert(result.responseText);
+			}
+		});		
+	});
+}
+
 //댓글삭제 ajax
 function deleteComment(commentId){
 	return new Promise(function(resolve, reject){
-		
 		$.ajax({
 			url: '/comment/' + commentId,
 			type: 'delete',
@@ -209,10 +286,11 @@ function deleteComment(commentId){
 		});
 	});
 }
+
 // 댓글리스트 가져오기 ajax
 function getCommentList(cp){
 	return new Promise(function(resolve, reject){
-	
+		
 		$.ajax({
 			url: '/comment/'+ postId,
 			type: 'get',
@@ -286,7 +364,7 @@ function getPostList(){
 								'<span aria-hidden="true">&laquo;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
-			queryString = '?'.concat(createQueryString(result.startPageNum - 1, nul1, urlParams.get('target'), urlParams.get('keyword')));			
+			queryString = '?'.concat(createQueryString(result.startPageNum - 1, null, urlParams.get('target'), urlParams.get('keyword')));			
 			pageList +='<li class="page-item"> \n'+
 							'<a class="page-link" href="/board'+ queryString +'" aria-label="Previous"> \n'+
 								'<span aria-hidden="true">&lt;</span> \n'+
@@ -453,6 +531,7 @@ function createQueryString(p, cp, target, keyword){
 	if(cp){
 		urlParams.set('cp',cp);
 	}
+	
 	
 	return urlParams;	
 }

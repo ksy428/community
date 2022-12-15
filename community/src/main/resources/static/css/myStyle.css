@@ -376,7 +376,8 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
 	border-color: var(--color-border-outer);
 	border-radius: 5px;
 	color: #000;
-	color: var(--color-text-color)
+	color: var(--color-text-color);
+	margin-bottom: 0.2em
 }
 
 .reply-form>.reply-form__container>.reply-form-textarea-wrapper {
@@ -400,15 +401,43 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
 	outline: 0
 }
 
-.reply-form>.reply-form__submit-button-wrapper
+.reply-form>.reply-form__container>.reply-form__info>.reply-form__submit-button-wrapper
 	{
 	text-align: right;
 	justify-content: flex-end;
-	padding-bottom: .5em;
+	
 
 }
+.reply-form>.reply-form__container>.reply-form__info>.reply-form__submit-button-wrapper>.reply-form__submit-button
+	{
+	padding: .25em 1.5em;
+	border: 1px solid;
+	border-color: #bbb;
+	border-color: var(--color-border-outer);
+	background-color: #fff;
+	background-color: var(--color-bg-main);
+	border-radius: 4px;
+	color: #000;
+	color: var(--color-text-color);
+	transition-duration: .3s;
+	height: 100%
+}
 
-.reply-form>.reply-form__submit-button-wrapper>.reply-form__submit-button
+.reply-form>.reply-form__container>.reply-form__info>.reply-form__submit-button-wrapper>.reply-form__submit-button:focus
+	{
+	outline: 2px solid;
+	outline-color: #0275d8;
+	outline-color: var(--color-link-color)
+}
+
+.reply-form>.reply-form__container>.reply-form__info>.reply-form__submit-button-wrapper>.reply-form__submit-button:hover
+	{
+	background-color: #eee;
+	background-color: var(--color-bg-focus)
+}
+
+
+/* .reply-form>.reply-form__submit-button-wrapper>.reply-form__submit-button
 	{
 	padding: .25em 1.5em;
 	border: 1px solid;
@@ -433,7 +462,7 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
 	{
 	background-color: #eee;
 	background-color: var(--color-bg-focus)
-}
+} */
 
 .body .right-sidebar {
 	position: relative;
@@ -621,6 +650,36 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
     border-color: #bbb;
     border-color: var(--color-border-outer);
 }
+
+
+.reply-form>.reply-form__container>.reply-form__info {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px solid;
+	border-color: #bbb;
+	border-color: var(--color-border-outer);
+	overflow: hidden
+}
+
+.reply-form>.reply-form__container>.reply-form__info>.reply-form__user-info
+	{
+	display: flex;
+	padding: .5em;
+	flex-grow: 1;
+	overflow: hidden
+}
+
+.reply-form>.reply-form__container>.reply-form__info>.reply-form__user-info>.replay-form-title
+	{
+	font-size: .8em;
+	line-height: 2;
+	margin: 0 2em 0 .5em;
+	user-select: none;
+	flex-shrink: 0
+}
+
+
+
 
 
 
