@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import hello.community.domain.board.Board;
 import hello.community.domain.comment.Comment;
 import hello.community.domain.member.Member;
 import hello.community.domain.post.Post;
@@ -16,6 +17,7 @@ import hello.community.exception.member.MemberExceptionType;
 import hello.community.exception.post.PostException;
 import hello.community.exception.post.PostExceptionType;
 import hello.community.global.security.SecurityUtil;
+import hello.community.repository.board.BoardRepository;
 import hello.community.repository.comment.CommentRepository;
 import hello.community.repository.member.MemberRepository;
 import hello.community.repository.post.PostRepository;
@@ -40,6 +42,7 @@ public class InitDummyData {
 		private final PostRepository postRepository;
 		private final PasswordEncoder passwordEncoder;
 		private final CommentRepository commentRepository;
+		private final BoardRepository boardRepository;
 		
 		@Transactional
 	    public void save() {
@@ -48,6 +51,11 @@ public class InitDummyData {
 			 initMember("dummy1", "1234", "1번유저", "dummy1@naver.com");
 			 initMember("dummy2", "1234", "2번유저", "dummy2@naver.com");
 			 initMember("dummy3", "1234", "3번유저", "dummy3@naver.com");
+			 
+			 initBoard("free");
+			 initBoard("humor");
+			 initBoard("game");
+			 initBoard("sport");
 		
 	
 			 for(int i=0; i<100;i++) {			 
@@ -69,7 +77,15 @@ public class InitDummyData {
 				 * 150L, commentId); initReComment("대댓글", 1L, 150L, commentId);
 				 * initReComment("대댓글", 1L, 150L, commentId);
 				 */
+			 
 	    }
+		
+		@Transactional
+		public void initBoard(String boardType) {
+			boardRepository.save(Board.builder()
+						.boardType(boardType)
+						.build());
+		}
 
 		@Transactional
 		public void initMember(String loginId, String password, String nickname, String email) {

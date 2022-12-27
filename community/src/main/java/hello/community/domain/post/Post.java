@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import hello.community.domain.BaseTimeEntity;
+import hello.community.domain.board.Board;
 import hello.community.domain.comment.Comment;
 import hello.community.domain.media.Media;
 import hello.community.domain.member.Member;
@@ -33,6 +34,10 @@ public class Post extends BaseTimeEntity{
 	@Column(name = "post_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "boardType")
+	private Board board;
 	
 	private String title;
 	

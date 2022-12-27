@@ -44,11 +44,6 @@ public class Member extends BaseTimeEntity{
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
-	@Enumerated(EnumType.STRING)
-	private Rank rank;
-
-	private Long exp;
-	
 	@OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Post> postList = new ArrayList<>();
 	
@@ -62,8 +57,6 @@ public class Member extends BaseTimeEntity{
 		this.nickname = nickname;
 		this.email = email;
 		this.role = Role.MEMBER;
-		this.rank = Rank.BLONZE;
-		this.exp = 0L;
 	}
 	
 	public void editNickname(String nickname) {

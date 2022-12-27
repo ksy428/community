@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import hello.community.domain.member.Member;
 import hello.community.domain.post.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
