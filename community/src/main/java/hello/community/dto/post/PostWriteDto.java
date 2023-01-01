@@ -23,6 +23,8 @@ public class PostWriteDto {
 
 	@NotBlank(message = "내용을 입력하세요")
 	private String content;
+	
+	private String boardType;
 
 	private List<Media> mediaList = new ArrayList<Media>();
 
@@ -32,8 +34,10 @@ public class PostWriteDto {
 		this.content = content;
 	}
 
-	public void initDto(List<String> originNameList, List<String> storeNameList) {
+	public void initDto(List<String> originNameList, List<String> storeNameList, String boardType) {
 	
+		this.boardType = boardType;
+		
 		if(CollectionUtils.isEmpty(storeNameList))
 			return;
 		

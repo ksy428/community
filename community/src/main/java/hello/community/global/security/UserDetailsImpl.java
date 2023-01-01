@@ -15,11 +15,9 @@ import lombok.Getter;
 public class UserDetailsImpl implements UserDetails{
 
 	private Member member;
-	private String loginId;
 	
 	public UserDetailsImpl(Member member) {
 		this.member = member;
-		this.loginId = member.getLoginId();
 	}
 
 	@Override

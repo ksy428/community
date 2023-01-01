@@ -31,12 +31,13 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 	}
 
 	@Override
-	public Page<Post> search(Pageable pageable, PostSearch postSearch) {
+	public Page<Post> search(Pageable pageable, String boardType, PostSearch postSearch) {
 	
 			List<Post> results = query
 					.selectFrom(post)
 					.where(
-							typeContain(postSearch)
+							post.board.boardType.eq(boardType)
+							,typeContain(postSearch)
 						   )
 					.leftJoin(post.writer, member)
 					.fetchJoin()
@@ -48,7 +49,8 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 			JPAQuery<Post> countQuery = query
 					.selectFrom(post)
 					.where(
-							typeContain(postSearch)							
+							post.board.boardType.eq(boardType)
+							,typeContain(postSearch)							
 							);
 			
 		return PageableExecutionUtils.getPage(results, pageable, ()-> countQuery.fetch().size());
@@ -57,7 +59,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 	private BooleanBuilder typeContain(PostSearch postSearch) {
 		
 		BooleanBuilder booleanBuilder = new BooleanBuilder();
-		
+			
 		if(postSearch.getTarget() == null) {
 			return booleanBuilder;
 		}	
@@ -78,4 +80,5 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 		
 		return booleanBuilder;
 	}
+	
 }

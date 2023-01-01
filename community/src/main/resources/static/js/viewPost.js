@@ -1,8 +1,7 @@
 "use strict"
 
 $(document).ready(function(e){
-	
-	//let urlParams = getQueryString();
+
 	let urlParams = new URLSearchParams(location.search);
 	
 	getCommentList(urlParams.get('cp')).then(pagingDto => {
@@ -314,16 +313,17 @@ function getPostList(){
 	$('.list-table').children('a').remove();
 	let urlParams = new URLSearchParams(location.search);
 	
+	let pathName = location.pathname.split('/');
+	let boardType = pathName[2];
+	
 	let postSearch = {
-		//target: $('#target').val(),
-		//keyword: $('#keyword').val(),
 		target: urlParams.get('target'),
 		keyword: urlParams.get('keyword') ?? '',
 		p: urlParams.get('p')
 	}
 
 	$.ajax({
-		url: '/board/list',
+		url: '/board/'+ boardType +'/list',
 		type: 'get',
 		data: postSearch,
 		dataType: 'json',
@@ -333,7 +333,7 @@ function getPostList(){
 				let postList="";
 				let queryString = '?'.concat(createQueryString(urlParams.get('p'), null, urlParams.get('target'), urlParams.get('keyword'),'#comment'));
 				let active = (postId == post.postId) ? 'active' : '';
-				postList += '<a class="vrow column ' + active + '" href= /board/'+ post.postId +'/'+ queryString + '> \n'+ 
+				postList += '<a class="vrow column ' + active + '" href= /board/'+ boardType +'/'+ post.postId +''+ queryString + '> \n'+ 
 								'<div class="vrow-inner"> \n'+
 									'<div class ="vrow-top"> \n'+
 										'<span class="vcol col-id">'+ post.postId + '</span> \n'+
@@ -360,36 +360,36 @@ function getPostList(){
 		if(result.hasPrev){
 			queryString = '?'.concat(createQueryString(1, null, urlParams.get('target'), urlParams.get('keyword')));
 			pageList += '<li class="page-item"> \n'+
-							'<a class="page-link" href="/board'+ queryString +'" aria-label="First"> \n'+
+							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="First"> \n'+
 								'<span aria-hidden="true">&laquo;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
 			queryString = '?'.concat(createQueryString(result.startPageNum - 1, null, urlParams.get('target'), urlParams.get('keyword')));			
 			pageList +='<li class="page-item"> \n'+
-							'<a class="page-link" href="/board'+ queryString +'" aria-label="Previous"> \n'+
+							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="Previous"> \n'+
 								'<span aria-hidden="true">&lt;</span> \n'+
 							'</a> \n'+
 						'</li>';
 		}
 		//페이지번호
 		for(let index = result.startPageNum; index <= result.endPageNum; index++){
-					let active = result.currentPageNum == index ? 'class="page-item active"' : '';
+					let active = result.currentPageNum == index ? 'class="page-item active"' : 'class="page-item"';
 
 			queryString = '?'.concat(createQueryString(index, null, urlParams.get('target'), urlParams.get('keyword')));
 			pageList += '<li '+ active + '>'+
-							'<a class="page-link" href="/board'+ queryString +'">'+ index +' </a>'+
+							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'">'+ index +' </a>'+
 						'</li>';
 		}			
 		if(result.hasNext){
 			queryString = '?'.concat(createQueryString(result.endPageNum + 1, null, urlParams.get('target'), urlParams.get('keyword')));
 			pageList += '<li class="page-item"> \n'+
-							'<a class="page-link" href="/board'+ queryString +'" aria-label="Next"> \n'+
+							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="Next"> \n'+
 								'<span aria-hidden="true">&gt;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
 			queryString = '?'.concat(createQueryString(result.totalPageCount, null, urlParams.get('target'), urlParams.get('keyword')));			
 			pageList += '<li class="page-item"> \n'+
-							'<a class="page-link" href="/board'+ queryString +'" aria-label="Last"> \n'+
+							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="Last"> \n'+
 								'<span aria-hidden="true">&raquo;</span> \n'+
 							'</a> \n'+
 						'</li>';

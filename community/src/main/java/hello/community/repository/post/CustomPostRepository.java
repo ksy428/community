@@ -7,5 +7,5 @@ import hello.community.domain.post.Post;
 
 public interface CustomPostRepository {
 
-	Page<Post> search(Pageable pageable, PostSearch postSearch);
+	Page<Post> search(Pageable pageable, String boardType, PostSearch postSearch);
 }

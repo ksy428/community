@@ -16,6 +16,8 @@ import hello.community.dto.post.PostEditDto;
 import hello.community.dto.post.PostInfoDto;
 import hello.community.dto.post.PostPagingDto;
 import hello.community.dto.post.PostWriteDto;
+import hello.community.exception.board.BoardException;
+import hello.community.exception.board.BoardExceptionType;
 import hello.community.exception.file.FileException;
 import hello.community.exception.member.MemberException;
 import hello.community.exception.member.MemberExceptionType;
@@ -23,6 +25,7 @@ import hello.community.exception.post.PostException;
 import hello.community.exception.post.PostExceptionType;
 import hello.community.global.file.FileService;
 import hello.community.global.security.SecurityUtil;
+import hello.community.repository.board.BoardRepository;
 import hello.community.repository.media.MediaRepository;
 import hello.community.repository.member.MemberRepository;
 import hello.community.repository.post.PostRepository;
@@ -37,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PostServiceImpl implements PostService {
 
 	private final PostRepository postRepository;
+	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 	private final MediaRepository mediaRepository;
 
@@ -51,6 +55,10 @@ public class PostServiceImpl implements PostService {
 		post.setWriter(memberRepository.findByLoginId(SecurityUtil.getLoginMemberId())
 				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER)));
 
+		post.setBoard(boardRepository.findByBoardType(writeDto.getBoardType())
+				.orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD)));
+		
+		
 		List<Media> mediaList = writeDto.getMediaList();
 
 		if (!CollectionUtils.isEmpty(mediaList)) {
@@ -136,9 +144,9 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostPagingDto searchPostList(Pageable pageable, PostSearch postSearch, int page) {
+	public PostPagingDto searchPostList(Pageable pageable, String boardType, PostSearch postSearch, int page) {
 		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  10);
-		return new PostPagingDto(postRepository.search(pageable, postSearch));
+		return new PostPagingDto(postRepository.search(pageable, boardType, postSearch));
 	}
 
 }

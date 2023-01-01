@@ -39,7 +39,21 @@ public class PostController {
 
 	private final PostService postService;
 	
-	@GetMapping("/board")
+	@GetMapping("/board/{boardType}")
+	public String postListForm(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
+			@PathVariable String boardType,
+			@RequestParam(required = false, defaultValue = "1", value = "p") int page) {
+		
+		log.info("서치: {}", postSearch);
+		log.info("게시판: {}", boardType);
+		PostPagingDto postPagingDto = postService.searchPostList(pageable, boardType, postSearch, page);
+		
+		model.addAttribute("postPagingDto",postPagingDto);
+		
+		return "post/listPost";
+	}
+	
+	/*@GetMapping("/board")
 	public String postListForm(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
 			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
 		
@@ -49,17 +63,18 @@ public class PostController {
 		model.addAttribute("postPagingDto",postPagingDto);
 		
 		return "post/listPost";
-	}
+	}*/
 	
 	
-	@GetMapping("/board/write")
+	@GetMapping("/board/{boardType}/write")
 	public String writeForm(@ModelAttribute PostWriteDto writeDto) {	
 		return "post/writePostForm";
 	}
 	
-	@PostMapping("/board/write")
+	@PostMapping("/board/{boardType}/write")
 	@ResponseBody
 	public ResponseEntity<Long> write(@Valid @ModelAttribute PostWriteDto writeDto, BindingResult result,
+			@PathVariable String boardType,
 			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
 			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList){
 
@@ -67,14 +82,14 @@ public class PostController {
 			//return "error";
 		}
 		
-		writeDto.initDto(originNameList, storeNameList);
+		writeDto.initDto(originNameList, storeNameList, boardType);
 
 		Long postId = postService.write(writeDto);
 		
 		return new ResponseEntity<>(postId, HttpStatus.OK);
 	}
 	
-	@GetMapping("/board/{postId}")
+	@GetMapping("/board/{boardType}/{postId}")
 	public String view(@PathVariable Long postId, Model model) {
 		
 		PostInfoDto infoDto = postService.view(postId);
@@ -84,7 +99,7 @@ public class PostController {
 		return "post/viewPost";
 	}
 	
-	@GetMapping("/board/{postId}/edit")
+	@GetMapping("/board/{boardType}/{postId}/edit")
 	public String editForm(@PathVariable Long postId, Model model) {
 		
 		PostEditDto editDto = postService.getEditInfo(postId);
@@ -95,7 +110,7 @@ public class PostController {
 	}
 	
 	@ResponseBody
-	@PutMapping("/board/{postId}/edit")
+	@PutMapping("/board/{boardType}/{postId}/edit")
 	public ResponseEntity<Long> edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result,
 			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
 			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList) {
@@ -114,21 +129,22 @@ public class PostController {
 		return new ResponseEntity<>(postId, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/board/{postId}")
-	public String delete(@PathVariable Long postId){
+	@DeleteMapping("/board/{boardType}/{postId}")
+	public String delete(@PathVariable String boardType, @PathVariable Long postId){
 	
 		postService.delete(postId);
 		
-		return "redirect:/board";
+		return "redirect:/board/"+ boardType;
 	}
 	
 	@ResponseBody
-	@GetMapping("/board/list")
+	@GetMapping("/board/{boardType}/list")
 	public ResponseEntity<PostPagingDto> postList(@ModelAttribute PostSearch postSearch, Pageable pageable,
-			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
+			@PathVariable String boardType,
+			@RequestParam(required = false, defaultValue = "1", value = "p") int page) {
 		
 		//log.info("서치: {}", postSearch);
-		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);				
+		PostPagingDto postPagingDto = postService.searchPostList(pageable, boardType, postSearch, page);				
 		
 		return new ResponseEntity<>(postPagingDto, HttpStatus.OK);
 	}

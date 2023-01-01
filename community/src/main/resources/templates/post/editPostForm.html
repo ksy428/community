@@ -1,51 +1,52 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="utf-8">
-<link th:href="@{/css/bootstrap.min.css}"
-	href="../css/bootstrap.min.css" rel="stylesheet">
-<style>
-.container {
-	max-width: 840px;
-}
-</style>
-<script src="https://code.jquery.com/jquery-3.6.1.min.js"
-	integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-	crossorigin="anonymous">
-	
-</script>
-<script src="/js/summernote/summernote-lite.js"></script>
-<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
-<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
-</head>
-<body>
-	<div class="container">
-		<div class="py-5 text-left">
-			<h2>게시글 수정</h2>
-		</div>
-		<form id="edit-form" name="edit-form" th:action
-			th:object="${postEditDto}" th:method="put">
-			<div>
-				<input type="text" class="form-control" th:field="*{title}"
-					placeholder="제목을 입력해 주세요">
-			</div>
-			<div>
-				<textarea id="summernote" th:field="*{content}"></textarea>
-			</div>
+<html xmlns:th="http://www.thymeleaf.org"
+	class="width-1300 navbar-scroll">
 
-			<div class="col-sm-3">
-				<button type="submit" id="edit-btn"
-					class="w-100 btn btn-primary btn-lg">수정</button>
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
+	<th:block th:fragment="content">
+		<article class="containe-fluid board-article">
+			<div class="article-write">
+				<div class="board-title">현재게시판 영역</div>
+				<form id="edit-form" name="edit-form" th:action th:object="${postEditDto}" method="put">
+					<div class=write-head> 게시글 수정</div>
+					<div class="row">
+						<div class="form-group col-12">
+							<div class="input-group input-group-sm">
+								<div class="unput-group-prepend">
+									<span class="input-group-text">제목</span>
+								</div>
+								<input type="text" class="form-control form-control-sm" th:field="*{title}" placeholder="제목을 입력해 주세요">
+							</div>
+						</div>
+					</div>
+					<div class="write-body">
+						<textarea id="summernote" th:field="*{content}"></textarea>
+					</div>
+					<div class="col">
+						<button type="submit" id="edit-btn" class="btn btn-navy btn-block">수정</button>
+					</div>
+				</form>
 			</div>
-		</form>
-	</div>
-</body>
+		</article>
+	</th:block>
+</th:block>
+
+<head>
+	<script src="/js/summernote/summernote-lite.js"></script>
+	<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+	<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+</head>
+
+
 <script th:inline="javascript">
 
 $(document).ready(function(e){
 
 	let originNameList = [];
 	let storeNameList = [];
+	
+	let pathName = location.pathname.split('/');
+	let boardType = pathName[2];
 
 	$("#edit-btn").on("click", function(e) {
 		e.preventDefault();
@@ -60,14 +61,14 @@ $(document).ready(function(e){
 		} 
 		$.ajax({
 			data : formData,
-			type : 'PUT',
+			type : 'put',
 			url : window.location.href,
 			contentType : false,
 			enctype : 'multipart/form-data',
 			processData : false,
 			dataType: 'json',
 			success : function(postId) {		
-				let url = '/board/' + postId;
+				let url = '/board/'+ boardType +'/'+ postId;
 				location.replace(url);
 			},
 			error : function(result){
@@ -75,68 +76,65 @@ $(document).ready(function(e){
 			}
 		});
 	});
+	
+	var toolbar = [
+		// 글꼴 설정
+		[ 'fontname', [ 'fontname' ] ],
+		// 글자 크기 설정
+		[ 'fontsize', [ 'fontsize' ] ],
+		// 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
+		[
+				'style',
+				[ 'bold', 'italic', 'underline',
+						'strikethrough', 'clear' ] ],
+		// 글자색
+		[ 'color', [ 'forecolor', 'color' ] ],
+		// 표만들기
+		[ 'table', [ 'table' ] ],
+		// 글머리 기호, 번호매기기, 문단정렬
+		[ 'para', [ 'ul', 'ol', 'paragraph' ] ],
+		// 줄간격
+		[ 'height', [ 'height' ] ],
+		// 그림첨부, 링크만들기, 동영상첨부
+		[ 'insert', [ 'picture', 'link', 'video' ] ],
+		// 코드보기, 확대해서보기, 도움말
+		[ 'view', [ 'codeview', 'fullscreen', 'help' ] ] ];
 
-	$(document).ready(
-			function() {
-
-				var toolbar = [
-						// 글꼴 설정
-						[ 'fontname', [ 'fontname' ] ],
-						// 글자 크기 설정
-						[ 'fontsize', [ 'fontsize' ] ],
-						// 굵기, 기울임꼴, 밑줄,취소 선, 서식지우기
-						[
-								'style',
-								[ 'bold', 'italic', 'underline',
-										'strikethrough', 'clear' ] ],
-						// 글자색
-						[ 'color', [ 'forecolor', 'color' ] ],
-						// 표만들기
-						[ 'table', [ 'table' ] ],
-						// 글머리 기호, 번호매기기, 문단정렬
-						[ 'para', [ 'ul', 'ol', 'paragraph' ] ],
-						// 줄간격
-						[ 'height', [ 'height' ] ],
-						// 그림첨부, 링크만들기, 동영상첨부
-						[ 'insert', [ 'picture', 'link', 'video' ] ],
-						// 코드보기, 확대해서보기, 도움말
-						[ 'view', [ 'codeview', 'fullscreen', 'help' ] ] ];
-
-				var setting = {
-					height : 520,
-					minHeight : null,
-					maxHeight : null,
-					focus : true,
-					lang : 'ko-KR',
-					toolbar : toolbar,
-					callbacks : { //여기 부분이 이미지를 첨부하는 부분
-						onImageUpload : function(files, editor, welEditable) {
-							for (let i = files.length - 1; i >= 0; i--) {
-								uploadSummernoteImageFile(files[i], this);
-							} 
-						}
-					}
-				};
-				$('#summernote').summernote(setting);
-			});
-
-	function uploadSummernoteImageFile(file, el) {
-		data = new FormData();
-		data.append('file', file);
-		$.ajax({
-			data : data,
-			type : 'POST',
-			url : '/media',
-			contentType : false,
-			enctype : 'multipart/form-data',
-			processData : false,
-			success : function(media) {
-				$(el).summernote('editor.insertImage','/tmp/' + media.storeName);
-				originNameList.push(media.originName);
-				storeNameList.push(media.storeName);
+	var setting = {
+		height : 480,
+		minHeight : null,
+		maxHeight : null,
+		focus : true,
+		lang : 'ko-KR',
+		toolbar : toolbar,
+		disableResizeEditor: true,
+		callbacks : { //여기 부분이 이미지를 첨부하는 부분
+			onImageUpload : function(files, editor, welEditable) {
+				for (let i = files.length - 1; i >= 0; i--) {
+					uploadSummernoteImageFile(files[i], this);
+				} 
 			}
-		});
-	}
+		}
+	};
+	$('#summernote').summernote(setting);	
 });
+
+function uploadSummernoteImageFile(file, el) {
+	data = new FormData();
+	data.append('file', file);
+	$.ajax({
+		data : data,
+		type : 'POST',
+		url : '/media',
+		contentType : false,
+		enctype : 'multipart/form-data',
+		processData : false,
+		success : function(media) {
+			$(el).summernote('editor.insertImage','/tmp/' + media.storeName);
+			originNameList.push(media.originName);
+			storeNameList.push(media.storeName);
+		}
+	});
+}
 </script>
 </html>

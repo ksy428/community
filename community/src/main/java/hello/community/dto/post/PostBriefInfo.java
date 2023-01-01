@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class PostBriefInfo {
 
 	private Long postId;
+	private String boardType;
 	private String title;
 	private String content;
 	private String writerNickname;
@@ -20,6 +21,7 @@ public class PostBriefInfo {
 	
 	public PostBriefInfo(Post post) {
 		this.postId = post.getId();
+		this.boardType = post.getBoard().getBoardType();
 		this.title = post.getTitle();
 		this.content = post.getContent();
 		this.writerNickname = post.getWriter().getNickname();

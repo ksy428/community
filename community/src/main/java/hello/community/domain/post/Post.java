@@ -36,7 +36,7 @@ public class Post extends BaseTimeEntity{
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "boardType")
+	@JoinColumn(name = "board_id")
 	private Board board;
 	
 	private String title;
@@ -85,6 +85,10 @@ public class Post extends BaseTimeEntity{
 	
 	public void addRecommend() {
 		this.recommend += 1;
+	}
+	
+	public void setBoard(Board board) {
+		this.board = board;
 	}
 	
 	//연관관계메서드

@@ -10,6 +10,8 @@ import hello.community.domain.board.Board;
 import hello.community.domain.comment.Comment;
 import hello.community.domain.member.Member;
 import hello.community.domain.post.Post;
+import hello.community.exception.board.BoardException;
+import hello.community.exception.board.BoardExceptionType;
 import hello.community.exception.comment.CommentException;
 import hello.community.exception.comment.CommentExceptionType;
 import hello.community.exception.member.MemberException;
@@ -100,8 +102,11 @@ public class InitDummyData {
 		@Transactional
 		public void initPost(String title, String content, Long memberId) {
 			Post post = Post.builder().title(title).content(content).build();
-			post.setWriter(memberRepository.findById(memberId).
-					orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER)));
+			post.setWriter(memberRepository.findById(memberId)
+					.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER)));
+			
+			post.setBoard(boardRepository.findByBoardType("free")
+					.orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD)));
 			
 			postRepository.save(post);
 		}	

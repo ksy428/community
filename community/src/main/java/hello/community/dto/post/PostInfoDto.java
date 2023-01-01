@@ -21,6 +21,7 @@ public class PostInfoDto {
 	private MemberInfoDto memberInfoDto;
 	private LocalDateTime createdDate;
 	private int totalCommentCount;
+	private String boardType;
 	
 	public PostInfoDto(Post post) {
 		this.postId = post.getId();
@@ -31,5 +32,6 @@ public class PostInfoDto {
 		this.memberInfoDto = new MemberInfoDto(post.getWriter());
 		this.createdDate = post.getCreatedDate();
 		this.totalCommentCount = post.getCommentList().size();
+		this.boardType = post.getBoard().getBoardType();
 	}
 }

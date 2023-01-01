@@ -31,6 +31,8 @@ public class WebSecurityConfig{
 					.usernameParameter("loginId")
 					.passwordParameter("password")
 					.permitAll()
+					.successHandler(new CustomLoginSuccessHandler())
+					.failureHandler(new CustomLoginFailureHandler())
 				//.successForwardUrl("/")
 			.and()
 				.logout()

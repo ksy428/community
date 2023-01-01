@@ -47,7 +47,7 @@
 				<tbody id="table_body">
 					<tr th:each="post : ${postPagingDto.postList}">
 						<td th:text="${post.postId}">번호</td>
-						<td><a class="vrow column" th:href="@{|/board/${post.postId}|}" th:text="${post.title}">제목</a></td>
+						<td><a class="vrow column" th:href="@{|/board/${post.boardType}/${post.postId}|}" th:text="${post.title}">제목</a></td>
 						<!-- <td><a th:href="@{/board/{postId}(postId =${post.postId}, p = ${#request.queryString})}" th:text="${post.title}">제목</a></td> -->
 						<!-- <td><a th:href="@{/board/{postId}(postId =${post.postId})}"  th:text="${post.title}">제목</a></td> -->
 						<!-- <td><a th:href="@{/board(postId =${#request.getParameter('z')})}" th:text="${post.title}">제목</a></td> -->
@@ -61,8 +61,7 @@
 		</div>
 		
 		<div class="col-md-12 d-flex ftco-animated justify-content-end">
-        	<form action="/board" name="search-form" th:object="${postSearch}">
-        	 <!-- <input type="hidden" name="page" value="1"> -->
+        	<form th:action name="search-form" th:object="${postSearch}">
 				<div class="input-group mb-3">
 					<select class="custom-select" th:field=*{target} th:value=*{target}>
 						<option th:value="all">전체</option>
@@ -83,12 +82,12 @@
         	<div class="inner-div">
                 <ul class="pagination pagination-primary m-4">
                     <li th:if="${postPagingDto.hasPrev}" class="page-item ">
-                        <a class="page-link" th:href="@{/board(target=${postSearch.target},keyword=${postSearch.keyword},p=1)}" aria-label="First">
+                        <a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=1)}" aria-label="First">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li th:if="${postPagingDto.hasPrev}" class="page-item ">
-                        <a class="page-link" th:href="@{/board(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.startPageNum} - 1)}" aria-label="Previous">
+                        <a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.startPageNum} - 1)}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
@@ -97,17 +96,17 @@
                     <li th:each="page: ${#numbers.sequence(postPagingDto.startPageNum, postPagingDto.endPageNum)}"
                         th:class="${postPagingDto.currentPageNum == page ? 'page-item active' :'' }">
                         <a class="page-link" th:text="${page}"
-                           th:href="@{/board(target=${postSearch.target},keyword=${postSearch.keyword},p=${page})}">                        
+                           th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${page})}">                        
                         </a>
                     </li>
 
                     <li th:if="${postPagingDto.hasNext}" class="page-item ">
-                        <a class="page-link" th:href="@{/board(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.endPageNum} + 1)}" aria-label="Next">
+                        <a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.endPageNum} + 1)}" aria-label="Next">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${postPagingDto.hasNext}" class="page-item ">
-                        <a class="page-link" th:href="@{/board(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.totalPageCount})}" aria-label="Last">
+                        <a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.totalPageCount})}" aria-label="Last">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
