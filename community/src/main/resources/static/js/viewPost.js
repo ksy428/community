@@ -485,7 +485,7 @@ function viewCommentList(result){
 		}
 		//페이지번호
 		for(let index = result.startPageNum; index <= result.endPageNum; index++){
-					let active = result.currentPageNum == index ? 'class="page-item active"' : '';
+					let active = result.currentPageNum == index ? 'class="page-item active"' : 'class="page-item"';
 
 			queryString = '?'.concat(createQueryString(urlParams.get('p'), index, urlParams.get('target'), urlParams.get('keyword')),'#comment');
 			pageList += '<li '+ active + '>'+

@@ -610,7 +610,14 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
 	width: 3rem
 }
 
-
+.body .board-article .article-list .list-table .vrow.column .vcol {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .body .board-article .search-form {
 	margin-top: .5rem
@@ -906,6 +913,17 @@ html.width-1300 .body .head{
 .body .board-article .article-body .article-content{
 	min-height: 320px;
 }
+
+
+.body .board-article .article-list .list-table .vrow.column .vrow-bottom,
+.body .board-article .article-list .list-table .vrow.column .vrow-middle,
+.body .board-article .article-list .list-table .vrow.column .vrow-top,
+.body .board-article .article-list .list-table .vrow.hybrid .vrow-bottom,
+.body .board-article .article-list .list-table .vrow.hybrid .vrow-middle,
+.body .board-article .article-list .list-table .vrow.hybrid .vrow-top {
+    align-items: center;
+}
+
 
 html, html.theme-light { 
 	--color-bg-navbar: #3d414d; 

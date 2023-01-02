@@ -60,7 +60,7 @@ public class InitDummyData {
 			 initBoard("sport");
 		
 	
-			 for(int i=0; i<100;i++) {			 
+			 for(int i=0; i<80;i++) {			 
 				 initPost((i+1) +"번 글", (i+1)+"번 내용", 1L);
 			 }
 			 
@@ -73,7 +73,6 @@ public class InitDummyData {
 				 long commentNum2 = (long)((i % 3 ) + 1);	 
 				 initReComment(commentNum2+"번 댓글_대댓글", 1L, 1L, commentNum2);
 			 }
-			 
 				/*
 				 * Long commentId = initComment("댓글", 1L, 150L, 101L); initReComment("대댓글", 1L,
 				 * 150L, commentId); initReComment("대댓글", 1L, 150L, commentId);

@@ -44,26 +44,37 @@ public class CommentPagingDto {
 		commentList = searchResults.getContent().stream().map(CommentBriefInfo::new).toList();
 		
 		pageNum = 10;
-		// 현재페이지가 페이지버튼 개수 중간값 보다 작을 경우
-		if(currentPageNum <= pageNum / 2) {
+		
+		// 현재페이지가 페이지버튼 개수 중간값 보다 작을 경우 ( ex: [1] ~ [현재페이지] ~ [10])
+		if (currentPageNum <= pageNum / 2) {
 			// 현재페이지와 총 페이지 개수를 이용해 페이지버튼 start,end 인덱스 부여
 			startPageNum = 1;
 			endPageNum = totalPageCount < pageNum ? totalPageCount : pageNum;
-			
-			if(endPageNum == 0) {
+
+			if (endPageNum == 0) {
 				endPageNum++;
 			}
-			
+
 			hasPrev = false;
-			hasNext = totalPageCount > pageNum;			 
+			hasNext = totalPageCount > pageNum;
 		}
 		// 현재페이지가 페이지버튼 개수 중간값보다 클 경우
-		else { 
-			startPageNum = (currentPageNum - (pageNum / 2)) + 1;
-			endPageNum = (currentPageNum + (pageNum / 2)) < totalPageCount ? (currentPageNum + (pageNum / 2)) : totalPageCount;
-			hasPrev =  currentPageNum - (pageNum / 2) >= 1;
-			hasNext = currentPageNum + (pageNum / 2) < totalPageCount;
-		}	
+		else {
+			// (ex: [<<][<][5] ~ [현재페이지] ~ [마지막페이지] )
+			if (currentPageNum + (pageNum / 2) >= totalPageCount) {
+				startPageNum = totalPageCount < pageNum ? 1 : (totalPageCount - pageNum) + 1;
+				endPageNum = totalPageCount;
+				hasPrev = totalPageCount > pageNum;
+				hasNext = false;
+			}
+			// (ex: [<<][<][5] ~ [현재페이지] ~ [14][>][>>] )
+			else {
+				startPageNum = (currentPageNum - (pageNum / 2)) + 1;
+				endPageNum = (currentPageNum + (pageNum / 2));
+				hasPrev = currentPageNum - (pageNum / 2) >= 1;
+				hasNext = currentPageNum + (pageNum / 2) < totalPageCount;
+			}
+		}
 		
 		/*log.info("결과사이즈: {}", commentList.size());
 		log.info("totalElementCount: {}", totalElementCount);
