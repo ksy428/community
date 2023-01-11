@@ -1,10 +1,13 @@
 package hello.community.service.member;
 
+import java.util.List;
+
 import hello.community.domain.member.Member;
 import hello.community.dto.member.MemberInfoDto;
 import hello.community.dto.member.MemberEditDto;
 import hello.community.dto.member.MemberSignUpDto;
 import hello.community.dto.member.PasswordEditDto;
+import hello.community.dto.subscribe.SubscribeInfoDto;
 import hello.community.exception.member.MemberException;
 
 public interface MemberService {
@@ -26,5 +29,7 @@ public interface MemberService {
 	boolean isExistEmail(String newEmail);
 	
 	Member findOne(String loginId) throws MemberException;
+	
+	List<SubscribeInfoDto> getSubcribeList();
 	
 }

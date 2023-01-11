@@ -36,7 +36,6 @@ public class ExControllerAdvice {
 		
 		//ajax요청에서 예외발생
 		if(request.getHeader("X-Requested-With") != null) {
-			
 			return new ResponseEntity<>(e.getExceptionType().getErrorMessage(), e.getExceptionType().getHttpStatus());
 		}
 		else {	

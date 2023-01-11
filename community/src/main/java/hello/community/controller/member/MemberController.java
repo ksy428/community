@@ -1,5 +1,7 @@
 package hello.community.controller.member;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -11,13 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import hello.community.dto.member.MemberInfoDto;
 import hello.community.dto.member.MemberSignUpDto;
 import hello.community.dto.member.PasswordEditDto;
+import hello.community.dto.subscribe.SubscribeInfoDto;
 import hello.community.dto.member.MemberEditDto;
 import hello.community.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +27,18 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
 @Slf4j
 public class MemberController {
 
 	private final MemberService memberService;
 
-	@GetMapping("/signup")
+	@GetMapping("/member/signup")
 	public String signUpForm(@ModelAttribute MemberSignUpDto signUpDto) {
 
 		return "member/signupForm";
 	}
 
-	@PostMapping("/signup")
+	@PostMapping("/member/signup")
 	public String signUp(@Valid @ModelAttribute MemberSignUpDto signUpDto, BindingResult result) {
 
 		if (memberService.isExistLoginId(signUpDto.getLoginId())) {
@@ -61,7 +62,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 
-	@GetMapping("/info")
+	@GetMapping("/member/info")
 	public String myInfoForm(Model model) throws Exception {
 		MemberInfoDto memberInfoDto = memberService.getInfo();
 
@@ -70,7 +71,7 @@ public class MemberController {
 		return "/member/info";
 	}
 
-	@GetMapping("/edit/info")
+	@GetMapping("/member/edit/info")
 	public String editInfoForm(Model model) throws Exception {
 
 		MemberEditDto editInfoDto = memberService.getEditInfo();
@@ -80,7 +81,7 @@ public class MemberController {
 		return "/member/editInfoForm";
 	}
 
-	@PostMapping("/edit/info")
+	@PostMapping("/member/edit/info")
 	public String editMember(@Valid @ModelAttribute MemberEditDto editInfoDto, BindingResult result)
 			throws Exception {
 
@@ -104,13 +105,13 @@ public class MemberController {
 		
 	}
 	
-	@GetMapping("/edit/password")
+	@GetMapping("/member/edit/password")
 	public String editPassword(@ModelAttribute PasswordEditDto editPWDto) {
 		
 		return "/member/editPasswordForm";
 	}
 	
-	@PostMapping("/edit/password")
+	@PostMapping("/member/edit/password")
 	public String editPassword(@Valid @ModelAttribute PasswordEditDto editPWDto, BindingResult result)
 			throws Exception {
 		
@@ -129,21 +130,28 @@ public class MemberController {
 	}
 
 	@ResponseBody
-	@GetMapping("/id/{loginId}/exists")
+	@GetMapping("/member/id/{loginId}/exists")
 	public ResponseEntity<Boolean> checkLoginId(@PathVariable String loginId) {
 		return new ResponseEntity<>(memberService.isExistLoginId(loginId), HttpStatus.OK);
 	}
 
 	@ResponseBody
-	@GetMapping("/nickname/{nickname}/exists")
+	@GetMapping("/member/nickname/{nickname}/exists")
 	public ResponseEntity<Boolean> checkNickname(@PathVariable String nickname) {
 		return new ResponseEntity<>(memberService.isExistNickname(nickname), HttpStatus.OK);
 	}
 
 	@ResponseBody
-	@GetMapping("/email/{email}/exists")
+	@GetMapping("/member/email/{email}/exists")
 	public ResponseEntity<Boolean> checkEmail(@PathVariable String email) {
 		return new ResponseEntity<>(memberService.isExistEmail(email), HttpStatus.OK);
 	}
 
+	@ResponseBody
+	@GetMapping("/member/info/subscribe")
+	public ResponseEntity<List<SubscribeInfoDto>> getSubscribe() {
+		
+		return new ResponseEntity<>(memberService.getSubcribeList(), HttpStatus.OK);
+	}
+	
 }

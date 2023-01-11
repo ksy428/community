@@ -18,7 +18,7 @@ import hello.community.exception.member.MemberException;
 import hello.community.exception.member.MemberExceptionType;
 import hello.community.exception.post.PostException;
 import hello.community.exception.post.PostExceptionType;
-import hello.community.global.security.SecurityUtil;
+import hello.community.global.util.SecurityUtil;
 import hello.community.repository.board.BoardRepository;
 import hello.community.repository.comment.CommentRepository;
 import hello.community.repository.member.MemberRepository;
@@ -54,12 +54,15 @@ public class InitDummyData {
 			 initMember("dummy2", "1234", "2번유저", "dummy2@naver.com");
 			 initMember("dummy3", "1234", "3번유저", "dummy3@naver.com");
 			 
-			 initBoard("free");
-			 initBoard("humor");
-			 initBoard("game");
-			 initBoard("sport");
+			 initBoard("free","자유");
+			 initBoard("humor","유머");
+			 initBoard("horor","공포");
+			 initBoard("info","정보");
+			 initBoard("soccer","축구");
+			 initBoard("basketball","농구");
+			 initBoard("baseball","야구");
+			 initBoard("other-sport","기타스포츠");
 		
-	
 			 for(int i=0; i<80;i++) {			 
 				 initPost((i+1) +"번 글", (i+1)+"번 내용", 1L);
 			 }
@@ -82,9 +85,10 @@ public class InitDummyData {
 	    }
 		
 		@Transactional
-		public void initBoard(String boardType) {
+		public void initBoard(String boardType, String boardName) {
 			boardRepository.save(Board.builder()
 						.boardType(boardType)
+						.boardName(boardName)
 						.build());
 		}
 

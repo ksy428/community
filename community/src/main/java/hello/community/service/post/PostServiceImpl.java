@@ -24,7 +24,7 @@ import hello.community.exception.member.MemberExceptionType;
 import hello.community.exception.post.PostException;
 import hello.community.exception.post.PostExceptionType;
 import hello.community.global.file.FileService;
-import hello.community.global.security.SecurityUtil;
+import hello.community.global.util.SecurityUtil;
 import hello.community.repository.board.BoardRepository;
 import hello.community.repository.media.MediaRepository;
 import hello.community.repository.member.MemberRepository;
@@ -145,6 +145,9 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public PostPagingDto searchPostList(Pageable pageable, String boardType, PostSearch postSearch, int page) {
+		
+		boardRepository.findByBoardType(boardType).orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
+		
 		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  10);
 		return new PostPagingDto(postRepository.search(pageable, boardType, postSearch));
 	}

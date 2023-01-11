@@ -27,7 +27,7 @@ import hello.community.exception.comment.CommentException;
 import hello.community.exception.comment.CommentExceptionType;
 import hello.community.exception.member.MemberException;
 import hello.community.exception.member.MemberExceptionType;
-import hello.community.global.security.SecurityUtil;
+import hello.community.global.util.SecurityUtil;
 import hello.community.repository.comment.CommentRepository;
 import hello.community.repository.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;

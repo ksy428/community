@@ -1,6 +1,7 @@
 package hello.community.dto.post;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import hello.community.domain.media.Media;
@@ -19,7 +20,7 @@ public class PostInfoDto {
 	private Long hit;
 	private Long recommend;
 	private MemberInfoDto memberInfoDto;
-	private LocalDateTime createdDate;
+	private String createdDate;
 	private int totalCommentCount;
 	private String boardType;
 	
@@ -30,7 +31,7 @@ public class PostInfoDto {
 		this.hit = post.getHit();
 		this.recommend = post.getRecommend();
 		this.memberInfoDto = new MemberInfoDto(post.getWriter());
-		this.createdDate = post.getCreatedDate();
+		this.createdDate = post.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 		this.totalCommentCount = post.getCommentList().size();
 		this.boardType = post.getBoard().getBoardType();
 	}

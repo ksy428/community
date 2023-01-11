@@ -7,7 +7,9 @@
 	<th:block th:fragment="content">
 		<article class="containe-fluid board-article">
 			<div class="article-write">
-				<div class="board-title">현재게시판 영역</div>
+							
+				<th:block th:replace="~{fragments/boardTitle::boardTitle}"></th:block>
+				
 				<form id="write-form" name="write-form" th:action th:object="${postWriteDto}" method="post">
 					<div class=write-head> 게시글 쓰기</div>
 					<div class="row">
@@ -36,38 +38,34 @@
 	<script src="/js/summernote/summernote-lite.js"></script>
 	<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
 	<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+	<script type="text/javascript" defer th:src="@{/js/boardTitle.js}"></script>
 </head>
 
 
-<script th:inline="javascript">
+<script type="text/javascript">
+
+let boardType = location.pathname.split('/')[2];
+
+let mediaList={
+		originNameList : [],
+		storeNameList : []
+}
 
 $(document).ready(function(e){
 	
-	let originNameList = [];
-	let storeNameList = [];
-	
-	let pathName = location.pathname.split('/');
-	let boardType = pathName[2];
-
 	$("#write-btn").on("click", function(e) {
 		e.preventDefault();
-
-		let formData = new FormData(document.getElementById('write-form'));
 		
-		for(let i=0; i < originNameList.length; i++){
-			formData.append('originNameList[]', originNameList[i]);
-		}
-		for(let i=0; i < storeNameList.length; i++){
-			formData.append('storeNameList[]', storeNameList[i]);
-		} 
+		let form = $(this).closest("form").serializeObject();
+			
+		let formData = Object.assign(form,mediaList);
+			
 		$.ajax({
-			data : formData,
+			data : JSON.stringify(formData),
 			type : 'post',
 			url : '/board/'+ boardType +'/write',
-			contentType : false,
+			contentType : 'application/json',
 			dataType: 'json',
-			enctype : 'multipart/form-data',
-			processData : false,
 			success : function(postId) {
 				let url = '/board/'+ boardType +'/'+ postId;
 				location.replace(url);
@@ -75,7 +73,7 @@ $(document).ready(function(e){
 			error : function(result){
 				alert(result.responseText);
 			}
-		});
+		}); 
 	});
 
 	var toolbar = [
@@ -133,8 +131,8 @@ function uploadSummernoteImageFile(file, el) {
 		processData : false,
 		success : function(media) {
 			$(el).summernote('editor.insertImage','/tmp/' + media.storeName);
-			originNameList.push(media.originName);
-			storeNameList.push(media.storeName);
+			mediaList.originNameList.push(media.originName);
+			mediaList.storeNameList.push(media.storeName);
 		}
 	});
 }

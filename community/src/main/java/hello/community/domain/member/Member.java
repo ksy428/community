@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import hello.community.domain.BaseTimeEntity;
 import hello.community.domain.comment.Comment;
 import hello.community.domain.post.Post;
+import hello.community.domain.subscribe.Subscribe;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +50,9 @@ public class Member extends BaseTimeEntity{
 	
 	@OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> commentList = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Subscribe> subscribeList = new ArrayList<>();
 	
 	@Builder
 	public Member(String loginId, String password, String nickname, String email) {

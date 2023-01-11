@@ -1,5 +1,6 @@
-package hello.community.global.security;
+package hello.community.global.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,9 +9,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import hello.community.global.security.CustomLoginFailureHandler;
+import hello.community.global.security.CustomLoginSuccessHandler;
+import hello.community.global.security.UserDetailsServiceImpl;
+
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig{
+	
+	@Autowired
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -31,13 +39,31 @@ public class WebSecurityConfig{
 					.usernameParameter("loginId")
 					.passwordParameter("password")
 					.permitAll()
-					.successHandler(new CustomLoginSuccessHandler())
-					.failureHandler(new CustomLoginFailureHandler())
+					.successHandler(customLoginSuccessHandler())
+					.failureHandler(customLoginFailureHandler())
 				//.successForwardUrl("/")
 			.and()
 				.logout()
-				.logoutSuccessUrl("/");
+				.logoutSuccessUrl("/")
+			.and()
+				.rememberMe()
+				.key("seyoung")
+				.rememberMeParameter("remember-me")
+				.tokenValiditySeconds(86400 * 30)
+				.userDetailsService(userDetailsServiceImpl)
+				.authenticationSuccessHandler(customLoginSuccessHandler());
 		
 		return http.build();
 	}
+	
+	@Bean
+	public CustomLoginSuccessHandler customLoginSuccessHandler() {
+		return new CustomLoginSuccessHandler();
+	}
+	
+	@Bean
+	public CustomLoginFailureHandler customLoginFailureHandler() {
+		return new CustomLoginFailureHandler();
+	}
+	
 }

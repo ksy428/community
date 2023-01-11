@@ -67,7 +67,7 @@ $(document).ready(function(e){
 									'<span class="replay-form-title">답글 쓰기</span>'+
 								'</div>'+
 								'<div class="reply-form__submit-button-wrapper">'+
-									'<button class="reply-form__submit-button" id="write-btn" type="submit">작성</button>'+
+									'<button class="btn reply-form__submit-button btn-block" id="write-btn" type="submit">작성</button>'+
 								'</div>'+
 							'</div>'+															
 							'<div class="reply-form-textarea-wrapper">'+
@@ -235,9 +235,11 @@ $(document).ready(function(e){
 //댓글쓰기 ajax
 function writeComment(form){
 	return new Promise(function(resolve, reject){
+
 		$.ajax({
 			url: form.attr('action'),
-			data: form.serialize(),
+			data: JSON.stringify(form.serializeObject()),
+			contentType : 'application/json',
 			type: 'post',
 			dataType: 'json',
 			success : function(result){				
@@ -250,13 +252,16 @@ function writeComment(form){
 	});
 }
 
+
+
 //댓글수정 ajax
 function editComment(form){
 	return new Promise(function(resolve, reject){
 		
 		$.ajax({
 			url: form.attr('action'),
-			data: form.serialize(),
+			data: JSON.stringify(form.serializeObject()),
+			contentType : 'application/json',
 			type: 'put',
 			dataType: 'json',
 			success : function(result){				
@@ -313,9 +318,6 @@ function getPostList(){
 	$('.list-table').children('a').remove();
 	let urlParams = new URLSearchParams(location.search);
 	
-	let pathName = location.pathname.split('/');
-	let boardType = pathName[2];
-	
 	let postSearch = {
 		target: urlParams.get('target'),
 		keyword: urlParams.get('keyword') ?? '',
@@ -337,7 +339,14 @@ function getPostList(){
 								'<div class="vrow-inner"> \n'+
 									'<div class ="vrow-top"> \n'+
 										'<span class="vcol col-id">'+ post.postId + '</span> \n'+
-										'<span class="vcol col-title">'+ post.title + '</span> \n'+
+										'<span class="vcol col-title"> \n' +
+											'<span class="title">'+ post.title +'</span> \n';
+				if(post.commentCount){										
+					postList +=				'<span class="info"> \n'+
+												'<span class="comment-count">[' + post.commentCount +']</span> \n'+
+											'</span> \n';
+				}							
+					postList +=			'</span> \n'+										
 									'</div> \n'+
 									'<div class ="vrow-bottom"> \n'+
 										'<span class="vcol col-author">'+ post.writerNickname + '</span> \n'+
@@ -431,13 +440,19 @@ function viewCommentList(result){
 												'<span>'+ comment.createdDate +'</span> \n';
 				if(writerId == authId){//작성자만 수정,삭제 있음																	
 					commentList +=				'<span class="sep"></span> \n'+
-												'<a href="#" class="edit-link" data-target='+ comment.commentId +'>수정</a> \n'+
+												'<a href="#" class="edit-link" data-target='+ comment.commentId +'> \n'+
+													'<span> <i class="bi-pencil-square"></i> 수정</span> \n' +
+												'</a> \n' +
 												'<span class="sep"></span> \n'+
-												'<a href="#" class="delete-link" data-target='+ comment.commentId +'>삭제</a> \n';		
+												'<a href="#" class="delete-link" data-target='+ comment.commentId +'> \n'+
+													'<span> <i class="bi-trash-fill"></i> 삭제</span> \n' +
+												'</a> \n';		
 				}								
 				if(isParent && authRole != '[ROLE_ANONYMOUS]'){ //부모댓글&&로그인해야만 답글있음
 					commentList += 				'<span class="sep"></span> \n'+
-												'<a href="#" class="reply-link" data-target='+ comment.commentId +'>답글</a> \n';
+												'<a href="#" class="reply-link" data-target='+ comment.commentId +'> \n'+
+													'<span> <i class="bi-reply-fill"></i> 답글</span> \n' +
+												'</a> \n';
 				}
 				commentList +=				'</div> \n'+
 										'</div>\n';

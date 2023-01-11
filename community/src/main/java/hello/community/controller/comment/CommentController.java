@@ -47,7 +47,7 @@ public class CommentController {
 	}
 	
 	@PostMapping(value = {"/comment/{postId}","/comment/{postId}/{commentId}"})
-	public ResponseEntity<Long> write(@Valid @ModelAttribute CommentWriteDto writeDto, BindingResult result
+	public ResponseEntity<Long> write(@Valid @RequestBody CommentWriteDto writeDto, BindingResult result
 			,@PathVariable Long postId ,@PathVariable(required = false) Optional<Long> commentId) {
 		
 		if(result.hasErrors()){
@@ -58,7 +58,7 @@ public class CommentController {
 	}
 	
 	@PutMapping("/comment/{commentId}")
-	public ResponseEntity<Long> edit(@Valid @ModelAttribute CommentEditDto editDto, BindingResult result
+	public ResponseEntity<Long> edit(@Valid @RequestBody CommentEditDto editDto, BindingResult result
 			,@PathVariable Long commentId) {
 		
 		if(result.hasErrors()){

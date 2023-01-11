@@ -27,6 +27,10 @@ public class PostWriteDto {
 	private String boardType;
 
 	private List<Media> mediaList = new ArrayList<Media>();
+	
+	private List<String> originNameList = new ArrayList<String>();
+	
+	private List<String> storeNameList = new ArrayList<String>();
 
 	@Builder
 	public PostWriteDto(String title, String content) {
@@ -34,7 +38,7 @@ public class PostWriteDto {
 		this.content = content;
 	}
 
-	public void initDto(List<String> originNameList, List<String> storeNameList, String boardType) {
+	public void initDto(String boardType) {
 	
 		this.boardType = boardType;
 		

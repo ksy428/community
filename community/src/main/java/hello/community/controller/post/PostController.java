@@ -53,18 +53,6 @@ public class PostController {
 		return "post/listPost";
 	}
 	
-	/*@GetMapping("/board")
-	public String postListForm(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
-			 @RequestParam(required = false, defaultValue = "1", value = "p") int page) {
-		
-		log.info("서치: {}", postSearch);
-		PostPagingDto postPagingDto = postService.searchPostList(pageable, postSearch, page);
-		
-		model.addAttribute("postPagingDto",postPagingDto);
-		
-		return "post/listPost";
-	}*/
-	
 	
 	@GetMapping("/board/{boardType}/write")
 	public String writeForm(@ModelAttribute PostWriteDto writeDto) {	
@@ -73,16 +61,13 @@ public class PostController {
 	
 	@PostMapping("/board/{boardType}/write")
 	@ResponseBody
-	public ResponseEntity<Long> write(@Valid @ModelAttribute PostWriteDto writeDto, BindingResult result,
-			@PathVariable String boardType,
-			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
-			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList){
+	public ResponseEntity<Long> write(@Valid @RequestBody PostWriteDto writeDto, BindingResult result, @PathVariable String boardType){
 
 		if(result.hasErrors()){
 			//return "error";
 		}
 		
-		writeDto.initDto(originNameList, storeNameList, boardType);
+		writeDto.initDto(boardType);
 
 		Long postId = postService.write(writeDto);
 		
@@ -111,9 +96,7 @@ public class PostController {
 	
 	@ResponseBody
 	@PutMapping("/board/{boardType}/{postId}/edit")
-	public ResponseEntity<Long> edit(@PathVariable Long postId, @Valid @ModelAttribute PostEditDto editDto, BindingResult result,
-			@RequestParam(value = "originNameList[]", required = false) List<String> originNameList,
-			@RequestParam(value = "storeNameList[]", required = false) List<String> storeNameList) {
+	public ResponseEntity<Long> edit(@PathVariable Long postId, @Valid @RequestBody PostEditDto editDto, BindingResult result) {
 			
 		if(result.hasErrors()) {
 			//return "post/editPostForm";
@@ -121,11 +104,10 @@ public class PostController {
 		
 		editDto.setMediaList(postService.findOne(postId).getMediaList());
 		
-		editDto.inItDto(originNameList, storeNameList);
+		editDto.inItDto();
 		
 		postService.edit(postId, editDto);
 		
-		//return "redirect:/board/"+ postId;
 		return new ResponseEntity<>(postId, HttpStatus.OK);
 	}
 	
@@ -147,7 +129,5 @@ public class PostController {
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, boardType, postSearch, page);				
 		
 		return new ResponseEntity<>(postPagingDto, HttpStatus.OK);
-	}
-	
-	
+	}	
 }

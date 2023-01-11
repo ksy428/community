@@ -26,16 +26,18 @@ public class PostEditDto {
 	
 	@NotBlank(message = "내용을 입력하세요")
 	private String content;
-	
-	//private List<MultipartFile> newUpdoaldFile = new ArrayList<>();
-	
+		
 	private List<Media> mediaList = new ArrayList<>();
+		
+	private List<String> originNameList = new ArrayList<String>();
 	
+	private List<String> storeNameList = new ArrayList<String>();
+
 	private List<Media> newMediaList = new ArrayList<>();
 	
 	private List<Media> deleteMediaList = new ArrayList<>();
-
-	public void inItDto(List<String> originNameList, List<String> storeNameList)
+	
+	public void inItDto()
 	{
 		//content내부에 List<Media> mediaList 저장이름들이 존재하는지 체크해서 삭제된거있는지 체크
 		deleteMediaList = mediaList.stream()

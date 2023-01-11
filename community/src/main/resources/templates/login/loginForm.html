@@ -2,62 +2,44 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	class="width-1300 navbar-scroll">
 
-<head>
-		<meta charset="utf-8">
-		<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">	
-		<link th:href="@{/css/myStyle.css?after}" type="text/css" rel="stylesheet">
-		
-		<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-	
-</head>
-<body class="body">
-		<div class="root-container single">
-			<th:block th:replace="~{fragments/logo::logo}"></th:block>
-			
-			<div class="navbar-wrapper">
-			<nav class="navbar navbar-dark navbar-expand">
-			</nav>			
-			</div>
-			<div class="content-wrapper clearfix">
-				<div class="sidebar left-ad-area"></div>
-				<article class="containe-fluid board-article">
-					<div class="login-wrapper">
-						<div class="login-form form-control">
-							<form action="/login" method="post">
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-addon"> <i class="bi-person-fill"></i> </span>
-										<input type="text" name="loginId" id="loginId" class="form-control" placeholder="아이디 입력" tabindex="10">
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="input-group">
-										<span class="input-group-addon"> <i class="bi-lock-fill"></i> </span>
-										<input type="password" name="password" id="password" class="form-control" placeholder="비밀번호 입력" tabindex="11">
-									</div>
-								</div>													
-								<button type="submit" class="btn btn-navy btn-block" tabindex="23"> 로그인 </button>								
-							</form>														
-							<div class="sub-menu">
-								<div class="left-menu">
-									<label>
-										<input type="checkbox" name="auto_login" value="1" id="outlogin_remember_me" class="remember-me">
-										자동로그인
-									</label>
-								</div>
-								<div class="right-menu">
-									<a href="/"> <span>작성글</span> </a>
-									<span class="sep"></span>
-									<a href="/"> <span>회원가입</span> </a>
-								</div>
-								<div class="clearfix"></div>
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
+	<th:block th:fragment="content">
+		<article class="containe-fluid board-article">
+			<div class="login-wrapper">
+				<div class="login-form form-control">
+					<form action="/login" method="post">
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon"> <i class="bi-person-fill"></i></span>
+								<input type="text" name="loginId" id="loginId"
+									class="form-control" placeholder="아이디 입력" tabindex="10">
 							</div>
 						</div>
-					</div>
-				</article>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon"> <i class="bi-lock-fill"></i> </span>
+								<input type="password" name="password" id="password"
+									class="form-control" placeholder="비밀번호 입력" tabindex="11">
+							</div>
+						</div>
+						<button type="submit" class="btn btn-navy btn-block" tabindex="23"> 로그인</button>
+						<div class="sub-menu">
+							<div class="left-menu">
+								<label> <input type="checkbox" name="remember-me"
+									id="remember-me"> 자동로그인
+								</label>
+							</div>
+							<div class="right-menu">
+								<a href="/"> <span>작성글</span></a>
+								<span class="sep"></span>
+								<a href="/"> <span>회원가입</span></a>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</form>
+				</div>
 			</div>
-		</div>	
-</body>
+		</article>
+	</th:block>
+</th:block>
 </html>

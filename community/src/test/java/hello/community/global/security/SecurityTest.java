@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import javax.persistence.EntityManager;
 
 
@@ -17,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import hello.community.domain.member.Member;
+import hello.community.global.util.DateUtil;
 import hello.community.repository.member.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +55,16 @@ class SecurityTest {
 		
 		mockMvc.perform(formLogin().userParameter("loginId").user(username).password(password))
 			.andExpect(authenticated());
+	}
+	
+	@Test
+	void 시간테스트() {
+				
+		//LocalDateTime now = LocalDateTime.of(2023, 1, 12, 01, 00);
+		LocalDateTime date2 = LocalDateTime.of(2023, 1, 11, 23, 50);
+			
+		String msg = DateUtil.calculateDate(date2);
+		
+		log.info("날짜: {}", msg);
 	}
 }

@@ -1,4 +1,4 @@
-package hello.community.global.security;
+package hello.community.global.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

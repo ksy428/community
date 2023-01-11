@@ -1,7 +1,11 @@
 package hello.community.service.member;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,10 +14,11 @@ import hello.community.domain.member.Member;
 import hello.community.dto.member.MemberInfoDto;
 import hello.community.dto.member.MemberSignUpDto;
 import hello.community.dto.member.PasswordEditDto;
+import hello.community.dto.subscribe.SubscribeInfoDto;
 import hello.community.dto.member.MemberEditDto;
 import hello.community.exception.member.MemberException;
 import hello.community.exception.member.MemberExceptionType;
-import hello.community.global.security.SecurityUtil;
+import hello.community.global.util.SecurityUtil;
 import hello.community.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -115,4 +120,23 @@ public class MemberServiceImpl implements MemberService{
 				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 	}
 
+	@Override
+	public List<SubscribeInfoDto> getSubcribeList() {
+			
+		List<SubscribeInfoDto> subscribeList = new ArrayList<>();
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if(!principal.equals("anonymousUser")) {
+			UserDetails loginMember = (UserDetails) principal;
+			
+			Member member = memberRepository.findByLoginId(loginMember.getUsername())
+							.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+				
+			subscribeList = member.getSubscribeList().stream().map( subscribe -> new SubscribeInfoDto(subscribe.getBoard())).toList();
+		}
+		
+		
+		return subscribeList;
+	}
 }

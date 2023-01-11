@@ -19,7 +19,7 @@ import hello.community.exception.member.MemberException;
 import hello.community.exception.member.MemberExceptionType;
 import hello.community.exception.post.PostException;
 import hello.community.exception.post.PostExceptionType;
-import hello.community.global.security.SecurityUtil;
+import hello.community.global.util.SecurityUtil;
 import hello.community.repository.comment.CommentRepository;
 import hello.community.repository.member.MemberRepository;
 import hello.community.repository.post.PostRepository;

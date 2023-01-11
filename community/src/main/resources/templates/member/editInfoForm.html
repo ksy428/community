@@ -1,90 +1,55 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="utf-8">
-<link th:href="@{/css/bootstrap.min.css}"
-	href="../css/bootstrap.min.css" rel="stylesheet">
-<style>
-.container {
-	max-width: 840px;
-}
+<html xmlns:th="http://www.thymeleaf.org"
+	class="width-1300 navbar-scroll">
 
-.field-error {
-	border-color: #dc3545;
-	color: #dc3545;
-}
-</style>
-<script
-  src="https://code.jquery.com/jquery-3.6.1.min.js"
-  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-  crossorigin="anonymous"></script>
-</head>
-<body>
-	<div class="container">
-		<div class="py-5 text-left">
-			<h2>회원 정보 수정</h2>
-		</div>
-		<h4 class="mb-3">회원 정보</h4>
-		<form id="info-edit-form" th:action th:object="${memberEditDto}" method="post">			  		
-			<div class="row">	
-				<div class="row gy-1">
-					<div class="col-sm-2">
-						<label for="loginId">아이디</label>
-					</div>
-					<div class= "col-sm-6">
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
+	<th:block th:fragment="content">
+		<article class="containe-fluid board-article">
+			<h4 class="mb-3">회원 정보</h4>
+			<nav class="navbar navbar-expand navbar-settings mb-2">
+				<ul class="navbar-nav mr-auto mt-2 nav-tabs">
+					<li class="nav-item" id="nav-info"> <a href="/member/edit/info">계정정보</a></li>
+					<li class="nav-item" id="nav-password"> <a href="/member/edit/password">비밀번호</a></li>
+					<li class="nav-item" id="nav-subscribe"> <a href="/settings/channels">즐겨찾기</a></li>
+				</ul>
+			</nav>
+			<div class="px-3">
+			<form id="info-edit-form" th:action th:object="${memberEditDto}" method="post">		
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label" for="loginId"> 아이디</label>
+					<div class="col-sm-6">
 						<input type="text" th:field="*{loginId}" class="form-control" readonly>
-					</div>		
-				</div>
-				
-				<div class="row gy-1">
-					<div class= "col-sm-2">
-						<label for="nickname">닉네임</label>
 					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label" for="nickname">닉네임</label>
 					<div class="col-sm-6">
 						<input type="text" th:field="*{nickname}" class="form-control">
-						<div><font size="2" color="#BDBDBD">닉네임은2-10자,한글,영문,숫자만 가능합니다.</font></div>
+						<font size="2" color="#BDBDBD">닉네임은2-10자,한글,영문,숫자만 가능합니다</font>
 					</div>
-					 <div class="col-sm-auto field-error" th:errors="*{nickname}"></div>
 				</div>
-				
-				<div class="row gy-1">
-					<div class= "col-sm-2">
-						<label for="email">이메일</label>
-					</div>
-					<div class="col-sm-6">	
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label" for="email">이메일</label>
+					<div class="col-sm-6">
 						<input type="text" th:field="*{email}" class="form-control">
 					</div>
-					<div class="col-sm-auto field-error" th:errors="*{email}"></div>	
+				</div>	
+						
+				<hr class="my-4">	
+				<div class="float-end col-sm-3">
+					<button type="submit" id="info-confirm-btn" class="btn btn-navy btn-block">저장</button>
 				</div>
-				
-			</div>	
-			
-			<hr class="my-4">
-			
-			<div class="row">
-				<div class="col-sm-3">
-					<button type="submit" id="info-confirm-btn"
-					class="w-100 btn btn-primary btn-lg">회원정보 변경</button>
-				</div>
+			</form>
 			</div>
-		</form>
-	</div>
-	<!-- /container -->
-</body>
+		</article>
+	</th:block>
+</th:block>
 
 <script>
 $(document).ready(function(e) {
-	
-	$("#info-confirm-btn").on("click", function(e){
-		e.preventDefault();
 		
-		/* if($('#loginId').hasClass('is-valid') && $('#password').hasClass('is-valid')
-				&& $('#nickname').hasClass('is-valid') && $('#email').hasClass('is-valid')){
-			
-			$("#update-form").submit();
-		}	 */
-		$("#info-edit-form").submit();
-	}); 
+	let route = location.pathname.split('/')[3];
+	$('#nav-' + route).addClass('active');
 });
 </script>
 </html>

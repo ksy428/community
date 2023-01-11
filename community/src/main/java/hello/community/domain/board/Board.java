@@ -25,9 +25,12 @@ public class Board {
 	@Column(unique = true)
 	private String boardType;
 	
+	private String boardName;
+	
 	@Builder
-	Board(String boardType){
+	Board(String boardType, String boardName){
 		this.boardType = boardType;
+		this.boardName = boardName;
 	}
 	
 }
