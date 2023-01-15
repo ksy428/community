@@ -115,7 +115,7 @@ public class MemberController {
 	public String editPassword(@Valid @ModelAttribute PasswordEditDto editPWDto, BindingResult result)
 			throws Exception {
 		
-		if(!editPWDto.getNewPassword().equals(editPWDto.getNewPasswordCheck())) {
+		if(!editPWDto.getNewPassword().equals(editPWDto.getNewPasswordConfirm())) {
 			result.reject("differ","비밀번호가 서로 다릅니다");
 		}
 		

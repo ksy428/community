@@ -20,12 +20,12 @@ public class PasswordEditDto {
 	
 	@NotBlank(message = "비밀번호 확인을 입력하세요")
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$",message = "")
-	private String newPasswordCheck;
+	private String newPasswordConfirm;
 
 	@Builder
-	public PasswordEditDto(String originPassword,String newPassword,String newPasswordCheck) {
+	public PasswordEditDto(String originPassword,String newPassword,String newPasswordConfirm) {
 		this.originPassword = originPassword;
 		this.newPassword = newPassword;
-		this.newPasswordCheck = newPasswordCheck;
+		this.newPasswordConfirm = newPasswordConfirm;
 	}
 }

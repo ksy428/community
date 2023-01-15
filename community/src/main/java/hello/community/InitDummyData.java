@@ -1,5 +1,7 @@
 package hello.community;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
@@ -33,7 +35,7 @@ public class InitDummyData {
 	
 	@PostConstruct
 	public void init() {
-		init.save();
+		//init.save();
 	}
 	
 	@Component
@@ -45,6 +47,7 @@ public class InitDummyData {
 		private final PasswordEncoder passwordEncoder;
 		private final CommentRepository commentRepository;
 		private final BoardRepository boardRepository;
+		
 		
 		@Transactional
 	    public void save() {

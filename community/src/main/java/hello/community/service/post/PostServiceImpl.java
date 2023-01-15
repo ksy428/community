@@ -148,7 +148,7 @@ public class PostServiceImpl implements PostService {
 		
 		boardRepository.findByBoardType(boardType).orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
 		
-		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  10);
+		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  20);
 		return new PostPagingDto(postRepository.search(pageable, boardType, postSearch));
 	}
 

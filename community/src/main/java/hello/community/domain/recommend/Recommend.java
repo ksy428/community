@@ -29,7 +29,7 @@ public class Recommend {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
-	private Member member;
+	private Member writer;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "post_id")
@@ -37,8 +37,8 @@ public class Recommend {
 	
 	
 	@Builder
-	Recommend(Member member, Post post){
-		this.member = member;
+	Recommend(Member writer, Post post){
+		this.writer = writer;
 		this.post = post;
 	}
 }

@@ -18,6 +18,7 @@ import hello.community.domain.post.Post;
 
 import static hello.community.domain.post.QPost.post;
 import static hello.community.domain.member.QMember.member;
+import static hello.community.domain.board.QBoard.board;
 
 @Repository
 public class CustomPostRepositoryImpl implements CustomPostRepository{
@@ -39,8 +40,8 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 							post.board.boardType.eq(boardType)
 							,typeContain(postSearch)
 						   )
-					.leftJoin(post.writer, member)
-					.fetchJoin()
+					.leftJoin(post.writer, member).fetchJoin()
+					.leftJoin(post.board, board).fetchJoin()
 					.offset(pageable.getOffset())
 					.limit(pageable.getPageSize())
 					.orderBy(post.id.desc())

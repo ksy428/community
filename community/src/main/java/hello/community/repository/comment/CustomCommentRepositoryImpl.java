@@ -40,8 +40,9 @@ public class CustomCommentRepositoryImpl implements CustomCommentRepository {
 				.where(
 						comment.post.id.eq(postId)			
 						)
-				.leftJoin(comment.writer, member)
-				.fetchJoin()
+				.leftJoin(comment.writer, member).fetchJoin()
+				.leftJoin(comment.post, post).fetchJoin()
+				.leftJoin(comment.parent).fetchJoin()
 				.offset(pageable.getOffset())
 				.limit(pageable.getPageSize())
 				.orderBy(comment.groupId.asc()

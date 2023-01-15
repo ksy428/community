@@ -78,8 +78,8 @@
 							<div class="reply-form__container">
 								<div class="reply-form__info">
 									<div class="reply-form__user-info">
-										<span class="replay-form-title">댓글 쓰기</span> <span
-											th:text="${postInfoDto.memberInfoDto.nickname}"></span>
+										<span class="replay-form-title">댓글 쓰기</span>
+										<span sec:authentication="Principal.member.nickname"></span>
 									</div>
 									<div class="reply-form__submit-button-wrapper">
 										<button class="btn reply-form__submit-button btn-block" id="write-btn"

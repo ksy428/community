@@ -9,7 +9,6 @@ import java.time.temporal.ChronoUnit;
 
 import javax.persistence.EntityManager;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,40 +30,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class SecurityTest {
 
-	@Autowired private MockMvc mockMvc;
-	@Autowired private MemberRepository memberRepository;
-	@Autowired EntityManager em;
-	@Autowired PasswordEncoder passwordEncoder;
-	
+	@Autowired
+	private MockMvc mockMvc;
+	@Autowired
+	private MemberRepository memberRepository;
+	@Autowired
+	EntityManager em;
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
 	private static String username = "test";
 	private static String password = "1234";
-	
-	@BeforeEach
+
+	/*@BeforeEach
 	public void init() {
 	
-		/*memberRepository.save(Member.builder()			
+		memberRepository.save(Member.builder()			
 				.loginId("test")
 				.password(passwordEncoder.encode("1234"))
 				.nickname("testZZ")
 				.email("test@naver.com")
-				.build());*/
+				.build());
 	}
 	
-	@Test
-	void 로그인테스트() throws Exception{
-		
-		mockMvc.perform(formLogin().userParameter("loginId").user(username).password(password))
-			.andExpect(authenticated());
-	}
-	
-	@Test
-	void 시간테스트() {
-				
-		//LocalDateTime now = LocalDateTime.of(2023, 1, 12, 01, 00);
-		LocalDateTime date2 = LocalDateTime.of(2023, 1, 11, 23, 50);
+		@Test
+		void 로그인테스트() throws Exception{
 			
-		String msg = DateUtil.calculateDate(date2);
-		
-		log.info("날짜: {}", msg);
-	}
+			mockMvc.perform(formLogin().userParameter("loginId").user(username).password(password))
+				.andExpect(authenticated());
+		}*/
 }

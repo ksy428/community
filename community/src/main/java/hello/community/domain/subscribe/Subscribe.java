@@ -30,17 +30,17 @@ public class Subscribe {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
-	private Member member;
+	private Member writer;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id")
 	private Board board;
 	
 	@Builder
-	Subscribe(Member member, Board board){
-		this.member = member;
+	Subscribe(Member writer, Board board){
+		this.writer = writer;
 		this.board = board;
 		
-		member.getSubscribeList().add(this);
+		this.writer.getSubscribeList().add(this);
 	}
 }

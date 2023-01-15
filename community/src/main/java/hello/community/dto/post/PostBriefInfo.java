@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class PostBriefInfo {
 
 	private Long postId;
-	private String boardType;
 	private String title;
 	private String content;
 	private String writerNickname;
@@ -20,6 +19,7 @@ public class PostBriefInfo {
 	private Long recommend;
 	private String createdDate;
 	private int commentCount;
+	private String boardType;
 	
 	public PostBriefInfo(Post post) {
 		this.postId = post.getId();

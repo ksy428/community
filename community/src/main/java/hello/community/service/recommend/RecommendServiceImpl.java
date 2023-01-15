@@ -38,12 +38,12 @@ public class RecommendServiceImpl implements RecommendService{
 		
 		Post post = postRepository.findById(postId).orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
 	
-		Optional<Recommend> result = recommendRepository.findByMemberAndPost(member, post);
+		Optional<Recommend> result = recommendRepository.findByWriterAndPost(member, post);
 		
 		// 처음 추천했을 경우 
 		if(result.isEmpty()) {
 			Recommend recommend = Recommend.builder()
-									.member(member)
+									.writer(member)
 									.post(post)
 									.build();			
 			post.addRecommend();			

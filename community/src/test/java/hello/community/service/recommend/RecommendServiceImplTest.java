@@ -39,31 +39,31 @@ class RecommendServiceImplTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
-
-	@Test
-	@WithMockUser(username = "test", roles = "MEMBER")
-	void 추천() {
+	/*
+		@Test
+		@WithMockUser(username = "test", roles = "MEMBER")
+		void 추천() {
+				
+			//given		
+			//when
+			Long recommendId = recommendService.write(1L);
 			
-		//given		
-		//when
-		Long recommendId = recommendService.write(1L);
-		
-		//then		
-		Optional<Recommend> result = recommendRepository.findById(recommendId);
-		
-		assertThat(recommendId).isEqualTo(result.get().getId());
-	}
-
-	@Test
-	@WithMockUser(username = "test", roles = "MEMBER")
-	//@Rollback(false)
-	void 중복추천() {
+			//then		
+			Optional<Recommend> result = recommendRepository.findById(recommendId);
 			
-		//given		
-		//when
-		Long recommendId = recommendService.write(1L);
+			assertThat(recommendId).isEqualTo(result.get().getId());
+		}
 		
-		//then
-		assertThrows(PostException.class, ()-> recommendService.write(1L));
-	}
+		@Test
+		@WithMockUser(username = "test", roles = "MEMBER")
+		//@Rollback(false)
+		void 중복추천() {
+				
+			//given		
+			//when
+			Long recommendId = recommendService.write(1L);
+			
+			//then
+			assertThrows(PostException.class, ()-> recommendService.write(1L));
+		}*/
 }

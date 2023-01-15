@@ -131,39 +131,15 @@ $(document).ready(function(e){
 		let form = $(this).closest("form");
 		let writeCommentId;
 		
-		writeComment(form).then(commentId => {
-			
-			writeCommentId = commentId;		
-		
+		writeComment(form).then(() => {
+					
 			let urlParams = new URLSearchParams(location.search);
 		
 			getCommentList(urlParams.get('cp')).then(pagingDto => {
-										
-				//현재페이지에서 방금 작성 한 댓글 있는지 찾기			
-				//못찾았으면 어느페이지에 있는지 찾기
-				if(existsComment(pagingDto.commentList, writeCommentId)){				
-					viewCommentList(pagingDto);
+												
+				viewCommentList(pagingDto);
 
-					$('#comment_count').html(pagingDto.totalElementCount);
-
-					let url = "?".concat(createQueryString(urlParams.get('p'), pagingDto.currentPageNum, urlParams.get('target'), urlParams.get('keyword')), '#c_', writeCommentId);
-					location.href = url;	
-				}
-				else{													
-					for(let index = pagingDto.totalPageCount ; index > 0 ; index--){
-						getCommentList(index).then(pagingDto => {	
-							
-							if(existsComment(pagingDto.commentList, writeCommentId)){
-								viewCommentList(pagingDto);
-
-								$('#comment_count').html(pagingDto.totalElementCount);
-
-								let url = "?".concat(createQueryString(urlParams.get('p'), pagingDto.currentPageNum, urlParams.get('target'), urlParams.get('keyword')), '#c_', writeCommentId);
-								location.href = url;
-							}					
-						});			
-					}		
-				}											
+				$('#comment_count').html(pagingDto.totalElementCount);										
 			});
 			
 			$('.reply-form-textarea').val('');
@@ -438,7 +414,7 @@ function viewCommentList(result){
 											'<span class="user-info">'+ comment.writerNickname + '</span> \n'+
 											'<div class="right"> \n'+ 
 												'<span>'+ comment.createdDate +'</span> \n';
-				if(writerId == authId){//작성자만 수정,삭제 있음																	
+				if(comment.writerLoginId == authId){//작성자만 수정,삭제 있음																	
 					commentList +=				'<span class="sep"></span> \n'+
 												'<a href="#" class="edit-link" data-target='+ comment.commentId +'> \n'+
 													'<span> <i class="bi-pencil-square"></i> 수정</span> \n' +

@@ -44,16 +44,13 @@ public class SubscribeServiceImpl implements SubscribeService{
 		Board board = boardRepository.findByBoardType(boardType)
 			.orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
 		
-		Optional<Subscribe> result = subscribeRepository.findByMemberAndBoard(member, board);
+		Optional<Subscribe> result = subscribeRepository.findByWriterAndBoard(member, board);
 		
 		if (result.isEmpty()) {
-			Subscribe subscribe = Subscribe.builder().member(member).board(board).build();
+			Subscribe subscribe = Subscribe.builder().writer(member).board(board).build();
 
-			System.out.println("00000");
 			subscribeRepository.save(subscribe);
-			
-			System.out.println("여기오냐");
-
+	
 		}
 		else {
 			throw new BoardException(BoardExceptionType.OVERLAP_SUBSCRIBE_BOARD);
@@ -71,7 +68,7 @@ public class SubscribeServiceImpl implements SubscribeService{
 		Board board = boardRepository.findByBoardType(boardType)
 				.orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
 		
-		Subscribe result = subscribeRepository.findByMemberAndBoard(member, board)
+		Subscribe result = subscribeRepository.findByWriterAndBoard(member, board)
 				.orElseThrow(() -> new BoardException(BoardExceptionType.NOT_SUBSCRIBE_BOARD));
 		
 		subscribeRepository.delete(result);

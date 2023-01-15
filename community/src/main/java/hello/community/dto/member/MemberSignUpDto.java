@@ -24,6 +24,11 @@ public class MemberSignUpDto {
 			message = "비밀번호는 8~20자에 최소 하나의 문자 및 숫자여야 합니다")
 	private String password;
 	
+	@NotBlank(message = "비밀번호는 필수 입니다.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$",
+			message = "비밀번호는 8~20자에 최소 하나의 문자 및 숫자여야 합니다")
+	private String passwordConfirm;
+	
 	@NotBlank(message = "닉네임은 필수 입니다")
 	@Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$",
 			message="닉네임은2-10자,한글,영문,숫자만 가능합니다")
