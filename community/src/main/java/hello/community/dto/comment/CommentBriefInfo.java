@@ -19,7 +19,11 @@ public class CommentBriefInfo {
 	private String writerNickname;
 	private String createdDate;
 	private Long parentId;
-	private Boolean isDeleted;
+	private boolean isDeleted;
+	private Long postId;
+	private String boardType;
+	private String boardName;
+	
 	
 	public CommentBriefInfo(Comment comment) {
 		this.commentId = comment.getId();
@@ -29,5 +33,9 @@ public class CommentBriefInfo {
 		this.createdDate = comment.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		this.parentId = comment.getParent() == null ? null :comment.getParent().getId();
 		this.isDeleted = comment.isDeleted();
+		this.postId = comment.getPost().getId();
+		this.boardType = comment.getPost().getBoard().getBoardType();
+		this.boardName = comment.getPost().getBoard().getBoardName();
+		
 	}
 }

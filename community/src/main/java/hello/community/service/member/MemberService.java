@@ -12,15 +12,15 @@ import hello.community.exception.member.MemberException;
 
 public interface MemberService {
 
-	void signUp(MemberSignUpDto signUpDto) throws MemberException;
+	void signUp(MemberSignUpDto signUpDto);
 	
-	void editInfo(MemberEditDto editInfoDto) throws MemberException;
+	void editInfo(MemberEditDto editInfoDto);
 	
-	void editPassword(PasswordEditDto editPWDto) throws MemberException;
+	void editPassword(PasswordEditDto editPWDto);
 	
-	MemberInfoDto getInfo() throws MemberException;
+	MemberInfoDto getInfo(String nickName);
 	
-	MemberEditDto getEditInfo() throws MemberException;
+	MemberEditDto getEditInfo();
 	
 	boolean isExistLoginId(String loginId);
 	
@@ -28,7 +28,7 @@ public interface MemberService {
 	
 	boolean isExistEmail(String newEmail);
 	
-	Member findOne(String loginId) throws MemberException;
+	Member findOne(String loginId);
 	
 	List<SubscribeInfoDto> getSubcribeList();
 	

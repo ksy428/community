@@ -1,15 +1,20 @@
 package hello.community.repository.post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -36,25 +41,47 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 	
 			List<Post> results = query
 					.selectFrom(post)
-					.where(
-							post.board.boardType.eq(boardType)
+					.where(							
+							eqBoardType(boardType)
+							,eqBest(postSearch.getMode())
 							,typeContain(postSearch)
 						   )
 					.leftJoin(post.writer, member).fetchJoin()
 					.leftJoin(post.board, board).fetchJoin()
 					.offset(pageable.getOffset())
 					.limit(pageable.getPageSize())
-					.orderBy(post.id.desc())
+					.orderBy(getOrderSpecifier(pageable.getSort()).stream().toArray(OrderSpecifier[]::new))
 					.fetch();
 			
 			JPAQuery<Post> countQuery = query
 					.selectFrom(post)
 					.where(
-							post.board.boardType.eq(boardType)
+							eqBoardType(boardType)
+							,eqBest(postSearch.getMode())
 							,typeContain(postSearch)							
 							);
-			
+
 		return PageableExecutionUtils.getPage(results, pageable, ()-> countQuery.fetch().size());
+	}
+	
+	private BooleanExpression eqBoardType(String boardType) {
+		
+		if(boardType.equals("main") || boardType.equals("best")) {
+			return null;
+		}
+		else {
+			return post.board.boardType.eq(boardType);
+		}
+		
+		//return StringUtils.hasText(boardType) ? post.board.boardType.eq(boardType) : null;
+	}
+	
+	private BooleanExpression eqBest(String mode) {
+		
+		if(StringUtils.hasText(mode)) {
+			return mode.equals("best") ? post.isBest.eq(true) : null;
+		}		
+		return null;
 	}
 	
 	private BooleanBuilder typeContain(PostSearch postSearch) {
@@ -77,9 +104,29 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 			booleanBuilder.or(post.title.contains(postSearch.getKeyword()));
 			booleanBuilder.or(post.content.contains(postSearch.getKeyword()));
 			booleanBuilder.or(post.writer.nickname.contains(postSearch.getKeyword()));
-		}
-		
+		}		
 		return booleanBuilder;
 	}
 	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private List<OrderSpecifier> getOrderSpecifier(Sort sort) {
+	    List<OrderSpecifier> orders = new ArrayList<>();
+	    // Sort
+	    sort.stream().forEach(order -> {
+	        Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+	        String prop = order.getProperty();
+			switch (prop){
+	    		case "best":
+	    			orders.add(new OrderSpecifier(direction, post.bestDate));   
+	    			break;
+	    		case "id":
+	    			orders.add(new OrderSpecifier(direction, post.id));
+	    			break;
+			}
+	    });
+	    return orders;
+	}
 }
+	
+

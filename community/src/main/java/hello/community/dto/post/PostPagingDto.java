@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import hello.community.domain.post.Post;
+import hello.community.global.util.DateUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -21,6 +22,8 @@ public class PostPagingDto {
 	private int totalPageCount;
 	// 현재 페이지 번호
 	private int currentPageNum;
+	// 페이징 사이즈
+	private int pageSize;
 	// 총 게시글의 개수
 	private long totalElementCount;
 	// 다음,이전 페이지 여부
@@ -39,8 +42,10 @@ public class PostPagingDto {
 
 		totalPageCount = searchResults.getTotalPages();
 		currentPageNum = searchResults.getNumber() + 1;
+		pageSize = searchResults.getSize();
 		totalElementCount = searchResults.getTotalElements();
 		postList = searchResults.getContent().stream().map(PostBriefInfo::new).toList();
+		//postList.stream().forEach(p -> p.setCreatedDate(DateUtil.calculateDate(p.getCreatedDate())));
 		
 		pageNum = 10;
 		
@@ -76,6 +81,8 @@ public class PostPagingDto {
 		}	
 		
 		log.info("결과사이즈: {}", postList.size());
+		log.info("총 page 갯수 : {}", totalPageCount);
+		log.info("page 사이즈: {}", pageSize);
 		log.info("totalElementCount: {}", totalElementCount);
 		log.info("current: {}", currentPageNum);
 		log.info("start: {}", startPageNum);

@@ -27,17 +27,13 @@ public class DateUtil {
 			msg = diffTime + "분 전";
 		}
 		else if((diffTime /= MIN) < HOUR) {
-		//else if((diffTime /= MIN) < HOUR && now.truncatedTo(ChronoUnit.DAYS).compareTo(date.truncatedTo(ChronoUnit.DAYS)) == 0){
 			//msg = diffTime + "시간 전";
 			msg = date.format(DateTimeFormatter.ofPattern("HH:mm"));
 		}
-		else if((diffTime /= HOUR) < DAY){
-			//msg = diffTime + "일 전";
-			msg = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-		}
 		else {
+			//msg = diffTime + "일 전";
 			msg = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		}		
+		}
 		return msg;
 	}
 }

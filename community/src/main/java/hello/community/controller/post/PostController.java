@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hello.community.dto.comment.CommentPagingDto;
+import hello.community.dto.post.PostBriefInfo;
 import hello.community.dto.post.PostEditDto;
 import hello.community.dto.post.PostInfoDto;
 import hello.community.dto.post.PostPagingDto;
@@ -47,7 +48,7 @@ public class PostController {
 		log.info("서치: {}", postSearch);
 		log.info("게시판: {}", boardType);
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, boardType, postSearch, page);
-		
+			
 		model.addAttribute("postPagingDto",postPagingDto);
 		
 		return "post/listPost";

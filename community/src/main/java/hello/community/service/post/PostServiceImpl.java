@@ -2,12 +2,13 @@ package hello.community.service.post;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import hello.community.domain.media.Media;
@@ -68,7 +69,7 @@ public class PostServiceImpl implements PostService {
 			}
 		}
 		postRepository.save(post);
-
+		
 		return post.getId();
 	}
 
@@ -84,6 +85,8 @@ public class PostServiceImpl implements PostService {
 		
 		List<Media> newMediaList = editDto.getNewMediaList();
 		List<Media> deleteMediaList = editDto.getDeleteMediaList();
+		
+		log.info("미디어리스트: {}",post.getMediaList().toString());
 		
 		//서버에서 파일삭제
 		if (!CollectionUtils.isEmpty(deleteMediaList)) {
@@ -146,9 +149,25 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostPagingDto searchPostList(Pageable pageable, String boardType, PostSearch postSearch, int page) {
 		
-		boardRepository.findByBoardType(boardType).orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
+		if(boardType != "main") {
+			boardRepository.findByBoardType(boardType).orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
+		}
 		
-		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  20);
+		int size = 20;
+		
+		//mode가 best가 아닌 다른값이오면 디폴트로 게시글 번호로 정렬
+		if(!StringUtils.hasText(postSearch.getMode())) {
+			pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  size, Sort.by("id").descending());
+		}
+		//인기글은 인기글로 올라갔을때 시간기준으로 내림차순
+		else { 
+			if(postSearch.getMode().equals("best")){
+				pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  size, Sort.by("best").descending());
+			}
+			else {
+				pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  size, Sort.by("id").descending());
+			}
+		}			
 		return new PostPagingDto(postRepository.search(pageable, boardType, postSearch));
 	}
 

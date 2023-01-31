@@ -62,17 +62,8 @@ public class MemberController {
 		return "redirect:/";
 	}
 
-	@GetMapping("/member/info")
-	public String myInfoForm(Model model) throws Exception {
-		MemberInfoDto memberInfoDto = memberService.getInfo();
-
-		model.addAttribute("memberInfoDto", memberInfoDto);
-
-		return "/member/info";
-	}
-
 	@GetMapping("/member/edit/info")
-	public String editInfoForm(Model model) throws Exception {
+	public String editInfoForm(Model model){
 
 		MemberEditDto editInfoDto = memberService.getEditInfo();
 
@@ -82,8 +73,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/member/edit/info")
-	public String editMember(@Valid @ModelAttribute MemberEditDto editInfoDto, BindingResult result)
-			throws Exception {
+	public String editMember(@Valid @ModelAttribute MemberEditDto editInfoDto, BindingResult result){
 
 		log.info("errors : {}", result);
 		
@@ -101,7 +91,7 @@ public class MemberController {
 
 		memberService.editInfo(editInfoDto);
 
-		return "redirect:/member/info";
+		return "redirect:/member/edit/info";
 		
 	}
 	
@@ -112,8 +102,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/member/edit/password")
-	public String editPassword(@Valid @ModelAttribute PasswordEditDto editPWDto, BindingResult result)
-			throws Exception {
+	public String editPassword(@Valid @ModelAttribute PasswordEditDto editPWDto, BindingResult result){
 		
 		if(!editPWDto.getNewPassword().equals(editPWDto.getNewPasswordConfirm())) {
 			result.reject("differ","비밀번호가 서로 다릅니다");
@@ -125,8 +114,19 @@ public class MemberController {
 
 		memberService.editPassword(editPWDto);
 
-		return "redirect:/member/info";
+		return "redirect:/member/edit/info";
 
+	}
+		
+	@GetMapping("/member/{nickName}")
+	public String viewInfoForm(@PathVariable String nickName, Model model) {
+		
+		MemberInfoDto memberInfoDto = memberService.getInfo(nickName);
+
+		model.addAttribute("memberInfoDto", memberInfoDto);
+
+		
+		return "/member/infoForm";
 	}
 
 	@ResponseBody

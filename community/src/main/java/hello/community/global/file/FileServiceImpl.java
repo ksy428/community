@@ -18,6 +18,8 @@ import hello.community.exception.file.FileExceptionType;
 import hello.community.exception.member.MemberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 
 @Service
 @Slf4j
@@ -77,6 +79,8 @@ public class FileServiceImpl implements FileService {
 				File copyFile = new File(getFullPath(media.getStoreName()));
 				try {
 					Files.copy(tmpFile.toPath(), copyFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
+					//Thumbnails.of(copyFile).size(70, 50).toFile(new File(getFullPath("t_"+ media.getStoreName())));
+					Thumbnails.of(copyFile).crop(Positions.CENTER).size(70, 50).toFile(new File(getFullPath("t_"+ media.getStoreName())));
 					deleteTmpFile(media.getStoreName());
 				} catch (IOException e) {
 					throw new FileException(FileExceptionType.FAIL_SAVE_FILE);
@@ -91,8 +95,9 @@ public class FileServiceImpl implements FileService {
 	public void deleteFile(String storeName) throws FileException {
 		
 		File deleteFile = new File(getFullPath(storeName));
+		File thumbnailFile = new File(getFullPath("t_"+ storeName));
 		if(deleteFile.exists()) {
-			if(!deleteFile.delete()) {
+			if(!deleteFile.delete() || !thumbnailFile.delete()) {
 				throw new FileException(FileExceptionType.FAIL_DELETE_FILE);
 			}
 		}

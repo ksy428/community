@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	class="width-1300 navbar-scroll">
+
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
+	<th:block th:fragment="content">	
+		<article class="containe-fluid board-article">
+			<div class="row user-header">
+				<div class="info-bar">
+					<div class="member-info">
+						<span th:text="${memberInfoDto.nickname}"></span>
+					</div>
+				</div>					
+			</div>
+			<div class="row user-body">
+				<div class="col-sm-12">
+					<div class="dialog bg-transparent">
+						<div class="card-block">
+							<div class="recent-post">
+								<h3>최근 작성글</h3>
+								<th:block th:each="post : ${memberInfoDto.postList}">																							
+									<div class="member-recent">
+										<div class="col-title">
+											<a th:href="@{/board/{boardType}(boardType=${post.boardType})}"> <span class="badge category-badge" th:text="${post.boardName}"></span> </a>
+											<a th:href="@{/board/{boardType}/{postId}(boardType=${post.boardType},postId=${post.postId})}">
+												<span th:text="${post.title}"></span>
+												<span class="comment-count" th:text="|[${post.commentCount}]|"></span>
+											 </a>							 
+										</div>
+										<div class="col-date">
+											<span th:text="${post.createdDate}"></span>
+										</div>
+									</div>
+								</th:block>												
+								<div class="clearfix"></div>
+							</div>
+							<hr>
+							<div class="recent-comment">
+								<h3>최근 작성 댓글</h3>
+								<th:block th:each="comment : ${memberInfoDto.commentList}">																							
+									<div class="member-recent">
+										<div class="col-title">
+											<a th:href="@{/board/{boardType}(boardType=${comment.boardType})}"> <span class="badge category-badge" th:text="${comment.boardName}"></span> </a>
+											<a th:href="@{/board/{boardType}/{postId}(boardType=${comment.boardType},postId=${comment.postId})}">
+												<span th:text="${comment.content}"></span>									
+											 </a>							 
+										</div>
+										<div class="col-date">
+											<span th:text="${comment.createdDate}"></span>
+										</div>
+									</div>
+								</th:block>		
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</th:block>
+</th:block>
+</html>

@@ -11,7 +11,15 @@
 				
 				<div class="btns-board">
 					<div class="float-end" sec:authorize="isAuthenticated()">						
-						<a th:href="${#request.getRequestURI()} + '/write'" class="btn btn-navy btn-block btn-sm"> 글쓰기</a>						
+						<a th:href="${#request.getRequestURI()} + '/write'" class="btn btn-navy btn-block btn-sm"> 글쓰기</a>
+					</div>
+					<div class="float-start">
+						<a th:href="${#request.getRequestURI()}" class="btn btn-mode btn-sm">
+							<span> 전체글</span>
+						</a>							 
+						<a th:href="|@{${detailsURL}(mode='best')}|" class="btn btn-mode btn-sm">
+							<span> 인기글</span> 
+						</a>
 					</div>			
 				</div>
 				<div class="clearfix"></div>
@@ -32,13 +40,18 @@
 							</div>		
 						</div>
 						
-						<th:block th:each="post : ${postPagingDto.postList}">
+						<th:block th:each="post, i: ${postPagingDto.postList}">
 							<a class="vrow column" th:href="@{/board/{boardType}/{postId}(boardType=${post.boardType}, postId=${post.postId})}">
 								<div class="vrow-inner">
 									<div class="vrow-top">
-										<span class="vcol col-id" th:text="${post.postId}"></span>
+										<span class="vcol col-id" th:text="${postPagingDto.totalElementCount} - ${postPagingDto.currentPageNum - 1} * ${postPagingDto.pageSize} - ${i.index}"></span>								
 										<span class="vcol col-title">
-											<span class="title" th:text="${post.title}"></span>
+											<span class="title">
+											<th:block th:if="${post.isBest}">
+												<i class="bi-star-fill"></i>
+											</th:block>
+												<span th:text="${post.title}"></span>
+											</span>
 											<span class="info" th:if="${post.commentCount}">
 												<span class="comment-count" th:text="|[${post.commentCount}]|"></span>
 											</span>
@@ -57,6 +70,9 @@
 					</div>				
 				</div>
 				<form method="get" class="form-inline search-form justify-content-end">
+					<th:block th:if="${#request.getParameter('mode') == 'best'}">
+						<input type="hidden" class="form-control" name="mode" value="best">
+					</th:block>
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<select class="search-select" name="target" id="target">
@@ -76,28 +92,28 @@
 				<nav class="pagination-wrapper">				
 					<ul class="pagination justify-content-center">			
 						<li th:if="${postPagingDto.hasPrev}" class="page-item ">
-							<a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=1)}" aria-label="First">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=1)}" aria-label="First">
 								<span aria-hidden="true">&laquo;</span>
 							</a>
 						</li>
 						<li th:if="${postPagingDto.hasPrev}" class="page-item ">
-							<a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.startPageNum} - 1)}" aria-label="Previous">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.startPageNum} - 1)}" aria-label="Previous">
 								<span aria-hidden="true">&lt;</span>
 							</a>
 						</li>
 
 						<li th:each="page: ${#numbers.sequence(postPagingDto.startPageNum, postPagingDto.endPageNum)}"
 							th:class="${postPagingDto.currentPageNum == page ? 'page-item active' :'page-item' }">
-							<a class="page-link" th:text="${page}" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${page})}"></a>
+							<a class="page-link" th:text="${page}" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${page})}"></a>
 						</li>
 	
 						<li th:if="${postPagingDto.hasNext}" class="page-item ">
-							<a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.endPageNum} + 1)}" aria-label="Next">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.endPageNum} + 1)}" aria-label="Next">
 								 <span aria-hidden="true">&gt;</span>
 							</a>
 						</li>
 						<li th:if="${postPagingDto.hasNext}" class="page-item ">
-							<a class="page-link" th:href="@{${detailsURL}(target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.totalPageCount})}" aria-label="Last">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.totalPageCount})}" aria-label="Last">
 								<span aria-hidden="true">&raquo;</span>
 							</a>
 						</li>
@@ -129,17 +145,6 @@ $(document).ready(function(e){
 		$(this).prop("href", link);
 		
 	});
-	
-	list.origin.push("zz");
-	list.origin.push("ff");
-	
-	let aa ={
-			title : 'ㅋㅋ',
-			content : '내용'
-	}
-	
-	let result = Object.assign(aa,list);
-	
 	//alert(JSON.stringify(result));
 });
 

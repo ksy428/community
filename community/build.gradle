@@ -37,6 +37,8 @@ dependencies {
 	
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+    
+    implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.19'
 	
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

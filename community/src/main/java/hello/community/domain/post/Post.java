@@ -1,5 +1,6 @@
 package hello.community.domain.post;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,10 @@ public class Post extends BaseTimeEntity{
 	
 	private Long recommend;
 	
+	private boolean isBest = false;
+	
+	private LocalDateTime bestDate;
+	
 	@Builder
 	public Post(String title, String content, Member writer) {
 		this.title = title;
@@ -85,6 +90,11 @@ public class Post extends BaseTimeEntity{
 	
 	public void addRecommend() {
 		this.recommend += 1;
+		
+		if(this.recommend >= 1) {
+			this.isBest = true;
+			this.bestDate = LocalDateTime.now();
+		}
 	}
 	
 	public void setBoard(Board board) {

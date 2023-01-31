@@ -57,6 +57,7 @@ public class InitDummyData {
 			 initMember("dummy2", "1234", "2번유저", "dummy2@naver.com");
 			 initMember("dummy3", "1234", "3번유저", "dummy3@naver.com");
 			 
+			 initBoard("best", "실시간 베스트");
 			 initBoard("free","자유");
 			 initBoard("humor","유머");
 			 initBoard("horor","공포");
@@ -66,11 +67,11 @@ public class InitDummyData {
 			 initBoard("baseball","야구");
 			 initBoard("other-sport","기타스포츠");
 		
-			 for(int i=0; i<80;i++) {			 
+			 for(int i=0; i<30;i++) {			 
 				 initPost((i+1) +"번 글", (i+1)+"번 내용", 1L);
 			 }
 			 
-			 for(int i=0; i<100; i++) {
+			 for(int i=0; i<20; i++) {
 				 long groupId = (long) i+1;				 
 				 initComment("1번 글_"+ groupId+"번댓글", 1L, 1L, groupId);
 			 }

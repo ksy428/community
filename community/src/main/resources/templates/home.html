@@ -1,57 +1,142 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
- 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-<meta charset="utf-8">
-<link th:href="@{/css/bootstrap.min.css}" href="css/bootstrap.min.css"
-	rel="stylesheet">
-</head>
-<body>
-	<div class="container" style="max-width: 600px">
-		<div class="py-5 text-center">
-			<h2>홈 화면</h2>
-		</div>
-		<div class="row">
-			<div class="col">
-				<button class="w-100 btn btn-secondary btn-lg" type="button"
-					th:onclick="|location.href='@{/member/signup}'|">회원 가입</button>
+	class="width-1300 navbar-scroll">
+
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
+	<th:block th:fragment="content">
+		<article class="containe-fluid board-article">
+			<div class="board-article-list">
+
+				<div class="board-title">
+					<div class="board-info">
+						<div class="head" data-title="">
+							<a class="title" href="/"> <span>실시간 베스트</span></a>
+						</div>
+						<div class="description"></div>
+					</div>
+				</div>
+
+				<div class="btns-board">
+	
+				</div>
+				<div class="clearfix"></div>
+				<div class="article-list">				
+					<div class="list-table table">				
+						<th:block th:each="post, i: ${postPagingDto.postList}">
+							<a class="main-vrow column " th:href="@{/board/{boardType}/{postId}(boardType=${post.boardType}, postId=${post.postId})}">
+								<div class="vrow-inner">
+									<div class="vrow-top">									
+										<span class="vcol col-thumb">
+											<!-- <th:block th:if="${post.thumbnailPath != null}"> -->
+												<img th:if="${post.thumbnailPath != null}" th:src="${post.thumbnailPath}">
+												<i th:unless="${post.thumbnailPath != null}" class="bi-chat-left-text"></i>
+											<!-- </th:block> -->
+										</span>
+										<span class="vcol col-title">
+											<span class="title">
+												<span class="badge category-badge" th:text="${post.boardName}"></span>
+												<span th:text="${post.title}"></span>
+											</span>
+											<span class="info" th:if="${post.commentCount}">
+												<span class="comment-count" th:text="|[${post.commentCount}]|"></span>
+											</span>
+										</span>
+									</div>
+									<div class="vrow-bottom">
+										<span class="vcol col-author" th:text="${post.writerNickname}"></span>								
+										<span class="vcol col-time" th:text="${post.createdDate}"></span>
+										<!-- <span class="vcol col-type" th:text="|[${post.boardName}]|"></span> -->
+									</div>
+								</div>
+							</a>
+						</th:block>
+					</div>				
+				</div>
+				<form method="get" class="form-inline search-form justify-content-end">
+					<th:block th:if="${#request.getParameter('mode') == 'best'}">
+						<input type="hidden" class="form-control" name="mode" value="best">
+					</th:block>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<select class="search-select" name="target" id="target">
+									<option value="all" th:selected="${#request.getParameter('target')} == 'all' ">전체</option>
+									<option value="title" th:selected="${#request.getParameter('target')} == 'title' ">제목</option>
+									<option value="content" th:selected="${#request.getParameter('target')} == 'content' ">내용</option>
+									<option value="writer" th:selected="${#request.getParameter('target')} == 'writer' ">작성자</option>
+									<option value="title_content" th:selected="${#request.getParameter('target')} == 'title_content' ">제목/내용</option>
+								</select>
+							</div>
+							<input type="text" class="form-control form-control-sm input-border" name="keyword" id="keyword" th:value="${#request.getParameter('keyword')}">
+							<div class="input-group-append">
+								<button class="btn btn-navy btn-block btn-sm" type="submit">검색</button>
+							</div>
+						</div>
+					</form>
+				<nav class="pagination-wrapper">				
+					<ul class="pagination justify-content-center">			
+						<li th:if="${postPagingDto.hasPrev}" class="page-item ">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=1)}" aria-label="First">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<li th:if="${postPagingDto.hasPrev}" class="page-item ">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.startPageNum} - 1)}" aria-label="Previous">
+								<span aria-hidden="true">&lt;</span>
+							</a>
+						</li>
+
+						<li th:each="page: ${#numbers.sequence(postPagingDto.startPageNum, postPagingDto.endPageNum)}"
+							th:class="${postPagingDto.currentPageNum == page ? 'page-item active' :'page-item' }">
+							<a class="page-link" th:text="${page}" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${page})}"></a>
+						</li>
+	
+						<li th:if="${postPagingDto.hasNext}" class="page-item ">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.endPageNum} + 1)}" aria-label="Next">
+								 <span aria-hidden="true">&gt;</span>
+							</a>
+						</li>
+						<li th:if="${postPagingDto.hasNext}" class="page-item ">
+							<a class="page-link" th:href="@{${detailsURL}(mode=${postSearch.mode},target=${postSearch.target},keyword=${postSearch.keyword},p=${postPagingDto.totalPageCount})}" aria-label="Last">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
 			</div>
-			<div sec:authorize ="isAnonymous()" class="col">
-				<button class="w-100 btn btn-dark btn-lg"
-					th:onclick="|location.href='@{/loginForm}'|" type="button">
-					로그인</button>
-			</div>
-			<div sec:authorize ="isAuthenticated()" class="col">
-				<button class="w-100 btn btn-secondary btn-lg"
-					th:onclick="|location.href='@{/logout}'|" type="button">
-					로그아웃</button>
-			</div>
-		</div>
+				
+		</article>
+	</th:block>
+</th:block>
+
+<script type="text/javascript">
+
+let boardType = location.pathname.split('/')[2];
+
+let list = {
+	origin : []
+}
+
+$(document).ready(function(e){
+	
+	let postList = $('.list-table').find('a').each(function(){
 		
-		<div sec:authorize ="isAuthenticated()" class="col">
-				<button class="w-100 btn btn-primary btn-lg"
-					th:onclick="|location.href='@{/member/info}'|" type="button">
-					마이페이지</button>
-		</div>
+		let link = $(this).attr("href").concat(createQueryString());
+		$(this).prop("href", link);
 		
-		<div sec:authorize ="isAuthenticated()" class="col">
-				<button class="w-100 btn btn-primary btn-lg"
-					th:onclick="|location.href='@{/board/write}'|" type="button">
-					글쓰기</button>
-		</div>
-		<div sec:authorize ="isAuthenticated()" class="col">
-				<button class="w-100 btn btn-primary btn-lg"
-					th:onclick="|location.href='@{/board/free}'|" type="button">
-					자유게시판</button>
-		</div>
-		<hr class="my-4">
-	</div>
+	});
+	//alert(JSON.stringify(result));
+});
+
+function createQueryString(){
 	
+	let urlParams = new URLSearchParams(location.search);
 	
-	<!-- <div sec:authorize ="isAuthenticated()">
-		<h4 class="mb-3" th:text="|로그인: ${session.member.loginId}|">로그인 사용자 이름</h4>
-	</div>  -->
+	if(!urlParams.get('p')){
+		urlParams.set('p',1);
+	}	
 	
-	<!-- /container -->
-</body>
+	return "?".concat(urlParams);	
+}
+	
+</script>
 </html>

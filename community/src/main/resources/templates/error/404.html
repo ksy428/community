@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	class="width-1300 navbar-scroll">
+
+<th:block th:replace="~{fragments/basicLayout :: setContent(~{this::content})}">
+	<th:block th:fragment="content">
+		<article class="containe-fluid board-article">
+			<div class="error-wrapper">
+				<div class="error-form form-control">
+					<h1>
+						<i class="bi-emoji-dizzy"></i>
+						<span> 오류</span>
+					</h1>
+					<h4> 페이지를 찾을 수 없습니다</h4>
+				</div>
+			</div>
+		</article>
+	</th:block>
+</th:block>
+</html>

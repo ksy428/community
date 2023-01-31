@@ -295,6 +295,7 @@ function getPostList(){
 	let urlParams = new URLSearchParams(location.search);
 	
 	let postSearch = {
+		mode: urlParams.get('mode'),
 		target: urlParams.get('target'),
 		keyword: urlParams.get('keyword') ?? '',
 		p: urlParams.get('p')
@@ -309,14 +310,20 @@ function getPostList(){
 			$.each(result.postList, function(index, post) {
 				
 				let postList="";
-				let queryString = '?'.concat(createQueryString(urlParams.get('p'), null, urlParams.get('target'), urlParams.get('keyword'),'#comment'));
+				let queryString = '?'.concat(createQueryString(urlParams.get('p'), null, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword'),'#comment'));
+				let postNum = result.totalElementCount - (result.currentPageNum - 1)  * result.pageSize - index;
 				let active = (postId == post.postId) ? 'active' : '';
 				postList += '<a class="vrow column ' + active + '" href= /board/'+ boardType +'/'+ post.postId +''+ queryString + '> \n'+ 
 								'<div class="vrow-inner"> \n'+
-									'<div class ="vrow-top"> \n'+
-										'<span class="vcol col-id">'+ post.postId + '</span> \n'+
+									'<div class ="vrow-top"> \n'+						
+										'<span class="vcol col-id">'+ postNum + '</span> \n'+
 										'<span class="vcol col-title"> \n' +
-											'<span class="title">'+ post.title +'</span> \n';
+											'<span class="title"> \n';	
+				if(post.best){
+					postList +=					'<i class="bi-star-fill"></i> \n';
+				}							
+					postList +=					'<span>' +post.title +'</span>\n'+
+											'</span> \n';														
 				if(post.commentCount){										
 					postList +=				'<span class="info"> \n'+
 												'<span class="comment-count">[' + post.commentCount +']</span> \n'+
@@ -343,13 +350,13 @@ function getPostList(){
 		//let urlParams = new URLSearchParams(location.search);
 	
 		if(result.hasPrev){
-			queryString = '?'.concat(createQueryString(1, null, urlParams.get('target'), urlParams.get('keyword')));
+			queryString = '?'.concat(createQueryString(1, null, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')));
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="First"> \n'+
 								'<span aria-hidden="true">&laquo;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
-			queryString = '?'.concat(createQueryString(result.startPageNum - 1, null, urlParams.get('target'), urlParams.get('keyword')));			
+			queryString = '?'.concat(createQueryString(result.startPageNum - 1, null, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')));			
 			pageList +='<li class="page-item"> \n'+
 							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="Previous"> \n'+
 								'<span aria-hidden="true">&lt;</span> \n'+
@@ -360,19 +367,19 @@ function getPostList(){
 		for(let index = result.startPageNum; index <= result.endPageNum; index++){
 					let active = result.currentPageNum == index ? 'class="page-item active"' : 'class="page-item"';
 
-			queryString = '?'.concat(createQueryString(index, null, urlParams.get('target'), urlParams.get('keyword')));
+			queryString = '?'.concat(createQueryString(index, null, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')));
 			pageList += '<li '+ active + '>'+
 							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'">'+ index +' </a>'+
 						'</li>';
 		}			
 		if(result.hasNext){
-			queryString = '?'.concat(createQueryString(result.endPageNum + 1, null, urlParams.get('target'), urlParams.get('keyword')));
+			queryString = '?'.concat(createQueryString(result.endPageNum + 1, null, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')));
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="Next"> \n'+
 								'<span aria-hidden="true">&gt;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
-			queryString = '?'.concat(createQueryString(result.totalPageCount, null, urlParams.get('target'), urlParams.get('keyword')));			
+			queryString = '?'.concat(createQueryString(result.totalPageCount, null, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')));			
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href="/board/'+ boardType +''+ queryString +'" aria-label="Last"> \n'+
 								'<span aria-hidden="true">&raquo;</span> \n'+
@@ -461,13 +468,13 @@ function viewCommentList(result){
 		let urlParams = new URLSearchParams(location.search);
 	
 		if(result.hasPrev){
-			queryString = '?'.concat(createQueryString(urlParams.get('p'), 1, urlParams.get('target'), urlParams.get('keyword'),'#comment'));
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), 1, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword'),'#comment'));
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="First"> \n'+
 								'<span aria-hidden="true">&laquo;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
-			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.startPageNum - 1, urlParams.get('target'), urlParams.get('keyword')),'#comment');			
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.startPageNum - 1, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')),'#comment');			
 			pageList +='<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="Previous"> \n'+
 								'<span aria-hidden="true">&lt;</span> \n'+
@@ -478,19 +485,19 @@ function viewCommentList(result){
 		for(let index = result.startPageNum; index <= result.endPageNum; index++){
 					let active = result.currentPageNum == index ? 'class="page-item active"' : 'class="page-item"';
 
-			queryString = '?'.concat(createQueryString(urlParams.get('p'), index, urlParams.get('target'), urlParams.get('keyword')),'#comment');
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), index, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')),'#comment');
 			pageList += '<li '+ active + '>'+
 							'<a class="page-link" href='+ queryString +' >'+ index +' </a>'+
 						'</li>';
 		}			
 		if(result.hasNext){
-			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.endPageNum + 1, urlParams.get('target'), urlParams.get('keyword')),'#comment');
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.endPageNum + 1, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')),'#comment');
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="Next"> \n'+
 								'<span aria-hidden="true">&gt;</span> \n'+
 							'</a> \n'+
 						'</li> \n';
-			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.totalPageCount, urlParams.get('target'), urlParams.get('keyword')),'#comment');			
+			queryString = '?'.concat(createQueryString(urlParams.get('p'), result.totalPageCount, urlParams.get('mode'), urlParams.get('target'), urlParams.get('keyword')),'#comment');			
 			pageList += '<li class="page-item"> \n'+
 							'<a class="page-link" href='+ queryString +' aria-label="Last"> \n'+
 								'<span aria-hidden="true">&raquo;</span> \n'+
@@ -502,9 +509,13 @@ function viewCommentList(result){
 	return $('.list-area');	
 }
 
-function createQueryString(p, cp, target, keyword){
+function createQueryString(p, cp, mode, target, keyword){
 	
 	let urlParams = new URLSearchParams();
+	
+	if(mode){
+		urlParams.set('mode',mode);
+	}
 	
 	if(target){
 		urlParams.set('target',target);

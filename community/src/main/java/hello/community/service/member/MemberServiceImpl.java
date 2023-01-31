@@ -1,6 +1,7 @@
 package hello.community.service.member;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,11 +11,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hello.community.domain.comment.Comment;
 import hello.community.domain.member.Member;
+import hello.community.domain.post.Post;
 import hello.community.dto.member.MemberInfoDto;
 import hello.community.dto.member.MemberSignUpDto;
 import hello.community.dto.member.PasswordEditDto;
+import hello.community.dto.post.PostBriefInfo;
 import hello.community.dto.subscribe.SubscribeInfoDto;
+import hello.community.dto.comment.CommentBriefInfo;
 import hello.community.dto.member.MemberEditDto;
 import hello.community.exception.member.MemberException;
 import hello.community.exception.member.MemberExceptionType;
@@ -44,7 +49,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	@Transactional
-	public void editInfo(MemberEditDto editInfoDto) throws MemberException {
+	public void editInfo(MemberEditDto editInfoDto){
 
 		Member member = findOne(SecurityUtil.getLoginMemberId());
 
@@ -54,7 +59,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	@Transactional
-	public void editPassword(PasswordEditDto editPWDto) throws MemberException {
+	public void editPassword(PasswordEditDto editPWDto){
 
 		Member member = findOne(SecurityUtil.getLoginMemberId());
 
@@ -67,15 +72,16 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public MemberInfoDto getInfo() throws MemberException {
+	public MemberInfoDto getInfo(String nickName){
 
-		Member member = findOne(SecurityUtil.getLoginMemberId());
-
+		Member member = memberRepository.findByNickname(nickName)
+				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+				
 		return new MemberInfoDto(member);
 	}
 
 	@Override
-	public MemberEditDto getEditInfo() throws MemberException {
+	public MemberEditDto getEditInfo(){
 
 		Member member = findOne(SecurityUtil.getLoginMemberId());
 
@@ -115,7 +121,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public Member findOne(String loginId) throws MemberException {
+	public Member findOne(String loginId){
 		return memberRepository.findByLoginId(loginId)
 				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 	}

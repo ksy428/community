@@ -28,12 +28,11 @@ $(document).ready(function(e){
 
 function getBoardInfo(){
 	
-	
 	$.ajax({
 			url: '/boards/'+ boardType,
 			type: 'get',
 			dataType: 'json',
-			success: function(result){ //commentPagingDto 가져옴				
+			success: function(result){			
 				
 				let boardTitle = "";
 				boardTitle += '<a class="title" href="/board/'+ boardType +'"> <span>'+ result.boardName + '  </span></a> \n';

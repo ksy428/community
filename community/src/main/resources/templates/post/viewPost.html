@@ -10,11 +10,6 @@
 					
 				<th:block th:replace="~{fragments/boardTitle::boardTitle}"></th:block>
 					
-				<div class="btns-board">
-					<div class="float-end" sec:authorize="isAuthenticated()">						
-						<a th:href="@{/board/{boardType}/write(boardType=${postInfoDto.boardType})}" class="btn btn-navy btn-block btn-sm"> 글쓰기</a>						
-					</div>			
-				</div>
 				<div class="clearfix"></div>
 				<div class="article-wrapper">
 					<div class="edit-menu"
@@ -114,6 +109,9 @@
 					</div>
 					<form th:action="@{/board/{boardType}(boardType=${postInfoDto.boardType})}" method="get"
 						class="form-inline search-form justify-content-end">
+						<th:block th:if="${#request.getParameter('mode') == 'best'}">
+							<input type="hidden" class="form-control" name="mode" value="best">
+						</th:block>
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<select class="search-select" name="target" id="target">
