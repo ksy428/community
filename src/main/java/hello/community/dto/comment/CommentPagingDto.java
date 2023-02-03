@@ -2,6 +2,7 @@ package hello.community.dto.comment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
@@ -41,7 +42,7 @@ public class CommentPagingDto {
 		totalPageCount = searchResults.getTotalPages();
 		currentPageNum = searchResults.getNumber() + 1;
 		totalElementCount = searchResults.getTotalElements();
-		commentList = searchResults.getContent().stream().map(CommentBriefInfo::new).toList();
+		commentList = searchResults.getContent().stream().map(CommentBriefInfo::new).collect(Collectors.toList());
 		
 		pageNum = 10;
 		

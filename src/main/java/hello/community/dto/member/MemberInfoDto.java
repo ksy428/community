@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import hello.community.domain.comment.Comment;
 import hello.community.domain.member.Member;
@@ -31,8 +32,8 @@ public class MemberInfoDto {
 		this.email = member.getEmail();
 		this.createdDate = member.getCreatedDate();
 		this.postList = member.getPostList().stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()).limit(10)
-				.map(PostBriefInfo::new).toList();
+				.map(PostBriefInfo::new).collect(Collectors.toList());
 		this.commentList = member.getCommentList().stream().sorted(Comparator.comparing(Comment::getCreatedDate).reversed()).limit(10)
-				.map(CommentBriefInfo::new).toList();		
+				.map(CommentBriefInfo::new).collect(Collectors.toList());
 	}
 }

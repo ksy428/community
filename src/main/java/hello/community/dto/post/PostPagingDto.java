@@ -2,6 +2,7 @@ package hello.community.dto.post;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
@@ -44,7 +45,7 @@ public class PostPagingDto {
 		currentPageNum = searchResults.getNumber() + 1;
 		pageSize = searchResults.getSize();
 		totalElementCount = searchResults.getTotalElements();
-		postList = searchResults.getContent().stream().map(PostBriefInfo::new).toList();
+		postList = searchResults.getContent().stream().map(PostBriefInfo::new).collect(Collectors.toList());
 		//postList.stream().forEach(p -> p.setCreatedDate(DateUtil.calculateDate(p.getCreatedDate())));
 		
 		pageNum = 10;

@@ -1,7 +1,14 @@
 package hello.community.service.recommend;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import hello.community.dto.post.PostBriefInfo;
+import hello.community.exception.json.JsonException;
+import hello.community.exception.json.JsonExceptionType;
+import hello.community.service.message.MessageService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,11 +31,11 @@ import lombok.RequiredArgsConstructor;
 public class RecommendServiceImpl implements RecommendService{
 
 	private final RecommendRepository recommendRepository;
-	
 	private final MemberRepository memberRepository;
-	
 	private final PostRepository postRepository;
+	private final MessageService messageService;
 
+	private ObjectMapper objectMapper = new ObjectMapper();
 	@Override
 	@Transactional
 	public Long write(Long postId){
@@ -46,7 +53,10 @@ public class RecommendServiceImpl implements RecommendService{
 									.writer(member)
 									.post(post)
 									.build();			
-			post.addRecommend();			
+			post.addRecommend();
+
+			bestCheck(post);
+
 			recommendRepository.save(recommend);
 			
 			return post.getRecommend();
@@ -54,6 +64,30 @@ public class RecommendServiceImpl implements RecommendService{
 		// 중복 추천했을 경우
 		else {
 			throw new PostException(PostExceptionType.NOT_RECOMMAND_POST);
+		}
+	}
+
+	private void bestCheck(Post post){
+		
+		//이미 베스트게시글이면 리턴
+		if(post.isBest()) {
+			return;
+		}
+		else {
+			//베스트게시글로 승격할 경우
+			if (post.getRecommend() >= 1) {
+				//베스트게시글로 상태값 변경
+				post.setBest(LocalDateTime.now());
+				try {
+					//json 변환
+					String json = objectMapper.writeValueAsString(new PostBriefInfo(post));
+					//웹소켓으로 메시지알림
+					messageService.sendMessage(json);
+				}
+				catch (JacksonException e){
+					throw new JsonException(JsonExceptionType.FAIL_OBJECT_TO_JSON);
+				}
+			}
 		}
 	}
 }

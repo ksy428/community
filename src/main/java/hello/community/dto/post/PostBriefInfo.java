@@ -47,6 +47,7 @@ public class PostBriefInfo {
 		
 		List<Media> mediaList = post.getMediaList();
 			
+		//내용중 첫번째 이미지가 썸네일
 		for(Media media : mediaList) {
 			if(thumbnailFileName == null) {
 				thumbnailFileName = media.getStoreName();

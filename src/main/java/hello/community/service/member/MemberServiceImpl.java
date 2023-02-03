@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -139,7 +140,7 @@ public class MemberServiceImpl implements MemberService{
 			Member member = memberRepository.findByLoginId(loginMember.getUsername())
 							.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 				
-			subscribeList = member.getSubscribeList().stream().map( subscribe -> new SubscribeInfoDto(subscribe.getBoard())).toList();
+			subscribeList = member.getSubscribeList().stream().map( subscribe -> new SubscribeInfoDto(subscribe.getBoard())).collect(Collectors.toList());
 		}
 		
 		

@@ -157,10 +157,10 @@ class GlobalTest {
 		int size = 5;
 		//postList.stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()).limit(5).forEach(t -> System.out.println("제목:"+t.getTitle()));
 		List<PostBriefInfo> plist = postList.stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()).limit(5)
-				.map(PostBriefInfo::new).toList();
+				.map(PostBriefInfo::new).collect(Collectors.toList());
 		
 		List<CommentBriefInfo> clist = commentList.stream().sorted(Comparator.comparing(Comment::getCreatedDate).reversed()).limit(5)
-				.map(CommentBriefInfo::new).toList();
+				.map(CommentBriefInfo::new).collect(Collectors.toList());
 		
 		/*for(PostBriefInfo i : plist) {
 			System.out.println("제목:"+ i.getTitle());

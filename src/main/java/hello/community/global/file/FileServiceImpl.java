@@ -79,7 +79,6 @@ public class FileServiceImpl implements FileService {
 				File copyFile = new File(getFullPath(media.getStoreName()));
 				try {
 					Files.copy(tmpFile.toPath(), copyFile.toPath(),StandardCopyOption.REPLACE_EXISTING);
-					//Thumbnails.of(copyFile).size(70, 50).toFile(new File(getFullPath("t_"+ media.getStoreName())));
 					Thumbnails.of(copyFile).crop(Positions.CENTER).size(70, 50).toFile(new File(getFullPath("t_"+ media.getStoreName())));
 					deleteTmpFile(media.getStoreName());
 				} catch (IOException e) {

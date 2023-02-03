@@ -1,5 +1,6 @@
 package hello.community.service.post;
 
+import hello.community.service.message.MessageService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -44,7 +45,6 @@ public class PostServiceImpl implements PostService {
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
 	private final MediaRepository mediaRepository;
-
 	private final FileService fileService;
 
 	@Override

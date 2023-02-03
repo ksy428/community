@@ -84,19 +84,19 @@ public class Post extends BaseTimeEntity{
 		this.mediaList.clear();
 	}
 	
-	public void addHit() {
+	public void addHit()
+	{
 		this.hit += 1;
 	}
-	
 	public void addRecommend() {
 		this.recommend += 1;
-		
-		if(this.recommend >= 1) {
-			this.isBest = true;
-			this.bestDate = LocalDateTime.now();
-		}
 	}
-	
+
+	public void setBest(LocalDateTime now){
+		this.isBest = true;
+		this.bestDate = now;
+	}
+
 	public void setBoard(Board board) {
 		this.board = board;
 	}

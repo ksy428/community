@@ -60,7 +60,7 @@ public class InitDummyData {
 			 initBoard("best", "실시간 베스트");
 			 initBoard("free","자유");
 			 initBoard("humor","유머");
-			 initBoard("horor","공포");
+			 initBoard("horror","공포");
 			 initBoard("info","정보");
 			 initBoard("soccer","축구");
 			 initBoard("basketball","농구");
