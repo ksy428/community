@@ -39,8 +39,11 @@ dependencies {
 	
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
-    
+
+	implementation group: 'com.twelvemonkeys.imageio', name: 'imageio-core', version: '3.9.4'
     implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.19'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

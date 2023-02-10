@@ -85,9 +85,7 @@ public class PostServiceImpl implements PostService {
 		
 		List<Media> newMediaList = editDto.getNewMediaList();
 		List<Media> deleteMediaList = editDto.getDeleteMediaList();
-		
-		log.info("미디어리스트: {}",post.getMediaList().toString());
-		
+
 		//서버에서 파일삭제
 		if (!CollectionUtils.isEmpty(deleteMediaList)) {
 			for (Media media : deleteMediaList) {

@@ -60,6 +60,9 @@ public class PostBriefInfo {
 		if(thumbnailFileName == null) {
 			return null;
 		}
-		return "/file/t_" + thumbnailFileName;
+		int pos = thumbnailFileName.lastIndexOf(".");
+		thumbnailFileName = thumbnailFileName.substring(0,pos);
+
+		return "/file/t_" + thumbnailFileName +".png";
 	}
 }

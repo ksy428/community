@@ -32,7 +32,9 @@
 						</div>
 						<div class="info-row">
 							<div class="member-info">
-								<span th:text="${postInfoDto.memberInfoDto.nickname}"></span>
+								<a th:href="@{/member/{nickname}(nickname=${postInfoDto.memberInfoDto.nickname})}">
+									<span th:text="${postInfoDto.memberInfoDto.nickname}"></span>
+								</a>
 							</div>
 							<div class="article-info">
 								<span>추천 <b th:text="${postInfoDto.recommend}"></b></span>

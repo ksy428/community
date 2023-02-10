@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import hello.community.global.util.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -89,7 +90,7 @@ public class MemberController {
 			return "/member/editInfoForm";
 		}
 
-		memberService.editInfo(editInfoDto);
+		memberService.editInfo(editInfoDto , SecurityUtil.getLoginMemberId());
 
 		return "redirect:/member/edit/info";
 		
@@ -112,7 +113,7 @@ public class MemberController {
 			return "/member/editPasswordForm";
 		}
 
-		memberService.editPassword(editPWDto);
+		memberService.editPassword(editPWDto, SecurityUtil.getLoginMemberId());
 
 		return "redirect:/member/edit/info";
 

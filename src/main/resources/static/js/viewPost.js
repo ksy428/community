@@ -418,7 +418,9 @@ function viewCommentList(result){
 									'<div class="content"> \n';
 			if(!isDeleted){	//삭제되지않은 댓글만 추가내용		
 				commentList += 			'<div class="info-row clearfix"> \n'+
-											'<span class="user-info">'+ comment.writerNickname + '</span> \n'+
+				                            '<a href="/member/'+ comment.writerNickname +'"> \n'+
+											    '<span class="user-info">'+ comment.writerNickname + '</span> \n'+
+											'</a> \n'+
 											'<div class="right"> \n'+ 
 												'<span>'+ comment.createdDate +'</span> \n';
 				if(comment.writerLoginId == authId){//작성자만 수정,삭제 있음																	

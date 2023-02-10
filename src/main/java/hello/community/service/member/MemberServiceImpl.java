@@ -50,9 +50,10 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	@Transactional
-	public void editInfo(MemberEditDto editInfoDto){
+	public void editInfo(MemberEditDto editInfoDto, String loginId){
 
-		Member member = findOne(SecurityUtil.getLoginMemberId());
+		Member member = memberRepository.findByLoginId(SecurityUtil.getLoginMemberId())
+				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 
 		member.editNickname(editInfoDto.getNickname());
 		member.editEmail(editInfoDto.getEmail());
@@ -60,9 +61,10 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	@Transactional
-	public void editPassword(PasswordEditDto editPWDto){
+	public void editPassword(PasswordEditDto editPWDto, String loginId){
 
-		Member member = findOne(SecurityUtil.getLoginMemberId());
+		Member member = memberRepository.findByLoginId(SecurityUtil.getLoginMemberId())
+				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 
 		// 현재 비밀번호 틀림
 		if (!passwordEncoder.matches(editPWDto.getOriginPassword(), member.getPassword())) {
@@ -84,7 +86,8 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public MemberEditDto getEditInfo(){
 
-		Member member = findOne(SecurityUtil.getLoginMemberId());
+		Member member = memberRepository.findByLoginId(SecurityUtil.getLoginMemberId())
+				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 
 		return new MemberEditDto(member);
 	}
@@ -122,12 +125,6 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public Member findOne(String loginId){
-		return memberRepository.findByLoginId(loginId)
-				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
-	}
-
-	@Override
 	public List<SubscribeInfoDto> getSubcribeList() {
 			
 		List<SubscribeInfoDto> subscribeList = new ArrayList<>();
@@ -142,8 +139,6 @@ public class MemberServiceImpl implements MemberService{
 				
 			subscribeList = member.getSubscribeList().stream().map( subscribe -> new SubscribeInfoDto(subscribe.getBoard())).collect(Collectors.toList());
 		}
-		
-		
 		return subscribeList;
 	}
 }

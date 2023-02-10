@@ -9,14 +9,18 @@ import hello.community.dto.member.MemberSignUpDto;
 import hello.community.dto.member.PasswordEditDto;
 import hello.community.dto.subscribe.SubscribeInfoDto;
 import hello.community.exception.member.MemberException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 public interface MemberService {
 
 	void signUp(MemberSignUpDto signUpDto);
-	
-	void editInfo(MemberEditDto editInfoDto);
-	
-	void editPassword(PasswordEditDto editPWDto);
+
+	//@CacheEvict(value ="loginMember", key ="#p1")
+	void editInfo(MemberEditDto editInfoDto, String loginId);
+
+	//@CacheEvict(value ="loginMember", key ="#p1")
+	void editPassword(PasswordEditDto editPWDto, String loginId);
 	
 	MemberInfoDto getInfo(String nickName);
 	
@@ -27,9 +31,7 @@ public interface MemberService {
 	boolean isExistNickname(String newNickname);
 	
 	boolean isExistEmail(String newEmail);
-	
-	Member findOne(String loginId);
-	
+
 	List<SubscribeInfoDto> getSubcribeList();
 	
 }
