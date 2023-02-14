@@ -33,12 +33,9 @@ public class HomeController {
 			//, @AuthenticationPrincipal(expression = "#this =='anonymousUser' ? null : member") Member member){
 	
 		postSearch.setMode("best");
-		log.info("홈 서치: {}", postSearch);
 		
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, "main", postSearch, page);
-		
-		log.info("홈 게시글 목록 :{}", postPagingDto);
-		
+
 		model.addAttribute("postPagingDto",postPagingDto);
 		
 		return "home";

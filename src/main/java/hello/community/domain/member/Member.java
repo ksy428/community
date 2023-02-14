@@ -1,5 +1,6 @@
 package hello.community.domain.member;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseTimeEntity{
+public class Member extends BaseTimeEntity {
 
 	@Id
 	@Column(name = "member_id")

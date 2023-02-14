@@ -152,7 +152,7 @@ public class MemberController {
 	@GetMapping("/member/info/subscribe")
 	public ResponseEntity<List<SubscribeInfoDto>> getSubscribe() {
 		
-		return new ResponseEntity<>(memberService.getSubcribeList(), HttpStatus.OK);
+		return new ResponseEntity<>(memberService.getSubscribeList(), HttpStatus.OK);
 	}
 	
 }

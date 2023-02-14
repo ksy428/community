@@ -1281,8 +1281,60 @@ html.width-1300 .body .logo{
     color: #fbd100;
 }
 
+.board-visit-history {
+    background-color: #eee;
+    background-color: var(--color-bg-focus);
+    padding: 0.6em;
+    margin: 0;
+    font-size: .8rem;
+    position: relative;
+}
+
+.board-visit-history .board-visit-history__normal {
+    display: flex;
+    list-style: none;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.board-visit-history .board-visit-history__normal .board-visit-history__head {
+    margin-right: 1em;
+    cursor: default;
+    font-weight: 700;
+    user-select: none;
+}
+.board-visit-history .board-visit-history__normal .board-visit-history__list {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 0;
+}
+
+.board-visit-history .board-visit-history__normal .board-visit-history__list li {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.board-visit-history .board-visit-history__normal .board-visit-history__list a:visited,
+.board-visit-history .board-visit-history__normal .board-visit-history__list a:focus {
+    color: #000;
+    color: var(--color-text-color);
+}
 
 
+.board-visit-history .board-visit-history__normal .board-visit-history__list li span {
+    padding-left: 0.4em;
+    cursor: pointer;
+}
+
+.board-visit-history .board-visit-history__normal .board-visit-history__list a:hover {
+    text-decoration: underline
+}
+
+.btns-board{
+
+}
 
 html, html.theme-light { 
 	--color-bg-navbar: #3d414d; 
@@ -1333,9 +1385,7 @@ html, html.theme-light {
 	--color-point-color: #3d414d; 
 	--color-wiki-point-color: #71bc6d; 
 	--color-notification: #fbd100; 
-	--color-notification-tint: #fbd100; 
-	--image-fallback-link-card:
-		url('/static/assets/images/linkcard-light.png'); 
+	--color-notification-tint: #fbd100;
 	--color-tile-pattern-0: #f8f8f8; 
 	--color-tile-pattern-1: #EBE5FA; 
 	--color-tile-pattern-2: #CDC2FC; 

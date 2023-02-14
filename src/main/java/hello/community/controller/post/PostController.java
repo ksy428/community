@@ -44,9 +44,7 @@ public class PostController {
 	public String postListForm(@ModelAttribute PostSearch postSearch, Model model, Pageable pageable,
 			@PathVariable String boardType,
 			@RequestParam(required = false, defaultValue = "1", value = "p") int page) {
-		
-		log.info("서치: {}", postSearch);
-		log.info("게시판: {}", boardType);
+
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, boardType, postSearch, page);
 			
 		model.addAttribute("postPagingDto",postPagingDto);
@@ -125,8 +123,7 @@ public class PostController {
 	public ResponseEntity<PostPagingDto> postList(@ModelAttribute PostSearch postSearch, Pageable pageable,
 			@PathVariable String boardType,
 			@RequestParam(required = false, defaultValue = "1", value = "p") int page) {
-		
-		//log.info("서치: {}", postSearch);
+
 		PostPagingDto postPagingDto = postService.searchPostList(pageable, boardType, postSearch, page);				
 		
 		return new ResponseEntity<>(postPagingDto, HttpStatus.OK);

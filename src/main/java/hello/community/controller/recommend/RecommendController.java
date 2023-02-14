@@ -19,10 +19,9 @@ public class RecommendController {
 	
 	@PostMapping("/recommend/{postId}")
 	public ResponseEntity<Long> postRecommand(@PathVariable Long postId){
-		
-		log.info("아디: {}", postId);
+
 		Long recommendCount = recommendService.write(postId);
-		log.info("결과아디: {}", recommendCount);
+
 		return new ResponseEntity<>(recommendCount, HttpStatus.OK);
 	}
 }

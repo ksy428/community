@@ -36,7 +36,7 @@ function getBoardInfo(){
 				
 				let boardTitle = "";
 				boardTitle += '<a class="title" href="/board/'+ boardType +'"> <span>'+ result.boardName + '  </span></a> \n';
-				if(!result.subcribe){
+				if(!result.subscribe){
 					boardTitle += '<form class="subscribeForm" \n'+
 									'action="/board/'+ boardType +'/subscribe" method="post" > \n'+
 									'<a class="subscribe" href="#" title="즐겨찾기"><i class="bi-star"></i></a> \n'+

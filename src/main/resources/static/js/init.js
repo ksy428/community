@@ -4,7 +4,17 @@ $(document).ready(function(e){
 
     connectWs();
 	getSubscribeInfo();
+    getRecentBoard();
 
+    $(".body").on("click",".visit-link", function(e){
+    	e.preventDefault();
+
+    	let boardType = $(this).attr("data-target");
+
+    	$(this).closest("li").remove();
+
+        deleteRecentBoard(boardType);
+    });
 });
 
 function connectWs(){
@@ -47,13 +57,13 @@ function getSubscribeInfo(){
 			url: '/member/info/subscribe',
 			type: 'get',
 			dataType: 'json',
-			success: function(result){ //commentPagingDto 가져옴
+			success: function(result){
 				//alert(JSON.stringify(result));
 				let itemList ="";
 
 				if(result.length){
 				$.each(result, function(index, item) {
-					itemList += '<a class="dropdown-item" href="/board/'+ item.boardType +'">'+ item.boardName +'</a> \n'
+					itemList += '<a class="dropdown-item" href="/board/'+ item.boardType +'">'+ item.boardName +'</a> \n';
 				});
 				}
 				else{
@@ -68,3 +78,41 @@ function getSubscribeInfo(){
 	});
 }
 
+function getRecentBoard(){
+
+	$.ajax({
+			url: '/redis/recent-board',
+			type: 'get',
+			dataType: 'json',
+			success: function(result){ //List<BoardInfoDto> 가져옴
+
+			let recentBoardList ="";
+            $.each(result, function(index, board) {
+            	recentBoardList += '<li> \n'+
+            	                        '<a href="/board/'+ board.boardType +'">' + board.boardName +'</a> \n' +
+            	                        '<a href="#" class="visit-link" data-target="'+ board.boardType+'"> \n' +
+            	                            '<span> <i class="bi-x"> </i> </span> \n' +
+            	                        '</a> \n' +
+            	                   '</li> \n';
+            });
+
+            $('.board-visit-history__list').append(recentBoardList);
+
+			},
+			error : function(result){
+				alert(result.responseText);
+			}
+	});
+}
+
+function deleteRecentBoard(boardType){
+    $.ajax({
+    		url: '/redis/recent-board/delete/'+ boardType,
+    		type: 'get',
+    		success: function(result){
+    	    },
+    	    error : function(result){
+    			alert(result.responseText);
+    		}
+    });
+}

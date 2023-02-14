@@ -17,24 +17,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SubscribeController {
 
-	private final SubscribeService subcribeService;
+	private final SubscribeService subscribeService;
 	
 	@PostMapping("/board/{boardType}/subscribe")
 	public String subscribe(@PathVariable String boardType, HttpServletRequest request){
-		
-		log.info("구독성공!!!: {}", boardType);
-		
-		subcribeService.write(boardType);
+
+		subscribeService.write(boardType);
 		
 		return "redirect:" + request.getHeader("Referer");
 	}
 	
 	@DeleteMapping("/board/{boardType}/subscribe")
 	public String unsubscribe(@PathVariable String boardType, HttpServletRequest request){
-		
-		log.info("구독해지!!!: {}", boardType);
-		
-		subcribeService.delete(boardType);
+
+		subscribeService.delete(boardType);
 
 		return "redirect:" + request.getHeader("Referer");
 	}

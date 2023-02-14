@@ -34,9 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommentController {
 	
 	private final CommentService commentService;
-	
-	
-	
+
 	@GetMapping("/comment/{postId}")
 	public ResponseEntity<CommentPagingDto> commentList(Pageable pageable, @PathVariable Long postId,
 			@RequestParam(required = false, defaultValue = "1", value = "cp") int commentPage) {

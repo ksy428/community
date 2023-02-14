@@ -19,7 +19,6 @@ public interface MemberService {
 	//@CacheEvict(value ="loginMember", key ="#p1")
 	void editInfo(MemberEditDto editInfoDto, String loginId);
 
-	//@CacheEvict(value ="loginMember", key ="#p1")
 	void editPassword(PasswordEditDto editPWDto, String loginId);
 	
 	MemberInfoDto getInfo(String nickName);
@@ -32,6 +31,6 @@ public interface MemberService {
 	
 	boolean isExistEmail(String newEmail);
 
-	List<SubscribeInfoDto> getSubcribeList();
+	List<SubscribeInfoDto> getSubscribeList();
 	
 }

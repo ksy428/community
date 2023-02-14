@@ -34,10 +34,5 @@ public class MediaController {
 
 		return media;
 	}
-	/*@ResponseBody
-	@GetMapping("/media/{filename}")
-	public Resource downloadMedia(@PathVariable String filename) throws MalformedURLException{
-		log.info("풀패스 {}", fileService.getFullPath(filename));
-		return new UrlResource("file:" + fileService.getFullPath(filename));
-	}*/
+
 }

@@ -407,7 +407,7 @@ function viewCommentList(result){
 		$.each(result.commentList, function(index, comment) {
 		
 			let isParent = (comment.parentId  == null) ? true : false;
-			let isDeleted = (comment.isDeleted) ? true : false;
+			let isDeleted = (comment.deleted) ? true : false;
 		
 			let commentList ="";
 			let hierarchy = isParent ? '"parentcomment-wrapper"':'"recomment-wrapper"';

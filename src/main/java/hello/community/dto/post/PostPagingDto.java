@@ -81,7 +81,7 @@ public class PostPagingDto {
 			}
 		}	
 		
-		log.info("결과사이즈: {}", postList.size());
+		/*log.info("결과사이즈: {}", postList.size());
 		log.info("총 page 갯수 : {}", totalPageCount);
 		log.info("page 사이즈: {}", pageSize);
 		log.info("totalElementCount: {}", totalElementCount);
@@ -89,6 +89,6 @@ public class PostPagingDto {
 		log.info("start: {}", startPageNum);
 		log.info("end: {}", endPageNum);
 		log.info("hasPrev: {}", hasPrev);
-		log.info("hasNext: {}", hasNext);
+		log.info("hasNext: {}", hasNext);*/
 	}
 }

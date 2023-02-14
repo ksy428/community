@@ -1,11 +1,20 @@
 package hello.community.service.post;
 
+import hello.community.domain.board.Board;
+import hello.community.domain.member.Member;
+import hello.community.dto.board.BoardInfoDto;
+import hello.community.dto.subscribe.SubscribeInfoDto;
+import hello.community.global.redis.RedisService;
 import hello.community.service.message.MessageService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +55,7 @@ public class PostServiceImpl implements PostService {
 	private final MemberRepository memberRepository;
 	private final MediaRepository mediaRepository;
 	private final FileService fileService;
+	private final RedisService redisService;
 
 	@Override
 	@Transactional
@@ -129,8 +139,25 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public PostInfoDto view(Long postId) throws PostException {
+
 		Post post = findOne(postId);
+
 		post.addHit();
+
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		// 로그인했으면 최근방문기록 redis에 저장
+		if(!principal.equals("anonymousUser")) {
+			UserDetails loginMember = (UserDetails) principal;
+
+			Instant instant = Instant.now();
+			long timeStampMillis = instant.toEpochMilli();
+
+			BoardInfoDto boardInfoDto = new BoardInfoDto(post.getBoard());
+
+			redisService.setRecentBoard(loginMember.getUsername(), boardInfoDto, timeStampMillis);
+		}
+
 		return new PostInfoDto(post);
 	}
 
@@ -148,7 +175,22 @@ public class PostServiceImpl implements PostService {
 	public PostPagingDto searchPostList(Pageable pageable, String boardType, PostSearch postSearch, int page) {
 		
 		if(boardType != "main") {
-			boardRepository.findByBoardType(boardType).orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
+			Board board = boardRepository.findByBoardType(boardType)
+					.orElseThrow(() -> new BoardException(BoardExceptionType.NOT_FOUND_BOARD));
+
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+			// 로그인했으면 최근방문기록 redis에 저장
+			if(!principal.equals("anonymousUser")) {
+				UserDetails loginMember = (UserDetails) principal;
+
+				Instant instant = Instant.now();
+				long timeStampMillis = instant.toEpochMilli();
+
+				BoardInfoDto boardInfoDto = new BoardInfoDto(board);
+
+				redisService.setRecentBoard(loginMember.getUsername(), boardInfoDto, timeStampMillis);
+			}
 		}
 		
 		int size = 20;
@@ -165,7 +207,8 @@ public class PostServiceImpl implements PostService {
 			else {
 				pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  size, Sort.by("id").descending());
 			}
-		}			
+		}
+
 		return new PostPagingDto(postRepository.search(pageable, boardType, postSearch));
 	}
 

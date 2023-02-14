@@ -9,7 +9,7 @@
 			
 				<th:block th:replace="~{fragments/boardTitle::boardTitle}"></th:block>
 				
-				<div class="btns-board">
+				<div class="btns-board mb-5">
 					<div class="float-end" sec:authorize="isAuthenticated()">						
 						<a th:href="${#request.getRequestURI()} + '/write'" class="btn btn-navy btn-block btn-sm"> 글쓰기</a>
 					</div>
@@ -23,6 +23,19 @@
 					</div>			
 				</div>
 				<div class="clearfix"></div>
+
+				<!---->
+				<div class="board-visit-history">
+					<div class="board-visit-history__normal">
+						<div class="board-visit-history__head">
+							<span class="d-none d-md-inline">최근 방문</span>
+						</div>
+						<ul class="board-visit-history__list">
+						</ul>
+					</div>
+				</div>
+				<!---->
+
 				<div class="article-list">
 					<div class="list-table table">
 						<div class="vrow column head d-none d-md-flex">

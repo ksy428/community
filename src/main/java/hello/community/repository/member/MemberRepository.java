@@ -10,7 +10,8 @@ import hello.community.domain.member.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long>{
 
-	//@Cacheable(value ="loginMember", key ="#p0")
+	/*@Cacheable(value ="loginMember", key ="#p0")
+	@EntityGraph(attributePaths = {"subscribeList"})*/
 	Optional<Member> findByLoginId(String loginId);
 	
 	Optional<Member> findByNickname(String nickname);

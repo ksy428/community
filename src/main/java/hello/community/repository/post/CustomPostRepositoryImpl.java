@@ -66,7 +66,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository{
 	
 	private BooleanExpression eqBoardType(String boardType) {
 		
-		if(boardType.equals("main") || boardType.equals("best")) {
+		if(boardType.equals("main")) {
 			return null;
 		}
 		else {

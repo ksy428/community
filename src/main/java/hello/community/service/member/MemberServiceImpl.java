@@ -125,10 +125,25 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public List<SubscribeInfoDto> getSubcribeList() {
+	@Transactional
+	public List<SubscribeInfoDto> getSubscribeList() {
 			
 		List<SubscribeInfoDto> subscribeList = new ArrayList<>();
-		
+
+		/*try{
+			String loginId = SecurityUtil.getLoginMemberId();
+
+			Member member = memberRepository.findByLoginId(loginId)
+					.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
+
+			subscribeList = member.getSubscribeList().stream().map( subscribe -> new SubscribeInfoDto(subscribe.getBoard())).collect(Collectors.toList());
+
+		}catch (MemberException e){
+			return subscribeList;
+		}
+
+		return subscribeList;*/
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		if(!principal.equals("anonymousUser")) {

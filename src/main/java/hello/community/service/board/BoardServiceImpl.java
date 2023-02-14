@@ -57,7 +57,7 @@ public class BoardServiceImpl implements BoardService{
 							.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 			
 			if(subscribeRepository.findByWriterAndBoard(member, board).isPresent()) {
-				boardInfoDto.setSubcribe(true);
+				boardInfoDto.setSubscribe(true);
 			}
 		}
 					
