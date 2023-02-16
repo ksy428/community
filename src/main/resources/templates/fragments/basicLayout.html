@@ -30,7 +30,14 @@
 					<!--  비 로그인 -->
 					<div sec:authorize="isAnonymous()" class="sidebar-item">
 						<div class="item-title">Login</div>
-						<a href="/loginForm" class="btn btn-navy btn-block"> 로그인</a>		
+						<a href="/loginForm" class="btn btn-navy btn-block"> 로그인</a>
+						<div class="sub-menu">
+							<div class="left-menu"></div>
+							<div class="right-menu">
+								<a href="/member/signup"> <span>회원가입</span></a>
+							</div>
+							<div class="clearfix"></div>
+						</div>
 					</div>
 					
 					<!-- 인증 후 보임 -->		
@@ -38,10 +45,10 @@
 						<div class="item-title">Profile</div>
 						<div class="profile">
 							<div class="user-info">
-								<span sec:authentication="Principal.member.loginId"> </span>
+								<span sec:authentication="Principal.member.nickname"> </span>
 							</div>
 							<div class="info-details">
-								<a href="/member/짱짱"> <span>작성글</span> </a>
+								<a th:href="@{/member/{nickname}(nickname=${#authentication.principal.member.nickname})}"> <span>작성글</span> </a>
 								<span class="sep"></span>
 								<a href="/member/edit/info"> <span>정보수정</span> </a>
 							</div>

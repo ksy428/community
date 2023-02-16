@@ -130,7 +130,7 @@ public class FileServiceImpl implements FileService {
 		File thumbnailFile = new File(getFullPath("t_"+ extractFileName(storeName)+ ".png"));
 
 		if(deleteFile.exists()) {
-			if(!deleteFile.delete() || !thumbnailFile.delete()) {
+			if(!deleteFile.delete()) {
 				throw new FileException(FileExceptionType.FAIL_DELETE_FILE);
 			}
 		}

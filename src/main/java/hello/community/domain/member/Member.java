@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import hello.community.domain.BaseTimeEntity;
 import hello.community.domain.comment.Comment;
 import hello.community.domain.post.Post;
+import hello.community.domain.recommend.Recommend;
 import hello.community.domain.subscribe.Subscribe;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,6 +55,9 @@ public class Member extends BaseTimeEntity {
 	
 	@OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Subscribe> subscribeList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<Recommend> recommendListList = new ArrayList<>();
 	
 	@Builder
 	public Member(String loginId, String password, String nickname, String email) {

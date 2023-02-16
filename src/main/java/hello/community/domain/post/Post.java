@@ -21,6 +21,7 @@ import hello.community.domain.board.Board;
 import hello.community.domain.comment.Comment;
 import hello.community.domain.media.Media;
 import hello.community.domain.member.Member;
+import hello.community.domain.recommend.Recommend;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,7 +55,11 @@ public class Post extends BaseTimeEntity{
 	
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> commentList = new ArrayList<>();
-	
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<Recommend> recommendList = new ArrayList<>();
+
+
 	private Long hit;
 	
 	private Long recommend;

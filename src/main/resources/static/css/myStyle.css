@@ -1332,8 +1332,14 @@ html.width-1300 .body .logo{
     text-decoration: underline
 }
 
-.btns-board{
+.field-error {
+ 	border-color: #dc3545;
+ 	color: #dc3545;
+}
 
+.tip {
+    font-size: 0.8rem;
+    color: #999;
 }
 
 html, html.theme-light { 

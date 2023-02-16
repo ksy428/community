@@ -37,7 +37,7 @@ public class LogAop {
 
             return result;
         }catch (Throwable e){
-            e.printStackTrace();
+            //e.printStackTrace();
             logTrace.exception(status, e);
             throw e;
         }

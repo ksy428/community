@@ -10,16 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PasswordEditDto {
-
-	@NotBlank(message = "비밀번호를 입력하세요")
 	private String originPassword;
-	
-	@NotBlank(message = "새 비밀번호를 입력하세요")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$",message = "")
+
+	@NotBlank(message = "비밀번호는 필수 입니다.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d`~!@#$%^&*()-_=+]{8,20}$",
+			message = "8~20자에 최소 하나의 영문자 및 숫자를 포함해야 합니다")
 	private String newPassword;
-	
-	@NotBlank(message = "비밀번호 확인을 입력하세요")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$",message = "")
+
 	private String newPasswordConfirm;
 
 	@Builder

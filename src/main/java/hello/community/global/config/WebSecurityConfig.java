@@ -3,8 +3,15 @@ package hello.community.global.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,7 +22,7 @@ import hello.community.global.security.UserDetailsServiceImpl;
 
 @EnableWebSecurity
 @Configuration
-public class WebSecurityConfig{
+public class WebSecurityConfig {
 	
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
@@ -24,10 +31,25 @@ public class WebSecurityConfig{
 	public PasswordEncoder passwordEncoder() {
 	      return new BCryptPasswordEncoder();
 	}
-	
+
+	// AuthenticationManager 커스텀
+	// 시큐리티는 인증이 완료되면 Credentials(인증서)를 지워버리는데 회원정보 변경 후 세션 갱신을 위해서
+	// eraseCredentials(false)을 설정해서 지우지 않도록 함
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		http
+	public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+		authenticationManagerBuilder.eraseCredentials(false)
+				.userDetailsService(userDetailsServiceImpl)
+				.passwordEncoder(passwordEncoder());
+
+		return authenticationManagerBuilder.build();
+	}
+
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception{
+
+		//커스텀한 AuthenticationManager 등록
+		http.authenticationManager(authenticationManager)
 			.csrf().disable()
 				.authorizeHttpRequests()
 				.antMatchers("/").permitAll()
@@ -52,7 +74,8 @@ public class WebSecurityConfig{
 				.tokenValiditySeconds(86400 * 30)
 				.userDetailsService(userDetailsServiceImpl)
 				.authenticationSuccessHandler(customLoginSuccessHandler());
-		
+
+
 		return http.build();
 	}
 	

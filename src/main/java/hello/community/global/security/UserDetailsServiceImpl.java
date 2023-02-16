@@ -25,8 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
 		
 		Member member = memberRepository.findByLoginId(loginId)
-				.orElseThrow(()->new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));				
-		
+				.orElseThrow(()->new UsernameNotFoundException("존재하지 않은 아이디입니다"));
+
 		return new UserDetailsImpl(member);
 			
 	}

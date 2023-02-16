@@ -49,13 +49,16 @@ public class RecommendServiceImpl implements RecommendService{
 		
 		// 처음 추천했을 경우 
 		if(result.isEmpty()) {
-			Recommend recommend = Recommend.builder()
-									.writer(member)
-									.post(post)
-									.build();			
+
+			Recommend recommend = new Recommend();
+
 			post.addRecommend();
 
 			bestCheck(post);
+
+			//연관관계메서드
+			recommend.setWriter(member);
+			recommend.setPost(post);
 
 			recommendRepository.save(recommend);
 			

@@ -16,10 +16,11 @@ public interface MemberService {
 
 	void signUp(MemberSignUpDto signUpDto);
 
-	//@CacheEvict(value ="loginMember", key ="#p1")
-	void editInfo(MemberEditDto editInfoDto, String loginId);
+	void editInfo(MemberEditDto editInfoDto);
 
-	void editPassword(PasswordEditDto editPWDto, String loginId);
+	void editPassword(PasswordEditDto editPWDto);
+
+	void withdraw(String passwordCheck);
 	
 	MemberInfoDto getInfo(String nickName);
 	
@@ -27,9 +28,15 @@ public interface MemberService {
 	
 	boolean isExistLoginId(String loginId);
 	
-	boolean isExistNickname(String newNickname);
+	boolean isExistNickname(String nickname);
 	
-	boolean isExistEmail(String newEmail);
+	boolean isExistEmail(String email);
+
+	boolean isEditNickname(String nickname);
+
+	boolean isEditEmail(String email);
+
+	boolean matchPassword(String password);
 
 	List<SubscribeInfoDto> getSubscribeList();
 	

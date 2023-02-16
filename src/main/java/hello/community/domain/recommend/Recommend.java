@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor()
 public class Recommend {
 
 	@Id
@@ -27,18 +27,24 @@ public class Recommend {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "member_id")
 	private Member writer;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "post_id")
 	private Post post;
-	
-	
-	@Builder
-	Recommend(Member writer, Post post){
+
+
+
+	// 연관관계메서드
+	public void setWriter(Member writer) {
 		this.writer = writer;
+		writer.getRecommendListList().add(this);
+	}
+
+	public void setPost(Post post) {
 		this.post = post;
+		post.getRecommendList().add(this);
 	}
 }

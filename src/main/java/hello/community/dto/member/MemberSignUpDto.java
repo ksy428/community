@@ -16,17 +16,16 @@ import lombok.NoArgsConstructor;
 public class MemberSignUpDto {
 
 	@NotBlank(message = "아이디는 필수 입니다")
-	@Size(min = 4, max = 12, message ="아이디를 4~12자 이내로 입력하셔야 합니다")
+	@Pattern(regexp = "^(?=.*[A-Za-z])[A-Za-z\\d]{4,12}$",
+			message = "4~12자에 최소 하나의 영문자를 포함해야 합니다")
 	private String loginId;
 	
 	@NotBlank(message = "비밀번호는 필수 입니다.")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$",
-			message = "비밀번호는 8~20자에 최소 하나의 문자 및 숫자여야 합니다")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d`~!@#$%^&*()-_=+]{8,20}$",
+			message = "8~20자에 최소 하나의 영문자 및 숫자를 포함해야 합니다")
 	private String password;
 	
 	@NotBlank(message = "비밀번호는 필수 입니다.")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$",
-			message = "비밀번호는 8~20자에 최소 하나의 문자 및 숫자여야 합니다")
 	private String passwordConfirm;
 	
 	@NotBlank(message = "닉네임은 필수 입니다")
