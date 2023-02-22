@@ -71,7 +71,8 @@ $(document).ready(function(e){
 				location.replace(url);
 			},
 			error : function(result){
-				alert(result.responseText);
+				let errors = JSON.parse(result.responseText);
+				errors.errorMessage.forEach(error => alert(error));
 			}
 		}); 
 	});

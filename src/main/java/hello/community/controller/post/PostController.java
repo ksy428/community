@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import hello.community.dto.valid.ValidErrorDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,19 +53,24 @@ public class PostController {
 		
 		return "post/listPost";
 	}
-	
-	
+
+
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/board/{boardType}/write")
-	public String writeForm(@ModelAttribute PostWriteDto writeDto) {	
+	public String writeForm(@ModelAttribute PostWriteDto writeDto) {
+
 		return "post/writePostForm";
 	}
 	
 	@PostMapping("/board/{boardType}/write")
 	@ResponseBody
-	public ResponseEntity<Long> write(@Valid @RequestBody PostWriteDto writeDto, BindingResult result, @PathVariable String boardType){
+	public ResponseEntity<Object> write(@Valid @RequestBody PostWriteDto writeDto, BindingResult result, @PathVariable String boardType){
 
 		if(result.hasErrors()){
-			//return "error";
+
+			ValidErrorDto validErrorDto = new ValidErrorDto(result.getAllErrors());
+
+			return new ResponseEntity<>(validErrorDto, HttpStatus.BAD_REQUEST);
 		}
 		
 		writeDto.initDto(boardType);
@@ -95,10 +102,12 @@ public class PostController {
 	
 	@ResponseBody
 	@PutMapping("/board/{boardType}/{postId}/edit")
-	public ResponseEntity<Long> edit(@PathVariable Long postId, @Valid @RequestBody PostEditDto editDto, BindingResult result) {
+	public ResponseEntity<Object> edit(@PathVariable Long postId, @Valid @RequestBody PostEditDto editDto, BindingResult result) {
 			
 		if(result.hasErrors()) {
-			//return "post/editPostForm";
+			ValidErrorDto validErrorDto = new ValidErrorDto(result.getAllErrors());
+
+			return new ResponseEntity<>(validErrorDto, HttpStatus.BAD_REQUEST);
 		}
 		
 		editDto.setMediaList(postService.findOne(postId).getMediaList());

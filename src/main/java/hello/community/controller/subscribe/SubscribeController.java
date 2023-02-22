@@ -3,6 +3,7 @@ package hello.community.controller.subscribe;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class SubscribeController {
 
 	private final SubscribeService subscribeService;
-	
+
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/board/{boardType}/subscribe")
 	public String subscribe(@PathVariable String boardType, HttpServletRequest request){
 

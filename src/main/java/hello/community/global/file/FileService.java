@@ -19,5 +19,7 @@ public interface FileService {
 	void deleteFile(String storeName) throws FileException;
 	
 	void deleteTmpFile(String fileName) throws FileException;
+
+	void deleteTmpFolder() throws FileException;
 	
 }

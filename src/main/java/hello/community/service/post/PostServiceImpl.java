@@ -50,6 +50,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PostServiceImpl implements PostService {
 
+	public static final int POST_PAGING_SIZE = 20;
 	private final PostRepository postRepository;
 	private final BoardRepository boardRepository;
 	private final MemberRepository memberRepository;
@@ -193,19 +194,18 @@ public class PostServiceImpl implements PostService {
 			}
 		}
 		
-		int size = 20;
-		
 		//mode가 best가 아닌 다른값이오면 디폴트로 게시글 번호로 정렬
 		if(!StringUtils.hasText(postSearch.getMode())) {
-			pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  size, Sort.by("id").descending());
+
+			pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  POST_PAGING_SIZE, Sort.by("id").descending());
 		}
 		//인기글은 인기글로 올라갔을때 시간기준으로 내림차순
 		else { 
 			if(postSearch.getMode().equals("best")){
-				pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  size, Sort.by("best").descending());
+				pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  POST_PAGING_SIZE, Sort.by("best").descending());
 			}
 			else {
-				pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  size, Sort.by("id").descending());
+				pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  POST_PAGING_SIZE, Sort.by("id").descending());
 			}
 		}
 

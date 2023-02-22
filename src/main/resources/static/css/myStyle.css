@@ -357,10 +357,23 @@ html.width-1300 .body .content-wrapper, html.width-1300 .body .navbar-wrapper .n
 }
 
 .body .board-article .pagination .page-item.active .page-link {
-    border-color: #00a495;
-    background-color: #eee;
-    background-color: var(--color-bg-focus);
+
+    color: #fff !important;
+    border-image: none !important;
+    background-image: none !important;
+    border: 0.1em solid rgb(40, 40, 50);
+    background-color: rgb(50, 60, 70);
 }
+
+.body .board-article .pagination .page-item .page-link:hover {
+    background-color: #eee;
+    background-color: var(--color-bg-focus)
+}
+
+.body .board-article .pagination .page-item.active .page-link:hover {
+    background-color: rgb(50, 60, 70);
+}
+
 
 .reply-form {
 	margin: 1em 0 1em 2em

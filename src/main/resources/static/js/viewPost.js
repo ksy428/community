@@ -222,7 +222,8 @@ function writeComment(form){
 				resolve(result);
 			},
 			error : function(result){
-				alert(result.responseText);
+				let errors = JSON.parse(result.responseText);
+                errors.errorMessage.forEach(error => alert(error));
 			}
 		});		
 	});
@@ -244,7 +245,8 @@ function editComment(form){
 				resolve(result);
 			},
 			error : function(result){
-				alert(result.responseText);
+				let errors = JSON.parse(result.responseText);
+                errors.errorMessage.forEach(error => alert(error));
 			}
 		});		
 	});

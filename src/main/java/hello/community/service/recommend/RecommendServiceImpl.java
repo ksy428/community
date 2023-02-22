@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class RecommendServiceImpl implements RecommendService{
 
+	public static final int BEST_RECOMMEND_COUNT = 3;
 	private final RecommendRepository recommendRepository;
 	private final MemberRepository memberRepository;
 	private final PostRepository postRepository;
@@ -78,7 +79,7 @@ public class RecommendServiceImpl implements RecommendService{
 		}
 		else {
 			//베스트게시글로 승격할 경우
-			if (post.getRecommend() >= 1) {
+			if (post.getRecommend() >= BEST_RECOMMEND_COUNT) {
 				//베스트게시글로 상태값 변경
 				post.setBest(LocalDateTime.now());
 				try {

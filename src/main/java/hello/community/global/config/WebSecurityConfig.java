@@ -5,9 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
@@ -19,8 +21,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import hello.community.global.security.CustomLoginFailureHandler;
 import hello.community.global.security.CustomLoginSuccessHandler;
 import hello.community.global.security.UserDetailsServiceImpl;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @Configuration
 public class WebSecurityConfig {
 	
@@ -39,10 +45,31 @@ public class WebSecurityConfig {
 	public AuthenticationManager authManager(HttpSecurity http) throws Exception {
 		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
 		authenticationManagerBuilder.eraseCredentials(false)
+				.authenticationProvider(rememberMeAuthenticationProvider())
 				.userDetailsService(userDetailsServiceImpl)
 				.passwordEncoder(passwordEncoder());
 
 		return authenticationManagerBuilder.build();
+	}
+
+	@Bean
+	public RememberMeServices tokenBasedRememberMeServices() {
+		TokenBasedRememberMeServices tokenBasedRememberMeServices = new TokenBasedRememberMeServices("seyoung", userDetailsServiceImpl);
+		tokenBasedRememberMeServices.setAlwaysRemember(true);
+		tokenBasedRememberMeServices.setParameter("remember-me");
+		tokenBasedRememberMeServices.setTokenValiditySeconds(86400 * 30);
+
+		return tokenBasedRememberMeServices;
+	}
+
+	@Bean
+	public RememberMeAuthenticationFilter rememberMeAuthenticationFilter(AuthenticationManager authenticationManager, RememberMeServices rememberMeServices){
+
+		return new RememberMeAuthenticationFilter(authenticationManager, rememberMeServices);
+	}
+	@Bean
+	public RememberMeAuthenticationProvider rememberMeAuthenticationProvider(){
+		return new RememberMeAuthenticationProvider("seyoung");
 	}
 
 	@Bean
@@ -68,17 +95,16 @@ public class WebSecurityConfig {
 				.logout()
 				.logoutSuccessUrl("/")
 			.and()
-				.rememberMe()
-				.key("seyoung")
-				.rememberMeParameter("remember-me")
-				.tokenValiditySeconds(86400 * 30)
-				.userDetailsService(userDetailsServiceImpl)
-				.authenticationSuccessHandler(customLoginSuccessHandler());
-
+				.exceptionHandling().accessDeniedPage("/login")
+			.and()
+				.rememberMe().key("seyoung")
+				.authenticationSuccessHandler(customLoginSuccessHandler())
+			.and()
+				.addFilter(rememberMeAuthenticationFilter(authenticationManager, tokenBasedRememberMeServices()));
 
 		return http.build();
 	}
-	
+
 	@Bean
 	public CustomLoginSuccessHandler customLoginSuccessHandler() {
 		return new CustomLoginSuccessHandler();

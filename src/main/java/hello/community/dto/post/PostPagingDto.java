@@ -34,7 +34,7 @@ public class PostPagingDto {
 	// 종료 페이지 번호
 	private int endPageNum;
 	// 페이지 버튼 개수
-	private int pageNum;
+	private int pageNum = 10;
 	
 
 	private List<PostBriefInfo> postList = new ArrayList<>();
@@ -46,10 +46,7 @@ public class PostPagingDto {
 		pageSize = searchResults.getSize();
 		totalElementCount = searchResults.getTotalElements();
 		postList = searchResults.getContent().stream().map(PostBriefInfo::new).collect(Collectors.toList());
-		//postList.stream().forEach(p -> p.setCreatedDate(DateUtil.calculateDate(p.getCreatedDate())));
-		
-		pageNum = 10;
-		
+
 		// 현재페이지가 페이지버튼 개수 중간값 보다 작을 경우 ( ex: [1] ~ [현재페이지] ~ [10])    
 		if(currentPageNum <= pageNum / 2) {
 			// 현재페이지와 총 페이지 개수를 이용해 페이지버튼 start,end 인덱스 부여

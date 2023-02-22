@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import hello.community.dto.valid.ValidErrorDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,22 +46,26 @@ public class CommentController {
 	}
 	
 	@PostMapping(value = {"/comment/{postId}","/comment/{postId}/{commentId}"})
-	public ResponseEntity<Long> write(@Valid @RequestBody CommentWriteDto writeDto, BindingResult result
+	public ResponseEntity<Object> write(@Valid @RequestBody CommentWriteDto writeDto, BindingResult result
 			,@PathVariable Long postId ,@PathVariable(required = false) Optional<Long> commentId) {
 		
 		if(result.hasErrors()){
-			return null;
+			ValidErrorDto validErrorDto = new ValidErrorDto(result.getAllErrors());
+
+			return new ResponseEntity<>(validErrorDto, HttpStatus.BAD_REQUEST);
 		}		 		
 
 		return new ResponseEntity<>(commentService.write(postId, commentId, writeDto), HttpStatus.OK);
 	}
 	
 	@PutMapping("/comment/{commentId}")
-	public ResponseEntity<Long> edit(@Valid @RequestBody CommentEditDto editDto, BindingResult result
+	public ResponseEntity<Object> edit(@Valid @RequestBody CommentEditDto editDto, BindingResult result
 			,@PathVariable Long commentId) {
 		
 		if(result.hasErrors()){
-			return null;
+			ValidErrorDto validErrorDto = new ValidErrorDto(result.getAllErrors());
+
+			return new ResponseEntity<>(validErrorDto, HttpStatus.BAD_REQUEST);
 		}
 		
 		return new ResponseEntity<>(commentService.edit(commentId, editDto), HttpStatus.OK);

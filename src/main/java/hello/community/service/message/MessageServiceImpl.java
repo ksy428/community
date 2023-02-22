@@ -20,7 +20,6 @@ public class MessageServiceImpl implements MessageService{
     @Override
     public void sendMessage(String message){
 
-        log.info("알림: {}", message);
         brokerMessagingTemplate.convertAndSend("/topic/main",message);
     }
 }

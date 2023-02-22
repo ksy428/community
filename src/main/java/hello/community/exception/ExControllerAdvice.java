@@ -41,21 +41,12 @@ public class ExControllerAdvice {
 			if (statusCode == HttpStatus.FORBIDDEN) {
                 return ERROR_PATH + "403";
             }
-
-            // 404 에러
-            if (statusCode == HttpStatus.NOT_FOUND) {
+            else if (statusCode == HttpStatus.NOT_FOUND) {
                 return ERROR_PATH + "404";
             }
-
-            // 500 에러
-            if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) {
+            else{
                 return ERROR_PATH + "500";
             }
-			
-			/*model.addAttribute("message", e.getExceptionType().getErrorMessage());
-			model.addAttribute("uri", request.getRequestURI());*/
-			
-			return "error";
 		}
 		
 	}

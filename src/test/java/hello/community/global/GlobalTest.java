@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
+import hello.community.global.file.FileService;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,8 @@ class GlobalTest {
 	EntityManager em;
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	@Autowired
+	FileService fileService;
 
 	@Test
 	void 시간테스트() {
@@ -142,34 +145,30 @@ class GlobalTest {
 	}
 	
 	@Test
-	
 	void 멤버() {
-		Member member = memberRepository.findByNickname("짱짱")
+		/*Member member = memberRepository.findByNickname("짱짱")
 				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
-		
-		
-		//MemberInfoDto infoDto = new MemberInfoDto();
+
 		List<Post> postList = member.getPostList();
 		List<Comment> commentList = member.getCommentList();
-		//member.getPostList().stream().collect(Collections.reverse(postList));
-		//postList.stream().forEach(t -> System.out.println("제목:"+t.getTitle()));
-		//Collections.reverse(postList);
+
 		int size = 5;
-		//postList.stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()).limit(5).forEach(t -> System.out.println("제목:"+t.getTitle()));
+
 		List<PostBriefInfo> plist = postList.stream().sorted(Comparator.comparing(Post::getCreatedDate).reversed()).limit(5)
 				.map(PostBriefInfo::new).collect(Collectors.toList());
 		
 		List<CommentBriefInfo> clist = commentList.stream().sorted(Comparator.comparing(Comment::getCreatedDate).reversed()).limit(5)
 				.map(CommentBriefInfo::new).collect(Collectors.toList());
-		
-		/*for(PostBriefInfo i : plist) {
-			System.out.println("제목:"+ i.getTitle());
-		}*/
+
 		for(CommentBriefInfo i : clist) {
 			System.out.println("제목:"+ i.getContent());
-		}
-		//postList.stream().forEach(t -> System.out.println("제목:"+t.getTitle()));
-		//member.getPostList().stream().map(null);
+		}*/
+	}
+
+	@Test
+	void 스케줄러파일삭제(){
+
+		fileService.deleteTmpFolder();
 	}
 
 }

@@ -10,9 +10,11 @@
 				<th:block th:replace="~{fragments/boardTitle::boardTitle}"></th:block>
 				
 				<div class="btns-board mb-5">
-					<div class="float-end" sec:authorize="isAuthenticated()">						
+					<!--<div class="float-end" sec:authorize="isAuthenticated()">-->
+					<div class="float-end">
 						<a th:href="${#request.getRequestURI()} + '/write'" class="btn btn-navy btn-block btn-sm"> 글쓰기</a>
 					</div>
+					<!--</div>-->
 					<div class="float-start">
 						<a th:href="${#request.getRequestURI()}" class="btn btn-mode btn-sm">
 							<span> 전체글</span>

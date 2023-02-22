@@ -31,7 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional(readOnly = true)
 @Slf4j
 public class CommentServiceImpl implements CommentService{
-	
+
+	public static final int COMMENT_PAGING_SIZE = 50;
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
 	private final MemberRepository memberRepository;
@@ -145,7 +146,7 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	public CommentPagingDto searchCommentList(Pageable pageable, Long postId, int page) {
-		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 ,  50);		
+		pageable = PageRequest.of( page > 0 ? (page - 1) : 0 , COMMENT_PAGING_SIZE);
 		return new CommentPagingDto(commentRepository.search(pageable, postId));
 	}
 }

@@ -2,6 +2,8 @@ package hello.community.controller.member;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import hello.community.domain.member.Member;
@@ -73,7 +75,7 @@ public class MemberController {
 	}
 
 	@PutMapping("/member/edit/info")
-	public String editMember(@Valid @ModelAttribute MemberEditDto editInfoDto, BindingResult result){
+	public String editMember(@Valid @ModelAttribute MemberEditDto editInfoDto, BindingResult result, HttpServletResponse response){
 
 		if(memberService.isEditNickname(editInfoDto.getNickname())) {
 			if (memberService.isExistNickname(editInfoDto.getNickname())) {
@@ -92,6 +94,11 @@ public class MemberController {
 
 		memberService.editInfo(editInfoDto);
 
+		/*Cookie rememberCookie = new Cookie("remember-me", null);
+		rememberCookie.setMaxAge(0);
+		rememberCookie.setPath("/");
+		response.addCookie(rememberCookie);
+*/
 		return "redirect:/member/edit/info";
 		
 	}

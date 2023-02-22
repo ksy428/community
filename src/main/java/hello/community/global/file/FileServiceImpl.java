@@ -6,12 +6,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +36,7 @@ import javax.imageio.stream.ImageInputStream;
 @Slf4j
 public class FileServiceImpl implements FileService {
 
+	public static final int DELETE_SEC = 60 * 60 * 24; // 24시간
 	@Value("${file.dir}")
 	private String fileDir;
 	
@@ -153,6 +158,41 @@ public class FileServiceImpl implements FileService {
 				throw new FileException(FileExceptionType.FAIL_DELETE_FILE);
 			}
 		}
+	}
+
+
+	/***
+	 * 임시파일스케줄러삭제 ,
+	 * 스케줄러로 임시파일폴더의 파일들을 가져온 후 그 파일의
+	 * 초로 환산한 수정 날짜가 DELETE_SEC보다 크면 삭제한다
+	 */
+	@Override
+	public void deleteTmpFolder() throws FileException{
+		File folder = new File(tmpFileDir);
+
+		if (!folder.isDirectory()) return;
+
+		for(File file : folder.listFiles()){
+			try {
+				long fModify = getSecondsFromModification(file);
+				if (fModify > DELETE_SEC) {
+					file.delete();
+				}
+			}
+			catch (IOException e) {
+				throw new FileException(FileExceptionType.FAIL_DELETE_FILE);
+			}
+		}
+	}
+
+	// 파일의 수정한 날짜를 현재 시간 대비 경과 시간을 초로 환산 하여 리턴
+	private static long getSecondsFromModification(File file) throws IOException {
+
+		Path attribPath = file.toPath();
+
+		BasicFileAttributes basicAttribs = Files.readAttributes(attribPath, BasicFileAttributes.class);
+
+		return (System.currentTimeMillis() - basicAttribs.lastModifiedTime().to(TimeUnit.MILLISECONDS)) / 1000;
 	}
 
 	public String createStoreFileName(String originalFilename) {

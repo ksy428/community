@@ -1,0 +1,59 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  banner:
+    location: dev-banner.txt
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/community
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        default_batch_fetch_size: 1000
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  cache:
+    redis:
+      time-to-live: 86400000
+
+  redis:
+    port: 6379
+    host: 127.0.0.1
+
+logging:
+  level:
+    p6spy: debug
+
+    org:
+      apache:
+        coyote:
+          http11: debug
+      hibernate.SQL: debug
+  file:
+    path: E:/Development/eclipse-workspace/storage/log
+  #org.hibernate.SQL: debug
+  #org.hibernate.type.descriptor.sql: trace
+  #org.hibernate.type: trace
+
+
+file:
+  dir: E:/Development/eclipse-workspace/storage/file/
+  tmpdir: E:/Development/eclipse-workspace/storage/tmp/

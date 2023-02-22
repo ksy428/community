@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,6 +66,10 @@ public class MemberServiceImpl implements MemberService{
 		
 		// 회원정보 변경 후 세션 갱신
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//remember-me로 자동로그인 시 세션 갱신, 나중에 하기
+		if(auth instanceof RememberMeAuthenticationToken){
+			return;
+		}
 		Authentication newAuth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials()));
 		SecurityContextHolder.getContext().setAuthentication(newAuth);
 
@@ -76,11 +81,6 @@ public class MemberServiceImpl implements MemberService{
 
 		Member member = memberRepository.findByLoginId(SecurityUtil.getLoginMemberId())
 				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
-
-		/*// 현재 비밀번호 틀림
-		if (!passwordEncoder.matches(editPWDto.getOriginPassword(), member.getPassword())) {
-			throw new MemberException(MemberExceptionType.WRONG_PASSWORD);
-		}*/
 
 		member.editPassword(passwordEncoder.encode(editPWDto.getNewPassword()));
 

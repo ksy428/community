@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,16 +43,25 @@ public class HomeController {
 	}
 	
 	@GetMapping("/loginForm")
-	public String login(HttpServletRequest request, Model model) {
-		
-		
+	public String login(HttpServletRequest request, Model model, Authentication authentication,
+						@RequestParam(value = "error", required = false) String error,
+						@RequestParam(value = "exception", required = false) String exception){
+
+		// 이미 로그인이면 return
+		if(authentication!=null) {
+			return "/login/duplicateLoginAlert";
+		}
+
 		String uri = request.getHeader("Referer");
 
 		if (uri != null && !uri.contains("/login")) {
 			request.getSession().setAttribute("prevPage", uri);
 		}
 
-		return "login/loginForm";
+		model.addAttribute("error", error);
+		model.addAttribute("exception", exception);
+
+		return "/login/loginForm";
 	}
 	
 

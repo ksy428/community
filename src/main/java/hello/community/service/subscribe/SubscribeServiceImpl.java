@@ -52,9 +52,9 @@ public class SubscribeServiceImpl implements SubscribeService{
 			subscribeRepository.save(subscribe);
 	
 		}
-		else {
+		/*else {
 			throw new BoardException(BoardExceptionType.OVERLAP_SUBSCRIBE_BOARD);
-		}
+		}*/
 	}
 
 
