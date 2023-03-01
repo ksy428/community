@@ -5,7 +5,7 @@
 
 <ul dir="auto">
 	<li>인터넷 커뮤니티 프로젝트</li>
-	<li>게시판 CRUD, 추천, 구독 기능</li>
+	<li>다중 게시판 CRUD, 추천, 구독 기능</li>
 	<li>Redis를 이용한 최근 방문 게시판 history 기능</li>
 	<li>Websocket을 통한 알림 기능</li>
 	<li>Aop를 이용한 로그</li>
