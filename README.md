@@ -8,6 +8,11 @@
 	<img src="https://img.shields.io/badge/Gradle-02303A.svg?&amp;style=for-the-badge&amp;logo=Gradle&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/MySQL-4479A1.svg?&amp;style=for-the-badge&amp;logo=MySQL&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/Redis-DC382D.svg?&amp;style=for-the-badge&amp;logo=Redis&amp;logoColor=white" style="max-width: 100%;">
+	<img src="https://img.shields.io/badge/Thymeleaf-005F0F.svg?&amp;style=for-the-badge&amp;logo=Redis&amp;logoColor=white" style="max-width: 100%;">
+	<img src="https://img.shields.io/badge/JPA-59666C.svg?&amp;style=for-the-badge&amp;logo=Hibernate&amp;logoColor=white" style="max-width: 100%;">
+</div>
+<div>
+	
 </div>
 
 # ERD
