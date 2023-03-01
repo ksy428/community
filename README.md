@@ -3,7 +3,7 @@
 # Stack
 <div>
 	<img src="https://img.shields.io/badge/Java-007396?style=flat&logo=Java&logoColor=white" />
-	<img src="https://img.shields.io/badge/Spring Boot-#6DB33F?style=flat&logo=Spring Boot&logoColor=white" />
+	<img alt="Spring_Boot"src="https://img.shields.io/badge/Spring_Boot-6DB33F.svg?&amp;style=for-the-badge&amp;logo=Spring-Boot&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=CSS3&logoColor=white" />
 </div>
 
