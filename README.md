@@ -22,9 +22,10 @@
 	<img src="https://img.shields.io/badge/Spring_Boot-6DB33F.svg?&amp;style=for-the-badge&amp;logo=Spring-Boot&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/Spring_Security-6DB33F.svg?&amp;style=for-the-badge&amp;logo=Spring-Securityt&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/Gradle-02303A.svg?&amp;style=for-the-badge&amp;logo=Gradle&amp;logoColor=white" style="max-width: 100%;">
-	<img src="https://img.shields.io/badge/MySQL-4479A1.svg?&amp;style=for-the-badge&amp;logo=MySQL&amp;logoColor=white" style="max-width: 100%;">
+	<img src="https://img.shields.io/badge/JavaScript-F7DF1E.svg?&amp;style=for-the-badge&amp;logo=JavaScript&amp;logoColor=white" style="max-width: 100%;">
 </div>	
 <div>
+	<img src="https://img.shields.io/badge/MySQL-4479A1.svg?&amp;style=for-the-badge&amp;logo=MySQL&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/Redis-DC382D.svg?&amp;style=for-the-badge&amp;logo=Redis&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/Thymeleaf-005F0F.svg?&amp;style=for-the-badge&amp;logo=Redis&amp;logoColor=white" style="max-width: 100%;">
 	<img src="https://img.shields.io/badge/JPA-59666C.svg?&amp;style=for-the-badge&amp;logo=Hibernate&amp;logoColor=white" style="max-width: 100%;">
