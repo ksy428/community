@@ -66,6 +66,11 @@ public class InitDummyData {
 			 initBoard("basketball","농구");
 			 initBoard("baseball","야구");
 			 initBoard("other-sport","기타스포츠");
+			 initBoard("lol","리그오브레전드");
+			 initBoard("wow","월드오브워크래프트");
+			 initBoard("hearthstone","하스스톤");
+			 initBoard("other-game","기타게임");
+
 		
 			 for(int i=0; i<30;i++) {			 
 				 initPost((i+1) +"번 글", (i+1)+"번 내용", 1L);

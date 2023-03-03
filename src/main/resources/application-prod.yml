@@ -5,10 +5,16 @@ spring:
   banner:
     location: prod-banner.txt
 
+  #datasource:
+   # url: jdbc:mysql://localhost:3306/community?serverTimezone=UTC&characterEncoding=UTF-8
+    #username: root
+    #password: tp1346790
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+
   datasource:
-    url: jdbc:mysql://localhost:3306/community?serverTimezone=UTC&characterEncoding=UTF-8
-    username: root
-    password: tp1346790
+    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -33,7 +39,7 @@ spring:
 
   redis:
     port: 6379
-    host: 127.0.0.1
+    host: ${REDIS_HOST}
 
 logging:
   level:
@@ -50,3 +56,11 @@ logging:
 file:
   dir: E:/Development/eclipse-workspace/storage/file/
   tmpdir: E:/Development/eclipse-workspace/storage/tmp/
+
+#server:
+ # port: 5000
+
+cloud:
+  aws:
+    stack:
+      auto: false

@@ -81,6 +81,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("admin/**").hasAnyRole("ADMIN")
+				//.and().requiresChannel().antMatchers("/login*").requiresSecure()
 			.and()
 				.formLogin()
 				.loginPage("/loginForm")

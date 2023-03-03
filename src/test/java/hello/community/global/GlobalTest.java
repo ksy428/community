@@ -3,15 +3,17 @@ package hello.community.global;
 import static org.assertj.core.api.Assertions.catchRuntimeException;
 import static org.assertj.core.api.Assertions.setMaxElementsForPrinting;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.persistence.EntityManager;
 
+import ch.qos.logback.core.boolex.EvaluationException;
 import hello.community.global.file.FileService;
 import org.junit.jupiter.api.Test;
 
@@ -69,7 +71,7 @@ class GlobalTest {
 	@Autowired
 	FileService fileService;
 
-	@Test
+	/*@Test
 	void 시간테스트() {
 					
 		LocalDateTime date2 = LocalDateTime.of(2023, 1, 11, 23, 50);
@@ -117,8 +119,8 @@ class GlobalTest {
 		 //Member member =  memberRepository.findById(1L).orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 		//List<Comment> commentList = commentRepository.findAll();
 
-		/*	Comment comment = commentRepository.findById(133L).orElseThrow(()-> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
-			comment.getParent().getId();*/
+		*//*	Comment comment = commentRepository.findById(133L).orElseThrow(()-> new CommentException(CommentExceptionType.NOT_FOUND_COMMENT));
+			comment.getParent().getId();*//*
 		
 		
 		 //member.getPostList().size();
@@ -128,25 +130,25 @@ class GlobalTest {
 		//List<Post> postList = postRepository.findAll();
 		//memberRepository.findAll();
 		//postRepository.findAll();
-			/*for(Post post: postList) {
+			*//*for(Post post: postList) {
 				System.out.println(post.getWriter());
-			}*/
+			}*//*
 		// member.getPostList().size();
 		// List<Member> memberList = memberRepository.findAll();
-			/*for(Member member: memberList) {
-			 System.out.println(member.getPostList().size());*/
+			*//*for(Member member: memberList) {
+			 System.out.println(member.getPostList().size());*//*
 	
 	
 		// Post post = postRepository.findById(1L).orElseThrow(() -> new PostException(PostExceptionType.NOT_FOUND_POST));
-		/* for(Post post : postList) {
+		*//* for(Post post : postList) {
 			 System.out.println(post.getWriter().getNickname());
-		 }*/
+		 }*//*
 	
 	}
 	
 	@Test
 	void 멤버() {
-		/*Member member = memberRepository.findByNickname("짱짱")
+		Member member = memberRepository.findByNickname("짱짱")
 				.orElseThrow(() -> new MemberException(MemberExceptionType.NOT_FOUND_MEMBER));
 
 		List<Post> postList = member.getPostList();
@@ -162,13 +164,21 @@ class GlobalTest {
 
 		for(CommentBriefInfo i : clist) {
 			System.out.println("제목:"+ i.getContent());
-		}*/
-	}
+		}
+	}*/
 
 	@Test
-	void 스케줄러파일삭제(){
+	void 테스트() {
+		String my_string ="aAb1B2cC34oOp";
 
-		fileService.deleteTmpFolder();
+		//String[] b = my_string.split("^[1-9][0-9]*$");
+		String[] b = my_string.split("^[1-9]$");
+
+		int[] emergency={3, 76, 24};
+		char g = 'a';
+		int i= 1;
+		int j= 10;
+		int k = 1;
+
 	}
-
 }

@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class RecommendServiceImpl implements RecommendService{
 
-	public static final int BEST_RECOMMEND_COUNT = 3;
+	public static final int BEST_RECOMMEND_COUNT = 1;
 	private final RecommendRepository recommendRepository;
 	private final MemberRepository memberRepository;
 	private final PostRepository postRepository;
