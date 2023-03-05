@@ -42,3 +42,7 @@
 
 ![메인](https://user-images.githubusercontent.com/114653884/222255016-fd43e0cb-9509-40f9-b674-922ea38563fc.png)
 
+
+# 진행중인 작업
+
+<p dir="auto">AWS 배포, https 적용, 도메인 적용</p>
