@@ -79,7 +79,7 @@ public class WebSecurityConfig {
 		http.authenticationManager(authenticationManager)
 			.csrf().disable()
 				.authorizeHttpRequests()
-				.antMatchers("/").permitAll()
+				.antMatchers("/**").permitAll()
 				.antMatchers("admin/**").hasAnyRole("ADMIN")
 				//.and().requiresChannel().antMatchers("/login*").requiresSecure()
 			.and()

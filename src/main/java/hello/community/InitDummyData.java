@@ -35,7 +35,7 @@ public class InitDummyData {
 	
 	@PostConstruct
 	public void init() {
-		//init.save();
+		init.save();
 	}
 	
 	@Component

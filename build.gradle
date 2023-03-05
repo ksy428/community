@@ -64,10 +64,6 @@ tasks.named('test') {
 
 tasks.withType(Jar) {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-	/*manifest {
-		attributes["Main-Class"] = 'hello.community.CommunityApplication'
-	}*/
 }
 /*
  * queryDSL 설정 추가
