@@ -44,5 +44,7 @@
 
 
 # 진행중인 작업
-
-<p dir="auto">AWS 배포, https 적용, 도메인 적용</p>
+<strong> AWS 배포 작업</strong>
+<p dir="auto">https 적용 O, 도메인 적용 O</p>
+<p dir="auto">로컬에서는 작동하는데 배포환경에서 작동안하는 문제 해결해야함</p>
+<p dir="auto">로컬File Service -> S3 버킷으로 변경해야 할 듯</p>
