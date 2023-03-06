@@ -41,16 +41,13 @@
 # Preview
 
 
-
 https://user-images.githubusercontent.com/114653884/223019873-36a84b07-0a77-4345-b727-08b1982f8fea.mp4
 
+https://user-images.githubusercontent.com/114653884/223019924-b798472c-0efe-45d8-b47f-719d5849bab2.mp4
 
+https://user-images.githubusercontent.com/114653884/223019934-da6e76c4-11d7-4ac0-aa1d-09399eea2d75.mp4
 
-![2](https://user-images.githubusercontent.com/114653884/223019671-6e5a6dde-ec5d-410c-9e06-9f40b5c06211.gif)
-
-![3](https://user-images.githubusercontent.com/114653884/223019682-ac230e4e-c6f2-4ca6-af9b-ccfefd41dd77.gif)
-
-![4](https://user-images.githubusercontent.com/114653884/223019687-df1d1193-05f9-4149-8aaf-3d8558316c4a.gif)
+https://user-images.githubusercontent.com/114653884/223019942-c1724949-7880-448c-b588-046cf0cf20b7.mp4
 
 
 # 진행중인 작업
