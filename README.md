@@ -5,9 +5,10 @@
 
 <ul dir="auto">
 	<li>인터넷 커뮤니티 프로젝트</li>
-	<li>다중 게시판 CRUD 댓글,대댓글, 추천, 구독 기능</li>
+	<li>다중 게시판 CRUD 댓글, 대댓글, 추천, 구독 기능</li>
 	<li>Redis를 이용한 최근 방문 게시판 history 기능</li>
-	<li>Websocket을 통한 알림 기능</li>
+	<li>Websocket STOMP를 통한 알림 기능</li>
+	<li>Spring Security를 이용한 인증과 회원 관리</li>
 	<li>Aop를 이용한 로그</li>
 	<li>개발/배포/테스트환경 분리</li>
 </ul>
