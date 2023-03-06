@@ -40,7 +40,13 @@
 
 # Preview
 
-![메인](https://user-images.githubusercontent.com/114653884/222255016-fd43e0cb-9509-40f9-b674-922ea38563fc.png)
+![1](https://user-images.githubusercontent.com/114653884/223019656-7e460664-7e21-4a47-9086-f0dedf18c4b6.gif)
+
+![2](https://user-images.githubusercontent.com/114653884/223019671-6e5a6dde-ec5d-410c-9e06-9f40b5c06211.gif)
+
+![3](https://user-images.githubusercontent.com/114653884/223019682-ac230e4e-c6f2-4ca6-af9b-ccfefd41dd77.gif)
+
+![4](https://user-images.githubusercontent.com/114653884/223019687-df1d1193-05f9-4149-8aaf-3d8558316c4a.gif)
 
 
 # 진행중인 작업
