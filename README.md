@@ -51,8 +51,4 @@ https://user-images.githubusercontent.com/114653884/223019934-da6e76c4-11d7-4ac0
 https://user-images.githubusercontent.com/114653884/223019942-c1724949-7880-448c-b588-046cf0cf20b7.mp4
 
 
-# 진행중인 작업
-<strong> AWS 배포 작업</strong>
-<p dir="auto">https 적용 O, 도메인 적용 O</p>
-<p dir="auto">로컬에서는 작동하는데 배포환경에서 작동안하는 문제 해결해야함</p>
-<p dir="auto">로컬File Service -> S3 버킷으로 변경해야 할 듯</p>
+
